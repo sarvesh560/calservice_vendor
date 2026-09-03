@@ -55,7 +55,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       backgroundColor: AppColors.brandMidnightDark,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.xxl),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xxl,
+            AppSpacing.xxl,
+            AppSpacing.xxl,
+            AppSpacing.xxl * 3,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -84,11 +89,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               
               TextField(
                 controller: _emailController,
-                style: AppTypography.body.copyWith(color: AppColors.brandMist),
+                style: AppTypography.body.copyWith(color: Colors.white, fontSize: 15),
+                cursorColor: AppColors.brandChampagne,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.brandMidnight,
                   labelText: 'Email Address',
-                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textMuted),
-                  prefixIcon: Icon(Icons.email_outlined, color: AppColors.textMuted),
+                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate),
+                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.brandChampagne),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.control),
+                    borderSide: BorderSide(color: AppColors.brandSlate.withValues(alpha: 0.3)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.control),
+                    borderSide: const BorderSide(color: AppColors.brandChampagne, width: 1.5),
+                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -97,15 +113,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               
               TextField(
                 controller: _passwordController,
-                style: AppTypography.body.copyWith(color: AppColors.brandMist),
+                style: AppTypography.body.copyWith(color: Colors.white, fontSize: 15),
+                cursorColor: AppColors.brandChampagne,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.brandMidnight,
                   labelText: 'Password',
-                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textMuted),
-                  prefixIcon: Icon(Icons.lock_outline_rounded, color: AppColors.textMuted),
+                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate),
+                  prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.brandChampagne),
                   suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: AppColors.textMuted),
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      color: AppColors.brandSlate,
+                    ),
                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.control),
+                    borderSide: BorderSide(color: AppColors.brandSlate.withValues(alpha: 0.3)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppRadius.control),
+                    borderSide: const BorderSide(color: AppColors.brandChampagne, width: 1.5),
                   ),
                 ),
                 textInputAction: TextInputAction.done,

@@ -25,6 +25,7 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.showAvatar = true,
     this.showStatusSubBar = false,
     this.showDrawerMenu = false,
+    this.showBackButton = false,
     this.onSearchPressed,
   });
 
@@ -35,6 +36,9 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool showAvatar;
   final bool showStatusSubBar;
   final bool showDrawerMenu;
+  /// Shows an iOS-style back button in the AppBar leading slot.
+  /// Ignored when [showDrawerMenu] is true (drawer icon takes precedence).
+  final bool showBackButton;
   final VoidCallback? onSearchPressed;
 
   @override
@@ -96,6 +100,7 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
         ),
       ),
       titleSpacing: showDrawerMenu ? 0 : AppSpacing.md,
+      automaticallyImplyLeading: false,
       leading: showDrawerMenu
           ? Builder(
               builder: (ctx) => IconButton(
@@ -104,7 +109,25 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 onPressed: () => Scaffold.of(ctx).openDrawer(),
               ),
             )
-          : null,
+          : (showBackButton && Navigator.canPop(context)
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  tooltip: 'Back',
+                  visualDensity: VisualDensity.compact,
+                  constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                  onPressed: () {
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    } else {
+                      context.go('/');
+                    }
+                  },
+                )
+              : null),
       title: Row(
         children: [
           if (showBrand) ...[

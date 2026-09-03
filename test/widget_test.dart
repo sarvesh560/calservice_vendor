@@ -1,26 +1,26 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mobile/app.dart';
 
 void main() {
-  testWidgets('App starts at the splash screen, then routes to onboarding for fresh launch', (
+  testWidgets('App starts at splash screen and routes to onboarding walkthrough', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const ProviderScope(child: App()));
+    await tester.pump();
 
+    // Verify initial splash state
     expect(find.text('Verifying session...'), findsOneWidget);
 
-    // Session restore and onboarding flag read from storage
+    // Wait for OnboardingController storage resolution
     await tester.runAsync(() async {
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 200));
     });
-    await tester.pump();
-    await tester.pump();
-    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pump(const Duration(milliseconds: 50));
 
-    // On fresh launch without prior completion, routes to intro onboarding walkthrough
-    expect(find.byType(PageView), findsOneWidget);
+    // On fresh launch, routes to intro onboarding walkthrough
+    expect(find.text('Next'), findsOneWidget);
   });
 }

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/theme/app_motion.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../shared/widgets/animated_pressable.dart';
 import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/async_value_view.dart';
-import '../../../shared/widgets/workforce_app_bar.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../documents/presentation/documents_providers.dart';
 import '../../profile/domain/employee_profile.dart';
 import '../../profile/presentation/profile_providers.dart';
@@ -359,11 +361,8 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const WorkforceAppBar(
-        titleText: 'Registration',
-        showSearch: false,
-        showNotifications: false,
-        showAvatar: false,
+      appBar: const PremiumSecondaryAppBar(
+        title: 'Complete Registration',
       ),
       body: SafeArea(
         child: AsyncValueView<EmployeeProfile>(
@@ -395,9 +394,37 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
                       AppSpacing.lg,
                       AppSpacing.sm,
                       AppSpacing.lg,
-                      AppSpacing.xl,
+                      AppSpacing.xxl * 4,
                     ),
-                    child: _buildStep(profile),
+                    child: AnimatedSwitcher(
+                      duration: AppMotion.resolve(AppMotion.normal),
+                      switchInCurve: AppMotion.curve,
+                      switchOutCurve: AppMotion.curve,
+                      transitionBuilder: (child, animation) {
+                        final slideAnimation = Tween<Offset>(
+                          begin: const Offset(0.04, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation);
+                        final scaleAnimation = Tween<double>(
+                          begin: 0.98,
+                          end: 1.0,
+                        ).animate(animation);
+                        return FadeTransition(
+                          opacity: animation,
+                          child: SlideTransition(
+                            position: slideAnimation,
+                            child: ScaleTransition(
+                              scale: scaleAnimation,
+                              child: child,
+                            ),
+                          ),
+                        );
+                      },
+                      child: KeyedSubtree(
+                        key: ValueKey<int>(_currentStep),
+                        child: _buildStep(profile),
+                      ),
+                    ),
                   ),
                 ),
                 _WizardFooter(
@@ -880,11 +907,13 @@ class _WizardProgressHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final percent = (currentStep / 7 * 100).round();
+    final targetValue = (currentStep / 7).clamp(0.0, 1.0);
+    final percent = (targetValue * 100).round();
+
     return Container(
       padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.md),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Column(
@@ -895,19 +924,32 @@ class _WizardProgressHeader extends StatelessWidget {
             children: [
               Text(
                 'Step $currentStep of 7: ${_stepLabels[currentStep - 1]}',
-                style: AppTypography.title,
+                style: AppTypography.title.copyWith(color: AppColors.brandMidnight),
               ),
-              Text('$percent% Complete', style: AppTypography.caption),
+              Text(
+                '$percent% Complete',
+                style: AppTypography.caption.copyWith(
+                  color: AppColors.brandChampagne,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: currentStep / 7,
-              minHeight: 6,
-              backgroundColor: AppColors.surfaceMuted,
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.success.base),
+            child: TweenAnimationBuilder<double>(
+              duration: AppMotion.resolve(AppMotion.normal),
+              curve: AppMotion.curve,
+              tween: Tween<double>(begin: 0, end: targetValue),
+              builder: (context, value, child) {
+                return LinearProgressIndicator(
+                  value: value,
+                  minHeight: 6,
+                  backgroundColor: AppColors.surfaceMuted,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.brandChampagne),
+                );
+              },
             ),
           ),
           const SizedBox(height: 10),
@@ -923,11 +965,11 @@ class _WizardProgressHeader extends StatelessWidget {
                 final isCurrent = stepNumber == currentStep;
                 final color = isDone
                     ? AppColors.success.base
-                    : (isCurrent ? AppColors.primary : AppColors.textMuted);
+                    : (isCurrent ? AppColors.brandChampagne : AppColors.textMuted);
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: isCurrent ? AppColors.info.tint : Colors.transparent,
+                    color: isCurrent ? AppColors.brandChampagne.withValues(alpha: 0.12) : Colors.transparent,
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: color.withValues(alpha: isCurrent ? 1 : 0.4)),
                   ),
@@ -976,52 +1018,74 @@ class _WizardFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLastStep = currentStep == 7;
+    final isPrimaryEnabled = isLastStep ? canSubmit : true;
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
           if (currentStep > 1)
             Expanded(
-              child: OutlinedButton(
-                onPressed: onBack,
-                style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-                child: const Text('Back'),
+              child: AnimatedPressable(
+                onPressed: isSaving ? null : onBack,
+                child: OutlinedButton(
+                  onPressed: isSaving ? null : onBack,
+                  style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+                  child: const Text('Back'),
+                ),
               ),
             ),
           if (currentStep > 1) const SizedBox(width: AppSpacing.md),
           Expanded(
             flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [AppColors.primary, AppColors.success.base]),
-                borderRadius: BorderRadius.circular(AppRadius.control),
-              ),
-              child: ElevatedButton(
-                onPressed: isLastStep ? (canSubmit ? onSubmit : null) : onNext,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  disabledBackgroundColor: Colors.transparent,
-                  foregroundColor: Colors.white,
-                  disabledForegroundColor: Colors.white70,
-                  shadowColor: Colors.transparent,
-                  elevation: 0,
-                  minimumSize: const Size.fromHeight(48),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.control)),
+            child: AnimatedPressable(
+              onPressed: (isSaving || !isPrimaryEnabled)
+                  ? null
+                  : (isLastStep ? onSubmit : onNext),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: isPrimaryEnabled
+                      ? const LinearGradient(
+                          colors: [AppColors.brandMidnightDark, AppColors.brandMidnight],
+                        )
+                      : null,
+                  color: isPrimaryEnabled ? null : AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(AppRadius.control),
                 ),
-                child: isSaving
-                    ? const SizedBox(
-                        height: 18,
-                        width: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                      )
-                    : Text(
-                        isLastStep ? 'Submit Application' : 'Save & Continue',
-                        style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
-                      ),
+                child: ElevatedButton(
+                  onPressed: isSaving
+                      ? null
+                      : (isLastStep ? (canSubmit ? onSubmit : null) : onNext),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    disabledBackgroundColor: Colors.transparent,
+                    foregroundColor: AppColors.brandChampagne,
+                    disabledForegroundColor: AppColors.textMuted,
+                    shadowColor: Colors.transparent,
+                    elevation: 0,
+                    minimumSize: const Size.fromHeight(48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.control),
+                    ),
+                  ),
+                  child: isSaving
+                      ? const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.brandChampagne,
+                          ),
+                        )
+                      : Text(
+                          isLastStep ? 'Submit Application' : 'Save & Continue',
+                          style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+                        ),
+                ),
               ),
             ),
           ),

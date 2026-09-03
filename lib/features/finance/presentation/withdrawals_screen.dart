@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/ledger_row.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import 'finance_providers.dart';
 
 
@@ -18,10 +19,7 @@ class WithdrawalsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Withdrawals', style: AppTypography.titleLarge),
-        backgroundColor: AppColors.surface,
-      ),
+      appBar: const PremiumSecondaryAppBar(title: 'Withdrawals'),
       body: wAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Error: ')),

@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/premium_buttons.dart';
 import '../../../shared/widgets/ledger_row.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../../shared/widgets/settings_row.dart';
 import 'finance_providers.dart';
 
@@ -22,11 +23,7 @@ class WalletScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Wallet', style: AppTypography.titleLarge.copyWith(color: AppColors.brandMist)),
-        backgroundColor: AppColors.brandMidnightDark,
-        iconTheme: const IconThemeData(color: AppColors.brandMist),
-      ),
+      appBar: const PremiumSecondaryAppBar(title: 'Wallet'),
       body: wallet == null 
         ? const Center(child: CircularProgressIndicator())
         : RefreshIndicator(

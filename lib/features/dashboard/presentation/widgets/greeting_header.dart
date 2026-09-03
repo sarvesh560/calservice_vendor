@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/theme/app_motion.dart';
+import '../../../../shared/widgets/animated_pressable.dart';
 import '../../../auth/presentation/auth_controller.dart';
 import '../../../notifications/presentation/notifications_providers.dart';
+import '../../../presence/presentation/presence_controller.dart';
 import '../../../profile/presentation/profile_providers.dart';
-import '../../../../shared/widgets/animated_pressable.dart';
 
 class GreetingHeader extends ConsumerWidget {
   const GreetingHeader({super.key});
@@ -20,9 +21,7 @@ class GreetingHeader extends ConsumerWidget {
     final unreadCount = ref.watch(unreadNotificationsCountProvider);
 
     final displayName = user?.displayName ?? 'Technician';
-    final initial = displayName.isNotEmpty ? displayName[0].toUpperCase() : 'T';
     final isOnline = profileAsync.valueOrNull?.isOnline ?? true;
-    final photoUrl = profileAsync.valueOrNull?.avatar;
 
     return Container(
       width: double.infinity,
@@ -31,26 +30,20 @@ class GreetingHeader extends ConsumerWidget {
         AppSpacing.lg,
         MediaQuery.paddingOf(context).top + AppSpacing.xl,
         AppSpacing.lg,
-        AppSpacing.massive, 
+        AppSpacing.lg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _HeaderAvatar(
-                initial: initial,
-                photoUrl: photoUrl,
-                onTap: () => context.push('/more/profile'),
-              ),
-              const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Good morning,',
+                      'Welcome back,',
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.brandSlate,
                         letterSpacing: 0.5,
@@ -61,6 +54,8 @@ class GreetingHeader extends ConsumerWidget {
                       displayName,
                       style: AppTypography.headline.copyWith(
                         color: AppColors.brandMist,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -71,13 +66,8 @@ class GreetingHeader extends ConsumerWidget {
               _NotificationAction(unreadCount: unreadCount),
             ],
           ),
-          const SizedBox(height: AppSpacing.xl),
-          Row(
-            children: [
-              const Spacer(),
-              _AvailabilityToggle(isOnline: isOnline),
-            ],
-          ),
+          const SizedBox(height: AppSpacing.lg),
+          _AvailabilityToggle(isOnline: isOnline),
         ],
       ),
     );
@@ -91,7 +81,7 @@ class _NotificationAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedPressable(
-      onPressed: () => context.go('/notifications'),
+      onPressed: () => context.push('/notifications'),
       child: Container(
         width: 40,
         height: 40,
@@ -102,7 +92,7 @@ class _NotificationAction extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Icon(Icons.notifications_outlined, color: AppColors.brandMist, size: 20),
+            const Icon(Icons.notifications_outlined, color: AppColors.brandMist, size: 20),
             if (unreadCount > 0)
               Positioned(
                 top: 8,
@@ -124,104 +114,109 @@ class _NotificationAction extends StatelessWidget {
   }
 }
 
-class _HeaderAvatar extends StatelessWidget {
-  const _HeaderAvatar({
-    required this.initial,
-    this.photoUrl,
-    required this.onTap,
-  });
-
-  final String initial;
-  final String? photoUrl;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedPressable(
-      onPressed: onTap,
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.8), width: 1.5),
-          color: AppColors.brandMidnightDark,
-        ),
-        child: ClipOval(
-          child: photoUrl != null && photoUrl!.isNotEmpty
-              ? Image.network(
-                  photoUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => _fallbackAvatar(),
-                )
-              : _fallbackAvatar(),
-        ),
-      ),
-    );
-  }
-
-  Widget _fallbackAvatar() {
-    return Center(
-      child: Text(
-        initial,
-        style: AppTypography.title.copyWith(color: AppColors.brandMist),
-      ),
-    );
-  }
-}
-
 class _AvailabilityToggle extends ConsumerWidget {
   const _AvailabilityToggle({required this.isOnline});
   final bool isOnline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final presenceState = ref.watch(presenceControllerProvider);
+    final isToggling = presenceState.isToggling;
+    final currentOnline = presenceState.isToggling ? presenceState.isOnline : isOnline;
+
     return AnimatedPressable(
-      onPressed: () {
-        final notifier = ref.read(profileControllerProvider.notifier);
-        notifier.savePreferences({'is_online': !isOnline});
-      },
+      onPressed: isToggling
+          ? null
+          : () async {
+              final targetState = !currentOnline;
+              try {
+                await ref.read(presenceControllerProvider.notifier).setOnline(targetState);
+                ref.invalidate(employeeProfileProvider);
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Failed to update availability: ${e.toString().replaceAll("Exception: ", "")}'),
+                      backgroundColor: AppColors.error.base,
+                    ),
+                  );
+                }
+              }
+            },
       child: AnimatedContainer(
         duration: AppMotion.resolve(AppMotion.normal),
         curve: AppMotion.curve,
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
         decoration: BoxDecoration(
-          color: isOnline 
+          color: currentOnline 
               ? AppColors.brandMidnightDark 
-              : AppColors.surfaceElevated.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(AppRadius.pill),
+              : AppColors.surfaceElevated.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           border: Border.all(
-            color: isOnline 
-                ? AppColors.brandChampagne.withValues(alpha: 0.6) 
-                : Colors.transparent,
+            color: currentOnline 
+                ? AppColors.brandChampagne.withValues(alpha: 0.5) 
+                : AppColors.brandSlate.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedContainer(
               duration: AppMotion.resolve(AppMotion.fast),
               curve: AppMotion.curve,
-              width: 6,
-              height: 6,
+              width: 10,
+              height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isOnline ? AppColors.brandChampagne : AppColors.brandSlate,
-                boxShadow: isOnline 
-                    ? [BoxShadow(color: AppColors.brandChampagne.withValues(alpha: 0.5), blurRadius: 4)]
+                color: currentOnline ? AppColors.brandChampagne : AppColors.brandSlate,
+                boxShadow: currentOnline 
+                    ? [BoxShadow(color: AppColors.brandChampagne.withValues(alpha: 0.6), blurRadius: 6)]
                     : null,
               ),
             ),
-            const SizedBox(width: AppSpacing.sm),
-            Text(
-              isOnline ? 'ONLINE' : 'OFFLINE',
-              style: AppTypography.label.copyWith(
-                color: isOnline ? AppColors.brandChampagne : AppColors.brandSlate,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isToggling
+                        ? 'UPDATING AVAILABILITY...'
+                        : (currentOnline ? 'ONLINE' : 'OFFLINE'),
+                    style: AppTypography.label.copyWith(
+                      color: currentOnline ? AppColors.brandChampagne : AppColors.brandMist,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    currentOnline
+                        ? "You're available for new work"
+                        : "You're currently unavailable",
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.brandSlate,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
+            if (isToggling)
+              const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.brandChampagne,
+                ),
+              )
+            else
+              Icon(
+                currentOnline ? Icons.toggle_on_rounded : Icons.toggle_off_rounded,
+                size: 32,
+                color: currentOnline ? AppColors.brandChampagne : AppColors.brandSlate,
+              ),
           ],
         ),
       ),

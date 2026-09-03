@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/premium_buttons.dart';
-import 'package:intl/intl.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../../shared/widgets/status_badge.dart';
 import '../domain/job.dart';
 import 'jobs_providers.dart';
@@ -21,28 +19,27 @@ class JobDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
-  
-  
-
   @override
   Widget build(BuildContext context) {
-    // Attempt to watch the latest state if available
-    final jobsAsync = ref.watch(activeJobsProvider);
-    final activeJobs = jobsAsync.valueOrNull ?? const [];
-    final currentJob = activeJobs.firstWhere((j) => j.id == widget.job.id, orElse: () => widget.job);
+    final activeJobsAsync = ref.watch(activeJobsProvider);
+    final activeJobs = activeJobsAsync.valueOrNull ?? [];
     
-    
+    // Find latest state of current job if present in provider
+    final currentJob = activeJobs.firstWhere(
+      (j) => j.id == widget.job.id,
+      orElse: () => widget.job,
+    );
 
     final canAccept = ['PENDING'].contains(currentJob.status.toUpperCase());
     final isActive = ['ACCEPTED', 'ACTIVE'].contains(currentJob.status.toUpperCase());
 
+    final amountText = currentJob.totalAmount != null 
+        ? '₹${currentJob.totalAmount!.toStringAsFixed(2)}'
+        : 'Standard Rate';
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Job Details', style: AppTypography.titleLarge.copyWith(color: AppColors.brandMist)),
-        backgroundColor: AppColors.brandMidnightDark,
-        iconTheme: const IconThemeData(color: AppColors.brandMist),
-      ),
+      appBar: const PremiumSecondaryAppBar(title: 'Job Details'),
       body: SafeArea(
         child: Column(
           children: [
@@ -54,78 +51,96 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
                     // HEADER
                     Container(
                       color: AppColors.brandMidnightDark,
-                      padding: const EdgeInsets.all(AppSpacing.xxl),
+                      padding: const EdgeInsets.all(AppSpacing.xl),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '#${currentJob.id}',
+                                style: AppTypography.caption.copyWith(color: AppColors.brandSlate),
+                              ),
+                              StatusBadge(status: currentJob.status),
+                            ],
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
                           Text(
-                            currentJob.displayTitle ?? 'Assigned Service',
+                            currentJob.displayTitle,
                             style: AppTypography.headline.copyWith(color: AppColors.brandMist),
                           ),
-                          const SizedBox(height: AppSpacing.md),
-                          StatusBadge(status: currentJob.status),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            currentJob.serviceCategory ?? 'General Service',
+                            style: AppTypography.bodySmall.copyWith(color: AppColors.brandChampagne),
+                          ),
                         ],
                       ),
                     ),
 
-                    // CUSTOMER & LOCATION
-                    _SectionHeader(title: 'Customer Information'),
-                    _InfoRow(icon: Icons.person_outline, label: 'Name', value: currentJob.customerName ?? 'Customer'),
-                    _InfoRow(icon: Icons.phone_outlined, label: 'Phone', value: 'Protected during pending state'),
-                    _InfoRow(
-                      icon: Icons.location_on_outlined,
-                      label: 'Location',
-                      value: currentJob.address ?? 'Customer Location',
-                      isLast: true,
+                    // DETAILS CARD
+                    Padding(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      child: Container(
+                        padding: const EdgeInsets.all(AppSpacing.lg),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(AppRadius.card),
+                          border: Border.all(color: AppColors.border),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _DetailRow(
+                              icon: Icons.person_outline_rounded,
+                              label: 'Customer Name',
+                              value: currentJob.customerName ?? 'Verified Customer',
+                            ),
+                            const Divider(height: AppSpacing.xl),
+                            _DetailRow(
+                              icon: Icons.location_on_outlined,
+                              label: 'Service Location',
+                              value: currentJob.address ?? 'Location coordinates provided upon dispatch',
+                            ),
+                            const Divider(height: AppSpacing.xl),
+                            _DetailRow(
+                              icon: Icons.payments_outlined,
+                              label: 'Payout Amount',
+                              value: amountText,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-
-                    // SCHEDULE
-                    _SectionHeader(title: 'Schedule'),
-                    _InfoRow(
-                      icon: Icons.calendar_today_outlined,
-                      label: 'Date & Time',
-                      value: currentJob.preferredDate ?? 'Unscheduled',
-                      isLast: true,
-                    ),
-
-                    // EARNINGS
-                    _SectionHeader(title: 'Earnings'),
-                    _InfoRow(
-                      icon: Icons.payments_outlined,
-                      label: 'Total Amount',
-                      value: currentJob.totalAmount?.toStringAsFixed(2) ?? '0.00',
-                      valueStyle: AppTypography.numeric.copyWith(fontSize: 16, color: AppColors.success.base),
-                      isLast: true,
-                    ),
-                    const SizedBox(height: AppSpacing.xxl),
                   ],
                 ),
               ),
             ),
-            
-            // ACTIONS (Pinned at bottom)
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                border: Border(top: BorderSide(color: AppColors.divider)),
-                boxShadow: AppElevation.subtle,
+
+            // BOTTOM ACTION BAR
+            if (canAccept)
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  border: Border(top: BorderSide(color: AppColors.border)),
+                ),
+                child: OfferActionsSection(job: currentJob),
+              )
+            else if (isActive)
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  border: Border(top: BorderSide(color: AppColors.border)),
+                ),
+                child: PremiumButton(
+                  label: 'Job Active — Open Navigation',
+                  icon: Icons.near_me_rounded,
+                  onPressed: () {},
+                ),
               ),
-              child: SafeArea(
-                top: false,
-                child: canAccept 
-                    ? OfferActionsSection(job: currentJob)
-                    : isActive
-                        ? PremiumButton(
-                            label: 'Mark Completed',
-                            onPressed: () { /* API Call */ },
-                          )
-                        : SecondaryButton(
-                            label: 'Back to Jobs',
-                            onPressed: () => context.pop(),
-                          ),
-              ),
-            ),
           ],
         ),
       ),
@@ -133,66 +148,35 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
   }
 }
 
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.xl, AppSpacing.lg, AppSpacing.sm),
-      child: Text(
-        title.toUpperCase(),
-        style: AppTypography.label.copyWith(color: AppColors.brandSlate, letterSpacing: 1.0),
-      ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({
+class _DetailRow extends StatelessWidget {
+  const _DetailRow({
     required this.icon,
     required this.label,
     required this.value,
-    this.valueStyle,
-    this.isLast = false,
   });
 
   final IconData icon;
   final String label;
   final String value;
-  final TextStyle? valueStyle;
-  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.surface,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(icon, size: 20, color: AppColors.brandSlate),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(label, style: AppTypography.bodySmall),
-                      const SizedBox(height: 4),
-                      Text(value, style: valueStyle ?? AppTypography.body.copyWith(fontSize: 15)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: AppColors.brandChampagne),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: AppTypography.caption.copyWith(color: AppColors.brandSlate)),
+              const SizedBox(height: 2),
+              Text(value, style: AppTypography.title.copyWith(color: AppColors.brandMidnight)),
+            ],
           ),
-          if (!isLast) Divider(color: AppColors.divider, height: 1, indent: 52),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

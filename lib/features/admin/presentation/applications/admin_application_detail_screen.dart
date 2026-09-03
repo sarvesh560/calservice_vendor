@@ -614,6 +614,18 @@ class _AdminApplicationDetailScreenState
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            size: 20,
+            color: Colors.white,
+          ),
+          tooltip: 'Back',
+          onPressed: () => Navigator.pop(context),
+        )
+            : null,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -622,25 +634,24 @@ class _AdminApplicationDetailScreenState
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF0A2540), // Deep Peacock Navy
-                Color(0xFF004E89), // Peacock Blue
+                Color(0xFF0A2540),
+                Color(0xFF004E89),
               ],
             ),
           ),
-        ),
-        title: Text(
-          'Dossier #${widget.applicationId}',
-          style: const TextStyle(fontWeight: FontWeight.w800, color: Colors.white, fontSize: 16),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        ), // <-- closes Container
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+            ),
             tooltip: 'Refresh Dossier',
             onPressed: _isProcessing ? null : _refreshDossier,
           ),
         ],
-      ),
+      ), // <-- closes AppBar
+
       body: detailAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(
@@ -772,6 +783,7 @@ class _AdminApplicationDetailScreenState
           );
         },
       ),
+
     );
   }
 

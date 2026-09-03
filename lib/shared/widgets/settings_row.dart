@@ -44,7 +44,7 @@ class SettingsRow extends StatelessWidget {
                     ],
                   ),
                 ),
-                trailing ?? Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.textMuted),
+                trailing ?? Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.textMuted),
               ],
             ),
           ),

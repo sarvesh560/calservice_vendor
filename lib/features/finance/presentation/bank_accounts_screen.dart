@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../../shared/widgets/settings_row.dart';
 import '../../../shared/widgets/status_badge.dart';
 import 'finance_providers.dart';
@@ -16,9 +17,16 @@ class BankAccountsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Bank Accounts', style: AppTypography.titleLarge),
-        backgroundColor: AppColors.surface,
+      appBar: PremiumSecondaryAppBar(
+        title: 'Bank Accounts',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.brandSlate),
+            onPressed: () {
+              // TODO: Implement add bank account
+            },
+          ),
+        ],
       ),
       body: accountsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),

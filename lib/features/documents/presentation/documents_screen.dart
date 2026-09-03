@@ -7,7 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/status_chip.dart';
-import '../../../shared/widgets/workforce_app_bar.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../profile/domain/employee_profile.dart';
 import '../../profile/presentation/profile_providers.dart';
 import 'documents_providers.dart';
@@ -23,10 +23,8 @@ class DocumentsScreen extends ConsumerWidget {
     final actionState = ref.watch(documentsControllerProvider);
 
     return Scaffold(
-      appBar: const WorkforceAppBar(
-        titleText: 'Documents',
-        showBrand: false,
-      ),
+      backgroundColor: AppColors.background,
+      appBar: const PremiumSecondaryAppBar(title: 'Documents'),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(employeeProfileProvider.future),
         child: AsyncValueView<EmployeeProfile>(

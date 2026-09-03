@@ -16,6 +16,8 @@ import '../../jobs/presentation/widgets/offer_card.dart';
 import '../../profile/presentation/profile_providers.dart';
 import 'widgets/greeting_header.dart';
 import 'widgets/today_overview_card.dart';
+import '../../promotions/presentation/widgets/animated_promotion_carousel.dart';
+import '../../promotions/presentation/widgets/floating_partner_promotion.dart';
 
 /// The completely redesigned Home Screen.
 /// Follows the Obsidian + Copper + Porcelain presentation layer rule.
@@ -69,59 +71,58 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(activeJobsProvider);
-          ref.invalidate(completedJobsProvider);
-          ref.invalidate(employeeProfileProvider);
-          ref.invalidate(shiftStatusProvider);
-          await ref.read(activeJobsProvider.future);
-        },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // The new Premium Header
-              const GreetingHeader(),
-              
-              // The rest of the content is animated in smoothly
-              FadeTransition(
-                opacity: _fadeAnimation,
-                child: SlideTransition(
-                  position: _slideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Overlaps the header slightly for depth
-                        Transform.translate(
-                          offset: const Offset(0, -20),
-                          child: TodayOverviewCard(
-                            activeCount: activeJobsAsync.valueOrNull?.length,
-                            completedCount: completedJobsAsync.valueOrNull?.length,
-                          ),
+      body: Stack(
+        children: [
+          RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(activeJobsProvider);
+              ref.invalidate(completedJobsProvider);
+              ref.invalidate(employeeProfileProvider);
+              ref.invalidate(shiftStatusProvider);
+              await ref.read(activeJobsProvider.future);
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const GreetingHeader(),
+                  const SizedBox(height: AppSpacing.md),
+                  const AnimatedPromotionCarousel(),
+                  const SizedBox(height: AppSpacing.md),
+                  FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TodayOverviewCard(
+                              activeCount: activeJobsAsync.valueOrNull?.length,
+                              completedCount: completedJobsAsync.valueOrNull?.length,
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
+                            const _QuickActionsSection(),
+                            const SizedBox(height: AppSpacing.xl),
+                            AsyncValueView<List<Job>>(
+                              value: activeJobsAsync,
+                              onRetry: () => ref.invalidate(activeJobsProvider),
+                              builder: (context, activeJobs) => _HomeJobsSection(activeJobs: activeJobs),
+                            ),
+                            const SizedBox(height: AppSpacing.xxl),
+                          ],
                         ),
-                        
-                        const _QuickActionsSection(),
-                        const SizedBox(height: AppSpacing.xl),
-                        
-                        AsyncValueView<List<Job>>(
-                          value: activeJobsAsync,
-                          onRetry: () => ref.invalidate(activeJobsProvider),
-                          builder: (context, activeJobs) => _HomeJobsSection(activeJobs: activeJobs),
-                        ),
-                        
-                        const SizedBox(height: AppSpacing.xxl),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          const FloatingPartnerPromotion(),
+        ],
       ),
     );
   }

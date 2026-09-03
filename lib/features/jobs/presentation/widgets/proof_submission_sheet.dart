@@ -317,8 +317,8 @@ class _PhotoSlot extends StatelessWidget {
           else
             TextButton.icon(
               onPressed: onPick,
-              icon: const Icon(Icons.add_a_photo_outlined, size: 14),
-              label: Text(required ? 'Capture *' : 'Add Photo'),
+              icon: const Icon(Icons.photo_camera_outlined, size: 14),
+              label: Text(required ? 'Take Photo *' : 'Take Photo'),
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

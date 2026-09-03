@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
@@ -187,7 +186,7 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
               ),
               
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.xxl),
+                padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.xxl * 4),
                 sliver: Builder(
                       builder: (context) {
                         if (isInitialLoading) {
@@ -283,18 +282,6 @@ class _JobsHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        AnimatedPressable(
-          onPressed: () => context.go('/'),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.brandMist,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.brandMidnightDark.withValues(alpha: 0.1)),
-            ),
-            child: const Icon(Icons.arrow_back_rounded, size: 20, color: AppColors.brandMidnight),
-          ),
-        ),
         Text(
           'Jobs Workspace',
           style: AppTypography.headline.copyWith(

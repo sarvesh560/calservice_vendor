@@ -75,10 +75,10 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/banners/
-    - onboarding1.jpg
-    - onboarding2.jpg
-    - onboarding3.jpg
+    - assets/images/onboarding/
+    - assets/images/promotions/
+    - assets/onboarding/
+    - assets/promotions/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

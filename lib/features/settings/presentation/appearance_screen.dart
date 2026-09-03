@@ -8,6 +8,8 @@ import 'providers/appearance_providers.dart';
 import '../../settings/domain/appearance_preferences.dart';
 
 
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
+
 class AppearanceScreen extends ConsumerWidget {
   const AppearanceScreen({super.key});
 
@@ -17,10 +19,7 @@ class AppearanceScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Appearance', style: AppTypography.titleLarge),
-        backgroundColor: AppColors.surface,
-      ),
+      appBar: const PremiumSecondaryAppBar(title: 'Appearance'),
       body: ListView(
         children: [
           const SectionHeader(title: 'THEME'),

@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../domain/saved_location.dart';
 import 'locations_providers.dart';
@@ -146,28 +147,20 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
     final actionState = ref.watch(locationsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _view == 'list'
-              ? 'My Saved Locations'
-              : (_view == 'add' ? 'Add New Location' : 'Edit Location'),
-        ),
-        leading: _view != 'list'
-            ? IconButton(
-                icon: const Icon(Icons.chevron_left_rounded, size: 28),
-                tooltip: 'Back to list',
-                onPressed: _closeForm,
-              )
-            : null,
+      appBar: PremiumSecondaryAppBar(
+        title: _view == 'list'
+            ? 'My Saved Locations'
+            : (_view == 'add' ? 'Add New Location' : 'Edit Location'),
+        onBack: _view != 'list' ? _closeForm : null,
         actions: [
           if (_view == 'list') ...[
             IconButton(
-              icon: const Icon(Icons.add_location_alt_outlined),
+              icon: const Icon(Icons.add_location_alt_outlined, size: 20, color: AppColors.brandMidnight),
               tooltip: 'Add Location',
               onPressed: _openAdd,
             ),
             IconButton(
-              icon: const Icon(Icons.refresh_rounded),
+              icon: const Icon(Icons.refresh_rounded, size: 20, color: AppColors.brandMidnight),
               tooltip: 'Refresh locations',
               onPressed: () => ref.refresh(savedLocationsProvider.future),
             ),
@@ -195,7 +188,7 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
               AppSpacing.lg,
               AppSpacing.lg,
               AppSpacing.lg,
-              AppSpacing.xxl,
+              AppSpacing.xxl * 4,
             ),
             children: [
               _LocationsHeader(onAdd: _openAdd),
@@ -231,7 +224,7 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
         AppSpacing.lg,
         AppSpacing.sm,
         AppSpacing.lg,
-        AppSpacing.xxl,
+        AppSpacing.xxl * 4,
       ),
       children: [
         // Top breadcrumb navigation matching web

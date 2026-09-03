@@ -29,7 +29,6 @@ import '../features/admin/presentation/monitoring/admin_database_egress_screen.d
 import '../features/jobs/presentation/job_detail_screen.dart';
 import '../features/jobs/presentation/jobs_screen.dart';
 import '../features/locations/presentation/locations_screen.dart';
-import '../features/more/presentation/more_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/onboarding/presentation/onboarding_controller.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
@@ -39,6 +38,7 @@ import '../features/onboarding_status/presentation/registration_incomplete_scree
 import '../features/onboarding_status/presentation/rejected_screen.dart';
 import '../features/onboarding_wizard/presentation/onboarding_wizard_screen.dart';
 import '../features/performance/presentation/performance_screen.dart';
+import '../features/profile/presentation/personal_information_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/services/presentation/services_screen.dart';
 import '../features/settings/presentation/account_security_screen.dart';
@@ -396,6 +396,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/more/finance/bank-accounts',
         redirect: (context, state) => AppRoutes.earningsBankAccount,
       ),
+      GoRoute(
+        path: AppRoutes.notifications,
+        builder: (context, state) => const NotificationsScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             AppShellScaffold(navigationShell: navigationShell),
@@ -427,16 +431,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.notifications,
-                builder: (context, state) => const NotificationsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
                 path: AppRoutes.more,
-                builder: (context, state) => const MoreScreen(),
+                builder: (context, state) => const ProfileScreen(),
                 routes: [
                   GoRoute(
                     path: 'performance',
@@ -444,7 +440,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'profile',
-                    builder: (context, state) => const ProfileScreen(),
+                    builder: (context, state) => const PersonalInformationScreen(),
+                  ),
+                  GoRoute(
+                    path: 'personal-info',
+                    builder: (context, state) => const PersonalInformationScreen(),
                   ),
                   GoRoute(
                     path: 'documents',

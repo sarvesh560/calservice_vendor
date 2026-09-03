@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/ledger_row.dart';
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import 'finance_providers.dart';
 
 class TransactionsScreen extends ConsumerWidget {
@@ -18,10 +19,7 @@ class TransactionsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Transactions', style: AppTypography.titleLarge),
-        backgroundColor: AppColors.surface,
-      ),
+      appBar: const PremiumSecondaryAppBar(title: 'Transactions'),
       body: txAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Error: ')),

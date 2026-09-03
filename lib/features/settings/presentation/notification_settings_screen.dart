@@ -5,6 +5,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/settings_row.dart';
 
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
+
 class NotificationSettingsScreen extends ConsumerWidget {
   const NotificationSettingsScreen({super.key});
 
@@ -12,10 +14,7 @@ class NotificationSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Notifications', style: AppTypography.titleLarge),
-        backgroundColor: AppColors.surface,
-      ),
+      appBar: const PremiumSecondaryAppBar(title: 'Notification Settings'),
       body: ListView(
         children: [
           const SectionHeader(title: 'JOB UPDATES'),

@@ -11,13 +11,16 @@ import '../domain/security_models.dart';
 import 'providers/security_providers.dart';
 import 'widgets/settings_section_card.dart';
 
+import '../../../shared/widgets/premium_secondary_app_bar.dart';
+
 class AccountSecurityScreen extends StatelessWidget {
   const AccountSecurityScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Account & Security')),
+      backgroundColor: AppColors.background,
+      appBar: const PremiumSecondaryAppBar(title: 'Account & Security'),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg,
