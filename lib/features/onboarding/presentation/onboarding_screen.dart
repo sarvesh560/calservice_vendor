@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../routing/app_routes.dart';
 import '../../../shared/localization/language_controller.dart';
-import '../../../shared/widgets/animated_pressable.dart';
-import '../../../shared/widgets/premium_buttons.dart';
 import 'onboarding_controller.dart';
+import 'components/onboarding_illustration.dart';
+import 'components/onboarding_page_content.dart';
+import 'components/onboarding_indicator.dart';
+import 'components/onboarding_controls.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -20,24 +21,40 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  double _pageOffset = 0.0;
 
   static const _slides = [
     (
-      image: 'assets/images/onboarding/img.png',
-      title: 'Join CalService Network',
+      image: 'assets/images/onboarding/animations/Plumbers.json',
+      eyebrow: 'PAGE 01 • SERVICE NETWORK',
+      title: 'Join CalService\nNetwork',
       description: 'Connect with thousands of customers needing verified expert service technicians in your area.',
     ),
     (
-      image: 'assets/images/onboarding/img_1.png',
-      title: 'Manage Jobs & Dispatch',
+      image: 'assets/images/onboarding/animations/Femenine Color palette of a painter.json',
+      eyebrow: 'PAGE 02 • SMART JOB MANAGEMENT',
+      title: 'Manage Jobs\n& Dispatch',
       description: 'Receive real-time job offers, accept assignments, update your status, and complete work effortlessly.',
     ),
     (
-      image: 'assets/images/onboarding/img_2.png',
-      title: 'Instant Earnings & Payouts',
+      image: 'assets/images/onboarding/animations/Man riding a red scooter.json',
+      eyebrow: 'PAGE 03 • GROW YOUR BUSINESS',
+      title: 'Instant Earnings\n& Payouts',
       description: 'Track your daily earnings, manage your bank accounts, and request instant wallet withdrawals anytime.',
     ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      if (mounted && _pageController.position.haveDimensions) {
+        setState(() {
+          _pageOffset = _pageController.page ?? 0.0;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -48,6 +65,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void _onFinish() {
     ref.read(onboardingControllerProvider.notifier).completeOnboarding();
     context.go(AppRoutes.createAccount);
+  }
+
+  void _onNext() {
+    if (_currentPage < _slides.length - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   void _showLanguageSelector(BuildContext context, String currentLang) {
@@ -118,306 +144,112 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _OnboardingHeader(
-              currentLang: currentLang,
-              isLastPage: isLastPage,
-              onOpenLanguage: () => _showLanguageSelector(context, currentLang),
-              onSkip: _onFinish,
-            ),
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _slides.length,
-                onPageChanged: (index) => setState(() => _currentPage = index),
-                itemBuilder: (context, index) {
-                  return _OnboardingSlide(
-                    slide: _slides[index],
-                    isActive: index == _currentPage,
-                  );
-                },
-              ),
-            ),
-            _OnboardingFooter(
-              slideCount: _slides.length,
-              currentPage: _currentPage,
-              isLastPage: isLastPage,
-              onFinish: _onFinish,
-              onSkip: _onFinish,
-              onNext: () {
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _OnboardingHeader extends StatelessWidget {
-  const _OnboardingHeader({
-    required this.currentLang,
-    required this.isLastPage,
-    required this.onOpenLanguage,
-    required this.onSkip,
-  });
-
-  final String currentLang;
-  final bool isLastPage;
-  final VoidCallback onOpenLanguage;
-  final VoidCallback onSkip;
-
-  @override
-  Widget build(BuildContext context) {
-    final langLabel = switch (currentLang) {
-      'ta' => 'தமிழ்',
-      'hi' => 'हिन्दी',
-      _ => 'English',
-    };
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          AnimatedPressable(
-            onPressed: onOpenLanguage,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceElevated.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(AppRadius.pill),
-                border: Border.all(
-                  color: AppColors.brandChampagne.withValues(alpha: 0.4),
-                  width: 1,
-                ),
-              ),
+            // TOP BRANDING
+            Padding(
+              padding: const EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.lg, AppSpacing.xl, AppSpacing.sm),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.language_rounded, size: 16, color: AppColors.brandChampagne),
-                  const SizedBox(width: 6),
                   Text(
-                    langLabel,
-                    style: AppTypography.label.copyWith(color: AppColors.brandMist),
+                    'CALSERVICE\nVENDOR',
+                    style: AppTypography.label.copyWith(
+                      color: AppColors.brandMist,
+                      letterSpacing: 1.5,
+                      height: 1.15,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                  const Icon(Icons.arrow_drop_down_rounded, size: 18, color: AppColors.brandMist),
+                  OnboardingLanguageSelector(
+                    currentLang: currentLang,
+                    onTap: () => _showLanguageSelector(context, currentLang),
+                  ),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
-class _OnboardingSlide extends StatelessWidget {
-  const _OnboardingSlide({
-    required this.slide,
-    required this.isActive,
-  });
+            // ILLUSTRATION AREA (~42%)
+            Expanded(
+              flex: 42,
+              child: Stack(
+                alignment: Alignment.center,
+                children: List.generate(_slides.length, (index) {
+                  final slideOffset = _pageOffset - index;
+                  // Render optimization
+                  if (slideOffset.abs() > 1.5) return const SizedBox.shrink();
 
-  final ({String description, String image, String title}) slide;
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Eyebrow
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 600),
-                opacity: isActive ? 1.0 : 0.0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  margin: const EdgeInsets.only(bottom: AppSpacing.lg),
-                  decoration: BoxDecoration(
-                    color: AppColors.brandChampagne.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(AppRadius.pill),
-                  ),
-                  child: Text(
-                    'CALSERVICE VENDOR',
-                    style: AppTypography.label.copyWith(
-                      color: AppColors.brandChampagne,
-                      letterSpacing: 1.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                  return OnboardingIllustration(
+                    imagePath: _slides[index].image,
+                    pageOffset: slideOffset,
+                    isActive: _currentPage == index,
+                  );
+                }).reversed.toList(),
               ),
-              // Image container with entrance motion
-              Flexible(
-                child: AnimatedScale(
-                  duration: const Duration(milliseconds: 800),
-                  curve: Curves.easeOutCubic,
-                  scale: isActive ? 1.0 : 0.9,
-                  child: Container(
-                    width: double.infinity,
-                    constraints: const BoxConstraints(maxHeight: 380),
-                    padding: const EdgeInsets.all(AppSpacing.sm),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(AppRadius.sheet),
-                      border: Border.all(color: AppColors.border),
-                      boxShadow: AppElevation.elevated,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 600),
-                        child: Image.asset(
-                          slide.image,
-                          key: ValueKey(slide.image),
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: AppColors.brandMist,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.handyman_rounded,
-                                  size: 72,
-                                  color: AppColors.brandChampagne,
+            ),
+
+            // TEXT & INDICATOR AREA (~45%)
+            Expanded(
+              flex: 45,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: _slides.length,
+                      onPageChanged: (index) {
+                        setState(() => _currentPage = index);
+                      },
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: SingleChildScrollView(
+                              physics: const ClampingScrollPhysics(),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: AppSpacing.md),
+                                child: OnboardingPageContent(
+                                  eyebrow: _slides[index].eyebrow,
+                                  title: _slides[index].title,
+                                  description: _slides[index].description,
+                                  isActive: _currentPage == index,
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxl * 1.5),
-              // Animated Text Details
-              AnimatedSlide(
-                duration: const Duration(milliseconds: 600),
-                curve: Curves.easeOutQuad,
-                offset: isActive ? Offset.zero : const Offset(0, 0.1),
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 600),
-                  opacity: isActive ? 1.0 : 0.0,
-                  child: Column(
-                    children: [
-                      Text(
-                        slide.title,
-                        style: AppTypography.display.copyWith(
-                          color: AppColors.brandMist,
-                          fontSize: 28,
-                          height: 1.2,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(
-                        slide.description,
-                        style: AppTypography.body.copyWith(
-                          color: AppColors.brandSlate,
-                          height: 1.5,
-                          fontSize: 15,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
 
-class _OnboardingFooter extends StatelessWidget {
-  const _OnboardingFooter({
-    required this.slideCount,
-    required this.currentPage,
-    required this.isLastPage,
-    required this.onFinish,
-    required this.onNext,
-    required this.onSkip,
-  });
-
-  final int slideCount;
-  final int currentPage;
-  final bool isLastPage;
-  final VoidCallback onFinish;
-  final VoidCallback onNext;
-  final VoidCallback onSkip;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.xxl, AppSpacing.md, AppSpacing.xxl, AppSpacing.xxl),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '0${currentPage + 1}',
-                style: AppTypography.label.copyWith(
-                  color: AppColors.brandChampagne,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              ...List.generate(
-                slideCount,
-                (index) {
-                  final isActive = currentPage == index;
-                  final isPast = index <= currentPage;
-                  
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 2),
-                    height: 2,
-                    width: isActive ? 24 : 12,
-                    decoration: BoxDecoration(
-                      color: isPast
-                          ? AppColors.brandChampagne
-                          : AppColors.brandSlate.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(2),
+                  // PAGE INDICATOR
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.xl),
+                    child: OnboardingIndicator(
+                      slideCount: _slides.length,
+                      pageOffset: _pageOffset,
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.xxl),
-          PremiumButton(
-            label: isLastPage ? 'Get Started' : 'Next',
-            onPressed: isLastPage ? onFinish : onNext,
-          ),
-          if (!isLastPage)
-            AnimatedPressable(
-              onPressed: onSkip,
+            ),
+
+            // BOTTOM CONTROLS (~13%)
+            SafeArea(
+              top: false,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                child: Text(
-                  'Skip for now',
-                  style: AppTypography.label.copyWith(
-                    color: AppColors.brandSlate,
-                    fontSize: 14,
-                  ),
+                padding: const EdgeInsets.fromLTRB(AppSpacing.xl, 0, AppSpacing.xl, AppSpacing.lg),
+                child: OnboardingBottomControls(
+                  isLastPage: isLastPage,
+                  onSkip: _onFinish,
+                  onNext: _onNext,
+                  onGetStarted: _onFinish,
                 ),
               ),
-            )
-          else
-            const SizedBox(height: AppSpacing.sm + 18),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

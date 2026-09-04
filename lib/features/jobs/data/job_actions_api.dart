@@ -17,6 +17,14 @@ class JobActionsApi {
     return response.data as Map<String, dynamic>;
   }
 
+  Future<Map<String, dynamic>> transitionJob(int jobId, String targetStatus) async {
+    final response = await _dio.post(
+      '/workforce/jobs/$jobId/transition/',
+      data: {'status': targetStatus},
+    );
+    return response.data as Map<String, dynamic>;
+  }
+
   Future<Map<String, dynamic>> rejectOffer(int jobId, String reason) async {
     final response = await _dio.post(
       '/workforce/jobs/$jobId/reject-offer/',
@@ -122,6 +130,29 @@ class JobActionsApi {
     final response = await _dio.post(
       '/workforce/jobs/$jobId/payment/verify-otp/',
       data: {'otp': otp},
+    );
+    return response.data as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> requestExtension(
+    int jobId, {
+    required String title,
+    required double laborCost,
+    required double materialsCost,
+    required String reason,
+    required bool isCritical,
+    required bool requiresSpecialist,
+  }) async {
+    final response = await _dio.post(
+      '/workforce/jobs/$jobId/extension/',
+      data: {
+        'title': title,
+        'labor_cost': laborCost,
+        'materials_cost': materialsCost,
+        'reason': reason,
+        'is_critical': isCritical,
+        'requires_specialist': requiresSpecialist,
+      },
     );
     return response.data as Map<String, dynamic>;
   }

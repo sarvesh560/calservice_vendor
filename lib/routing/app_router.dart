@@ -47,6 +47,7 @@ import '../features/settings/presentation/notification_settings_screen.dart';
 import '../features/settings/presentation/privacy_data_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../shared/widgets/app_shell_scaffold.dart';
+import '../shared/widgets/lottie_loading_indicator.dart';
 import 'app_routes.dart';
 
 /// Turns one or more Streams into a Listenable so go_router's `refreshListenable` can
@@ -500,9 +501,7 @@ class _SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text('Verifying session...'),
+            LottieLoadingIndicator(message: 'Verifying session...'),
           ],
         ),
       ),

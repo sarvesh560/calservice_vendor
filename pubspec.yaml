@@ -49,6 +49,8 @@ dependencies:
   latlong2: ^0.10.1
   google_fonts: ^8.2.1
   intl: ^0.20.3
+  flutter_svg: ^2.3.0
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -75,8 +77,10 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/loading/
     - assets/images/onboarding/
     - assets/images/promotions/
+    - assets/images/onboarding/animations/
     - assets/onboarding/
     - assets/promotions/
 

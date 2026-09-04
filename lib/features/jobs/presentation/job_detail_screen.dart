@@ -9,6 +9,11 @@ import '../../../shared/widgets/status_badge.dart';
 import '../domain/job.dart';
 import 'jobs_providers.dart';
 import 'widgets/offer_actions_section.dart';
+import 'widgets/active_job_actions/accepted_actions.dart';
+import 'widgets/active_job_actions/en_route_actions.dart';
+import 'widgets/active_job_actions/pre_service_actions.dart';
+import 'widgets/active_job_actions/in_progress_actions.dart';
+import 'widgets/active_job_actions/payment_actions.dart';
 
 class JobDetailScreen extends ConsumerStatefulWidget {
   const JobDetailScreen({super.key, required this.job});
@@ -19,6 +24,41 @@ class JobDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
+  
+  Widget _buildActiveJobActions(Job currentJob) {
+    switch (currentJob.status.toUpperCase()) {
+      case 'ACCEPTED':
+        return AcceptedActions(job: currentJob);
+      case 'ON_THE_WAY':
+        return EnRouteActions(job: currentJob);
+      case 'ARRIVED':
+        return PreServiceActions(job: currentJob);
+      case 'IN_PROGRESS':
+        return InProgressActions(job: currentJob);
+      case 'COMPLETED':
+        return PaymentActions(job: currentJob);
+      default:
+        // Fallback for unknown active statuses (e.g. ACCEPTED/ACTIVE)
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Job Status: ${currentJob.status}',
+              style: AppTypography.title.copyWith(color: AppColors.brandMidnightDark),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            SecondaryButton(
+              label: 'Refresh Job State',
+              icon: Icons.refresh,
+              onPressed: () {
+                ref.invalidate(activeJobsProvider);
+              },
+            ),
+          ],
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final activeJobsAsync = ref.watch(activeJobsProvider);
@@ -31,7 +71,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
     );
 
     final canAccept = ['PENDING'].contains(currentJob.status.toUpperCase());
-    final isActive = ['ACCEPTED', 'ACTIVE'].contains(currentJob.status.toUpperCase());
+    final isActive = ['ACCEPTED', 'ACTIVE', 'ON_THE_WAY', 'ARRIVED', 'IN_PROGRESS', 'COMPLETED'].contains(currentJob.status.toUpperCase());
 
     final amountText = currentJob.totalAmount != null 
         ? '₹${currentJob.totalAmount!.toStringAsFixed(2)}'
@@ -135,11 +175,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
                   color: AppColors.surface,
                   border: Border(top: BorderSide(color: AppColors.border)),
                 ),
-                child: PremiumButton(
-                  label: 'Job Active — Open Navigation',
-                  icon: Icons.near_me_rounded,
-                  onPressed: () {},
-                ),
+                child: _buildActiveJobActions(currentJob),
               ),
           ],
         ),

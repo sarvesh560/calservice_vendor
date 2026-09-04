@@ -14,6 +14,11 @@ class JobActionsRepository {
     return _message(json, 'Job offer accepted.');
   }
 
+  Future<String> transitionJob(int jobId, String targetStatus) async {
+    final json = await _api.transitionJob(jobId, targetStatus);
+    return _message(json, 'Job state updated.');
+  }
+
   Future<String> rejectOffer(int jobId, String reason) async {
     final json = await _api.rejectOffer(jobId, reason);
     return _message(json, 'Job offer declined.');
@@ -90,6 +95,27 @@ class JobActionsRepository {
   Future<String> verifyPaymentOtp(int jobId, String otp) async {
     final json = await _api.verifyPaymentOtp(jobId, otp);
     return _message(json, 'Payment verified.');
+  }
+
+  Future<String> requestExtension(
+    int jobId, {
+    required String title,
+    required double laborCost,
+    required double materialsCost,
+    required String reason,
+    required bool isCritical,
+    required bool requiresSpecialist,
+  }) async {
+    final json = await _api.requestExtension(
+      jobId,
+      title: title,
+      laborCost: laborCost,
+      materialsCost: materialsCost,
+      reason: reason,
+      isCritical: isCritical,
+      requiresSpecialist: requiresSpecialist,
+    );
+    return _message(json, 'Work extension requested.');
   }
 
   String _message(Map<String, dynamic> json, String fallback) {

@@ -99,7 +99,7 @@ class ActiveAssignmentBanner extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: AnimatedPressable(
-              onPressed: () => context.push('/jobs/${job.id}'),
+              onPressed: () => context.push('/jobs/${job.id}', extra: job),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(

@@ -60,7 +60,7 @@ void main() {
     testWidgets('renders premium UI elements correctly', (tester) async {
       final controller = FakeOnboardingController();
       await tester.pumpWidget(buildTestableOnboarding(controller));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.byIcon(Icons.handyman_rounded), findsOneWidget);
       expect(find.text('Join the Network'), findsOneWidget);
@@ -71,10 +71,10 @@ void main() {
     testWidgets('tapping Get Started completes onboarding and navigates to create account', (tester) async {
       final controller = FakeOnboardingController();
       await tester.pumpWidget(buildTestableOnboarding(controller));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 500));
 
       await tester.tap(find.text('Get Started'));
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(controller.completeCalled, isTrue);
       expect(find.text('Create Account Screen'), findsOneWidget);
@@ -94,7 +94,7 @@ void main() {
       testWidgets('renders cleanly at ${size.width}x${size.height} with 0 overflow', (tester) async {
         final controller = FakeOnboardingController();
         await tester.pumpWidget(buildTestableOnboarding(controller, size: size));
-        await tester.pumpAndSettle();
+        await tester.pump(const Duration(milliseconds: 500));
 
         expect(tester.takeException(), isNull);
       });
