@@ -70,7 +70,7 @@ class _PrivacyDataScreenState extends ConsumerState<PrivacyDataScreen> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.download_outlined, size: 18, color: AppColors.primary),
+                      Icon(Icons.download_outlined, size: 18, color: AppColors.primary),
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text('Export My Data & Records', style: Theme.of(context).textTheme.titleMedium),

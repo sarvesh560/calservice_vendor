@@ -25,7 +25,7 @@ class PremiumButton extends StatelessWidget {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: isDisabled ? AppColors.surfaceMuted : AppColors.brandChampagne,
+          color: isDisabled ? AppColors.surfaceMuted : AppColors.primary,
           borderRadius: BorderRadius.circular(AppRadius.control),
           boxShadow: isDisabled ? AppElevation.none : AppElevation.subtle,
         ),
@@ -36,20 +36,20 @@ class PremiumButton extends StatelessWidget {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textOnPrimary,
                 ),
               )
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 20, color: isDisabled ? AppColors.textMuted : AppColors.brandMidnightDark),
+                    Icon(icon, size: 20, color: isDisabled ? AppColors.textMuted : AppColors.textOnPrimary),
                     const SizedBox(width: AppSpacing.sm),
                   ],
                   Text(
                     label,
                     style: AppTypography.label.copyWith(
-                      color: isDisabled ? AppColors.textMuted : AppColors.brandMidnightDark,
+                      color: isDisabled ? AppColors.textMuted : AppColors.textOnPrimary,
                       fontSize: 14,
                     ),
                   ),
@@ -85,7 +85,7 @@ class SecondaryButton extends StatelessWidget {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(AppRadius.control),
           border: Border.all(
-            color: isDisabled ? AppColors.border : AppColors.brandSlate,
+            color: isDisabled ? AppColors.border : AppColors.primary,
           ),
         ),
         alignment: Alignment.center,
@@ -95,20 +95,20 @@ class SecondaryButton extends StatelessWidget {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.brandSlate,
+                  color: AppColors.primary,
                 ),
               )
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 20, color: isDisabled ? AppColors.textMuted : AppColors.textPrimary),
+                    Icon(icon, size: 20, color: isDisabled ? AppColors.textMuted : AppColors.primary),
                     const SizedBox(width: AppSpacing.sm),
                   ],
                   Text(
                     label,
                     style: AppTypography.label.copyWith(
-                      color: isDisabled ? AppColors.textMuted : AppColors.textPrimary,
+                      color: isDisabled ? AppColors.textMuted : AppColors.primary,
                       fontSize: 14,
                     ),
                   ),

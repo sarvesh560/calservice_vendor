@@ -135,8 +135,8 @@ class _OnboardingIllustrationState extends State<OnboardingIllustration> with Si
           child: Lottie.asset(
             widget.imagePath,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(Icons.error_outline, color: AppColors.brandChampagne),
+            errorBuilder: (context, error, stackTrace) => Center(
+              child: Icon(Icons.error_outline, color: AppColors.primary),
             ),
           ),
         ),

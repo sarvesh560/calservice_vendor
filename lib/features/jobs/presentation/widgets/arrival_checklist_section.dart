@@ -237,7 +237,7 @@ class _ArrivalChecklistSectionState extends ConsumerState<ArrivalChecklistSectio
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.verified_user_outlined, size: 18, color: AppColors.primary),
+                  Icon(Icons.verified_user_outlined, size: 18, color: AppColors.primary),
                   const SizedBox(width: AppSpacing.sm),
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 220),
@@ -329,7 +329,7 @@ class _ArrivalChecklistSectionState extends ConsumerState<ArrivalChecklistSectio
                                   ),
                                   child: Row(
                                     children: [
-                                      const SizedBox(
+                                      SizedBox(
                                         width: 14,
                                         height: 14,
                                         child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
@@ -372,7 +372,7 @@ class _ArrivalChecklistSectionState extends ConsumerState<ArrivalChecklistSectio
                                   ),
                                   child: Row(
                                     children: [
-                                      const SizedBox(
+                                      SizedBox(
                                         width: 14,
                                         height: 14,
                                         child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
@@ -758,7 +758,7 @@ class _PhotoRow extends StatelessWidget {
               ),
             )
           else if (uploading)
-            const SizedBox(
+            SizedBox(
               width: 20,
               height: 20,
               child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),

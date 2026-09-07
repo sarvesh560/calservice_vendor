@@ -25,7 +25,7 @@ class GreetingHeader extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      color: AppColors.brandMidnight,
+      color: AppColors.background,
       padding: EdgeInsets.fromLTRB(
         AppSpacing.lg,
         MediaQuery.paddingOf(context).top + AppSpacing.xl,
@@ -45,7 +45,7 @@ class GreetingHeader extends ConsumerWidget {
                     Text(
                       'Welcome back,',
                       style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.brandSlate,
+                        color: AppColors.textSecondary,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -53,7 +53,7 @@ class GreetingHeader extends ConsumerWidget {
                     Text(
                       displayName,
                       style: AppTypography.headline.copyWith(
-                        color: AppColors.brandMist,
+                        color: AppColors.textPrimary,
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
@@ -87,12 +87,13 @@ class _NotificationAction extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.brandMidnightDark,
+          color: AppColors.surfaceElevated,
+          border: Border.all(color: AppColors.border),
         ),
         child: Stack(
           alignment: Alignment.center,
           children: [
-            const Icon(Icons.notifications_outlined, color: AppColors.brandMist, size: 20),
+            Icon(Icons.notifications_outlined, color: AppColors.primary, size: 20),
             if (unreadCount > 0)
               Positioned(
                 top: 8,
@@ -101,9 +102,9 @@ class _NotificationAction extends StatelessWidget {
                   width: 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: AppColors.brandChampagne,
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.brandMidnightDark, width: 1.5),
+                    border: Border.all(color: AppColors.surfaceElevated, width: 1.5),
                   ),
                 ),
               ),
@@ -149,13 +150,13 @@ class _AvailabilityToggle extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.md),
         decoration: BoxDecoration(
           color: currentOnline 
-              ? AppColors.brandMidnightDark 
-              : AppColors.surfaceElevated.withValues(alpha: 0.12),
+              ? AppColors.surfaceElevated 
+              : AppColors.surfaceElevated.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(AppRadius.card),
           border: Border.all(
             color: currentOnline 
-                ? AppColors.brandChampagne.withValues(alpha: 0.5) 
-                : AppColors.brandSlate.withValues(alpha: 0.2),
+                ? AppColors.primary.withValues(alpha: 0.6) 
+                : AppColors.border,
             width: 1,
           ),
         ),
@@ -168,9 +169,9 @@ class _AvailabilityToggle extends ConsumerWidget {
               height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: currentOnline ? AppColors.brandChampagne : AppColors.brandSlate,
+                color: currentOnline ? AppColors.primary : AppColors.textSecondary,
                 boxShadow: currentOnline 
-                    ? [BoxShadow(color: AppColors.brandChampagne.withValues(alpha: 0.6), blurRadius: 6)]
+                    ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.4), blurRadius: 6)]
                     : null,
               ),
             ),
@@ -184,7 +185,7 @@ class _AvailabilityToggle extends ConsumerWidget {
                         ? 'UPDATING AVAILABILITY...'
                         : (currentOnline ? 'ONLINE' : 'OFFLINE'),
                     style: AppTypography.label.copyWith(
-                      color: currentOnline ? AppColors.brandChampagne : AppColors.brandMist,
+                      color: currentOnline ? AppColors.primary : AppColors.textSecondary,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.6,
                     ),
@@ -195,7 +196,7 @@ class _AvailabilityToggle extends ConsumerWidget {
                         ? "You're available for new work"
                         : "You're currently unavailable",
                     style: AppTypography.bodySmall.copyWith(
-                      color: AppColors.brandSlate,
+                      color: AppColors.textSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -203,19 +204,19 @@ class _AvailabilityToggle extends ConsumerWidget {
               ),
             ),
             if (isToggling)
-              const SizedBox(
+              SizedBox(
                 width: 16,
                 height: 16,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.brandChampagne,
+                  color: AppColors.primary,
                 ),
               )
             else
               Icon(
                 currentOnline ? Icons.toggle_on_rounded : Icons.toggle_off_rounded,
                 size: 32,
-                color: currentOnline ? AppColors.brandChampagne : AppColors.brandSlate,
+                color: currentOnline ? AppColors.primary : AppColors.textSecondary,
               ),
           ],
         ),

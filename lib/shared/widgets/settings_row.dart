@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/app_typography.dart';
 
+
 class SettingsRow extends StatelessWidget {
   const SettingsRow({
     super.key,
@@ -55,6 +56,7 @@ class SettingsRow extends StatelessWidget {
     );
   }
 }
+
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({super.key, required this.title});

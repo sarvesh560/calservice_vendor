@@ -43,7 +43,7 @@ class ActiveAssignmentBanner extends StatelessWidget {
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.3)),
                 ),
-                child: const Icon(Icons.local_shipping_outlined, color: AppColors.brandChampagne, size: 18),
+                child: Icon(Icons.local_shipping_outlined, color: AppColors.primary, size: 18),
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(

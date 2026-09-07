@@ -182,24 +182,24 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: AppColors.brandMidnight.withValues(alpha: 0.1),
+                          color: AppColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(AppRadius.sm),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.account_balance_wallet_rounded,
                           size: 20,
-                          color: AppColors.brandMidnight,
+                          color: AppColors.primary,
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       Text(
                         'Request Payout',
-                        style: AppTypography.headline.copyWith(color: AppColors.brandMidnight, fontSize: 16),
+                        style: AppTypography.headline.copyWith(color: AppColors.textPrimary, fontSize: 16),
                       ),
                     ],
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded, size: 20, color: AppColors.brandMidnight),
+                    icon: Icon(Icons.close_rounded, size: 20, color: AppColors.textSecondary),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -443,11 +443,11 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                       value: account.id,
                       child: Row(
                         children: [
-                          const Icon(Icons.account_balance_outlined, size: 16, color: AppColors.brandMidnightDark),
+                          Icon(Icons.account_balance_outlined, size: 16, color: AppColors.primary),
                           const SizedBox(width: 8),
                           Text(
                             '${account.bankName} (${account.maskedAccountNumber})',
-                            style: AppTypography.body.copyWith(fontSize: 13, color: AppColors.brandMidnight),
+                            style: AppTypography.body.copyWith(fontSize: 13, color: AppColors.textPrimary),
                           ),
                           if (account.isPrimary) ...[
                             const SizedBox(width: 8),

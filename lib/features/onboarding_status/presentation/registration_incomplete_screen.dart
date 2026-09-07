@@ -56,10 +56,10 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                             border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.4)),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.assignment_late_outlined,
                             size: 32,
-                            color: AppColors.brandChampagne,
+                            color: AppColors.primary,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.lg),
@@ -68,7 +68,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                           style: AppTypography.display.copyWith(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.brandMidnightDark,
+                            color: AppColors.textPrimary,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -76,7 +76,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                         Text(
                           'Your vendor profile is not complete yet. Complete the remaining steps to submit your application and start receiving dispatches.',
                           style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.brandSlate,
+                            color: AppColors.textSecondary,
                             fontSize: 14,
                             height: 1.5,
                           ),
@@ -89,9 +89,8 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                             width: double.infinity,
                             height: 52,
                             decoration: BoxDecoration(
-                              color: AppColors.brandMidnightDark,
+                              color: AppColors.primary,
                               borderRadius: BorderRadius.circular(AppRadius.control),
-                              border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.4)),
                             ),
                             alignment: Alignment.center,
                             child: Row(
@@ -100,13 +99,13 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                                 Text(
                                   'Continue Registration',
                                   style: AppTypography.label.copyWith(
-                                    color: AppColors.brandChampagne,
+                                    color: Colors.white,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                const Icon(Icons.arrow_forward_rounded, size: 18, color: AppColors.brandChampagne),
+                                Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white),
                               ],
                             ),
                           ),

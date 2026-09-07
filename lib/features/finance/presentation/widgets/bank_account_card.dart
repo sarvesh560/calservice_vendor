@@ -49,10 +49,10 @@ class BankAccountCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(AppRadius.sm),
                           border: Border.all(color: AppColors.border),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.account_balance_rounded,
                           size: 20,
-                          color: AppColors.brandMidnightDark,
+                          color: AppColors.primary,
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),

@@ -21,6 +21,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
 
     // On fresh launch, routes to intro onboarding walkthrough
-    expect(find.text('Next'), findsOneWidget);
+    expect(find.text('NEXT'), findsOneWidget);
   });
 }

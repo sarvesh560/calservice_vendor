@@ -185,10 +185,10 @@ class TransactionListTile extends StatelessWidget {
                 ],
               ),
               const SizedBox(width: 8),
-              const Icon(
+              Icon(
                 Icons.chevron_right_rounded,
                 size: 16,
-                color: AppColors.brandChampagne,
+                color: AppColors.primary,
               ),
             ],
           ),

@@ -47,16 +47,16 @@ class _AdminDrawerState extends ConsumerState<AdminDrawer> {
             // ── Drawer Header ──────────────────────────────────────────────
             Container(
               padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Color(0xFF0A2540), // Deep Peacock Navy
-                    Color(0xFF004E89), // Peacock Blue
+                    AppColors.primaryDark,
+                    AppColors.primary,
                   ],
                 ),
-                border: Border(bottom: BorderSide(color: Color(0x33004E89))),
+                border: Border(bottom: BorderSide(color: AppColors.border)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -579,7 +579,7 @@ class _DrawerNavItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                      color: isActive ? const Color(0xFF0A2540) : const Color(0xFF334155),
+                      color: isActive ? AppColors.primary : AppColors.textSecondary,
                     ),
                   ),
                 ),

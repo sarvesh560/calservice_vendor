@@ -48,7 +48,7 @@ class LottieLoadingIndicator extends StatelessWidget {
                 Text(
                   'CALSERVICE',
                   style: AppTypography.titleLarge.copyWith(
-                    color: AppColors.brandMidnightDark,
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.5,
                   ),
@@ -56,7 +56,7 @@ class LottieLoadingIndicator extends StatelessWidget {
                 Text(
                   'VENDOR',
                   style: AppTypography.label.copyWith(
-                    color: AppColors.brandChampagne,
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 2.0,
                   ),
@@ -65,7 +65,7 @@ class LottieLoadingIndicator extends StatelessWidget {
                 Text(
                   message!,
                   style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.brandMist.withValues(alpha: 0.8),
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

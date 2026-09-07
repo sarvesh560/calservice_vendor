@@ -1,3 +1,8 @@
+enum PromotionMediaType {
+  image,
+  video,
+}
+
 class PromotionModel {
   const PromotionModel({
     required this.id,
@@ -10,6 +15,8 @@ class PromotionModel {
     required this.externalUrl,
     this.badgeText = 'PARTNER SPOTLIGHT',
     this.isActive = true,
+    this.mediaType = PromotionMediaType.image,
+    this.videoAsset,
   });
 
   final String id;
@@ -22,8 +29,11 @@ class PromotionModel {
   final String externalUrl;
   final String badgeText;
   final bool isActive;
+  final PromotionMediaType mediaType;
+  final String? videoAsset;
 
   factory PromotionModel.fromJson(Map<String, dynamic> json) {
+    final mediaTypeStr = json['media_type'] as String? ?? 'image';
     return PromotionModel(
       id: json['id'] as String? ?? '',
       partnerName: json['partner_name'] as String? ?? '',
@@ -35,6 +45,8 @@ class PromotionModel {
       externalUrl: json['external_url'] as String? ?? 'https://calservice.in',
       badgeText: json['badge_text'] as String? ?? 'PARTNER SPOTLIGHT',
       isActive: json['is_active'] as bool? ?? true,
+      mediaType: mediaTypeStr == 'video' ? PromotionMediaType.video : PromotionMediaType.image,
+      videoAsset: json['video_asset'] as String?,
     );
   }
 
@@ -50,6 +62,8 @@ class PromotionModel {
       'external_url': externalUrl,
       'badge_text': badgeText,
       'is_active': isActive,
+      'media_type': mediaType == PromotionMediaType.video ? 'video' : 'image',
+      'video_asset': videoAsset,
     };
   }
 }

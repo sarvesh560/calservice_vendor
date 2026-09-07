@@ -74,7 +74,7 @@ class DocumentsScreen extends ConsumerWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      const Icon(Icons.shield_outlined, size: 16, color: AppColors.primary),
+                                      Icon(Icons.shield_outlined, size: 16, color: AppColors.primary),
                                       const SizedBox(width: AppSpacing.sm),
                                       Expanded(
                                         child: Text(
@@ -414,7 +414,7 @@ class _DocumentItemTile extends StatelessWidget {
                     color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.description_outlined, size: 20, color: AppColors.primary),
+                  child: Icon(Icons.description_outlined, size: 20, color: AppColors.primary),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(

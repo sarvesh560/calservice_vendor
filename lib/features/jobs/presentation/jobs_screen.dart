@@ -140,7 +140,7 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                       Text(
                         'JOBS QUEUE',
                         style: AppTypography.label.copyWith(
-                          color: AppColors.brandMidnightDark,
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.0,
                         ),
@@ -150,9 +150,9 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: AppColors.brandMist,
+                          color: AppColors.surfaceElevated,
                           borderRadius: BorderRadius.circular(AppRadius.pill),
-                          border: Border.all(color: AppColors.brandMidnightDark.withValues(alpha: 0.1)),
+                          border: Border.all(color: AppColors.border),
                         ),
                         child: Row(
                           children: [
@@ -190,11 +190,11 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                 sliver: Builder(
                       builder: (context) {
                         if (isInitialLoading) {
-                          return const SliverToBoxAdapter(
+                          return SliverToBoxAdapter(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(AppSpacing.xxl),
-                                child: CircularProgressIndicator(strokeWidth: 2.5, color: AppColors.brandChampagne),
+                                padding: const EdgeInsets.all(AppSpacing.xxl),
+                                child: CircularProgressIndicator(strokeWidth: 2.5, color: AppColors.primary),
                               ),
                             ),
                           );
@@ -286,7 +286,7 @@ class _JobsHeader extends StatelessWidget {
           'Jobs Workspace',
           style: AppTypography.headline.copyWith(
             fontSize: 20,
-            color: AppColors.brandMidnight,
+            color: AppColors.textPrimary,
           ),
         ),
         AnimatedPressable(
@@ -294,10 +294,10 @@ class _JobsHeader extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.brandChampagne.withValues(alpha: 0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.refresh_rounded, size: 20, color: AppColors.brandChampagne),
+            child: Icon(Icons.refresh_rounded, size: 20, color: AppColors.primary),
           ),
         ),
       ],
@@ -326,12 +326,12 @@ class _TabButton extends StatelessWidget {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.brandMidnight : Colors.transparent,
+            color: isSelected ? AppColors.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(AppRadius.pill),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: AppColors.brandMidnight.withValues(alpha: 0.2),
+                      color: AppColors.primary.withValues(alpha: 0.2),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -346,7 +346,7 @@ class _TabButton extends StatelessWidget {
             style: AppTypography.label.copyWith(
               fontSize: 12,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-              color: isSelected ? AppColors.brandMist : AppColors.brandMidnightDark,
+              color: isSelected ? AppColors.textOnPrimary : AppColors.textSecondary,
             ),
           ),
         ),

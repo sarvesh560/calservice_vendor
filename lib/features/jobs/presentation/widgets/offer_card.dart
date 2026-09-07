@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '';
+import 'package:intl/intl.dart' as intl;
 
 import '../../../../core/theme/app_theme.dart';
-import 'package:intl/intl.dart' as intl;
 import '../../../../core/theme/app_typography.dart';
-import '../../../../shared/widgets/premium_buttons.dart';
 import '../../domain/job.dart';
 import 'offer_actions_section.dart';
-import '../jobs_providers.dart';
 
 class OfferCard extends ConsumerWidget {
   const OfferCard({super.key, required this.job});
@@ -18,14 +14,12 @@ class OfferCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currency = intl.NumberFormat.currency(locale: 'en_IN', symbol: '₹', decimalDigits: 0);
-    final isAccepting = false;
-    final isRejecting = false;
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceElevated,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.brandChampagne),
+        border: Border.all(color: AppColors.primary),
         boxShadow: AppElevation.elevated,
       ),
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -37,10 +31,10 @@ class OfferCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.brandChampagne.withValues(alpha: 0.2),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
-                child: Text('NEW DISPATCH', style: AppTypography.caption.copyWith(color: AppColors.brandChampagneDark)),
+                child: Text('NEW DISPATCH', style: AppTypography.caption.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
               ),
               const Spacer(),
               Text(
@@ -51,8 +45,8 @@ class OfferCard extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            job.displayTitle ?? 'Assigned Service',
-            style: AppTypography.titleLarge,
+            job.displayTitle,
+            style: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary),
           ),
           const SizedBox(height: AppSpacing.xs),
           Row(
@@ -62,7 +56,7 @@ class OfferCard extends ConsumerWidget {
               Expanded(
                 child: Text(
                   job.address ?? 'Customer Location',
-                  style: AppTypography.bodySmall,
+                  style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/localization/language_controller.dart';
@@ -34,8 +35,8 @@ class ProfileScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Select App Language',
-                  style: AppTypography.titleLarge.copyWith(color: AppColors.brandMidnight),
+                  context.tr('select_language'),
+                  style: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 _LanguageTile(
@@ -87,8 +88,8 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Vendor Profile',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('profile'),
         automaticallyImplyLeading: false,
       ),
       body: profileAsync.when(
@@ -101,7 +102,7 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.md),
               ElevatedButton(
                 onPressed: () => ref.invalidate(employeeProfileProvider),
-                child: const Text('Retry'),
+                child: Text(context.tr('retry')),
               ),
             ],
           ),
@@ -129,11 +130,11 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       CircleAvatar(
                         radius: 36,
-                        backgroundColor: AppColors.brandChampagne,
+                        backgroundColor: AppColors.primary.withValues(alpha: 0.2),
                         child: Text(
                           displayName.isNotEmpty ? displayName[0].toUpperCase() : 'V',
                           style: AppTypography.display.copyWith(
-                            color: AppColors.brandMidnightDark,
+                            color: AppColors.primary,
                             fontSize: 32,
                           ),
                         ),
@@ -147,7 +148,7 @@ class ProfileScreen extends ConsumerWidget {
                               displayName,
                               style: AppTypography.headline.copyWith(
                                 fontSize: 20,
-                                color: AppColors.brandMidnight,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -156,7 +157,7 @@ class ProfileScreen extends ConsumerWidget {
                                   ? profile.displayPhone
                                   : (profile.email ?? user?.email ?? ''),
                               style: AppTypography.bodySmall.copyWith(
-                                color: AppColors.brandSlate,
+                                color: AppColors.textSecondary,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -398,12 +399,12 @@ class _LanguageTile extends StatelessWidget {
       title: Text(
         label,
         style: AppTypography.title.copyWith(
-          color: isSelected ? AppColors.brandChampagne : AppColors.brandMidnight,
+          color: isSelected ? AppColors.primary : AppColors.textPrimary,
           fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check_circle_rounded, color: AppColors.brandChampagne)
+          ? Icon(Icons.check_circle_rounded, color: AppColors.primary)
           : null,
     );
   }

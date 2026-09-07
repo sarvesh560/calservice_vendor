@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/localization/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/domain/appearance_preferences.dart';
 import 'features/settings/presentation/providers/appearance_providers.dart';
 import 'routing/app_router.dart';
+import 'shared/localization/language_controller.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});
@@ -49,6 +51,7 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
     final appearance = ref.watch(currentAppearanceProvider);
+    final languageCode = ref.watch(languageControllerProvider);
 
     final brightness = _resolveBrightness(appearance.theme);
     // Must run before this build() returns — every descendant that reads
@@ -68,6 +71,9 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       theme: themeData,
       routerConfig: router,
+      locale: Locale(languageCode),
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
     );
   }
 }

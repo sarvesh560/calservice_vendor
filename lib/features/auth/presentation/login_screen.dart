@@ -89,21 +89,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               
               TextField(
                 controller: _emailController,
-                style: AppTypography.body.copyWith(color: Colors.white, fontSize: 15),
-                cursorColor: AppColors.brandChampagne,
+                style: AppTypography.body.copyWith(color: AppColors.textPrimary, fontSize: 15),
+                cursorColor: AppColors.primary,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: AppColors.brandMidnight,
+                  fillColor: AppColors.surfaceElevated,
                   labelText: 'Email Address',
-                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate),
-                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.brandChampagne),
+                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+                  prefixIcon: Icon(Icons.email_outlined, color: AppColors.primary),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadius.control),
-                    borderSide: BorderSide(color: AppColors.brandSlate.withValues(alpha: 0.3)),
+                    borderSide: BorderSide(color: AppColors.border),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadius.control),
-                    borderSide: const BorderSide(color: AppColors.brandChampagne, width: 1.5),
+                    borderSide: BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                 ),
                 keyboardType: TextInputType.emailAddress,
@@ -113,29 +113,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               
               TextField(
                 controller: _passwordController,
-                style: AppTypography.body.copyWith(color: Colors.white, fontSize: 15),
-                cursorColor: AppColors.brandChampagne,
+                style: AppTypography.body.copyWith(color: AppColors.textPrimary, fontSize: 15),
+                cursorColor: AppColors.primary,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: AppColors.brandMidnight,
+                  fillColor: AppColors.surfaceElevated,
                   labelText: 'Password',
-                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate),
-                  prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.brandChampagne),
+                  labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+                  prefixIcon: Icon(Icons.lock_outline_rounded, color: AppColors.primary),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                      color: AppColors.brandSlate,
+                      color: AppColors.textSecondary,
                     ),
                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadius.control),
-                    borderSide: BorderSide(color: AppColors.brandSlate.withValues(alpha: 0.3)),
+                    borderSide: BorderSide(color: AppColors.border),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadius.control),
-                    borderSide: const BorderSide(color: AppColors.brandChampagne, width: 1.5),
+                    borderSide: BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                 ),
                 textInputAction: TextInputAction.done,

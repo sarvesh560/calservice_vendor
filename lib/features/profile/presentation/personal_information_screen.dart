@@ -144,19 +144,20 @@ class PersonalInformationScreen extends ConsumerWidget {
               height: 52,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.brandMidnight,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
+                border: Border.all(color: AppColors.border),
                 boxShadow: AppElevation.subtle,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.edit_note_rounded, color: AppColors.brandChampagne, size: 22),
+                  Icon(Icons.edit_note_rounded, color: AppColors.primary, size: 22),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
                     'Edit Information',
                     style: AppTypography.title.copyWith(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -236,7 +237,7 @@ class PersonalInformationScreen extends ConsumerWidget {
             const SizedBox(height: AppSpacing.lg),
             Text(
               'Unable to load personal information',
-              style: AppTypography.titleLarge.copyWith(color: AppColors.brandMidnight),
+              style: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -253,12 +254,12 @@ class PersonalInformationScreen extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
                 decoration: BoxDecoration(
-                  color: AppColors.brandMidnight,
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(AppRadius.control),
                 ),
                 child: Text(
                   'Retry',
-                  style: AppTypography.title.copyWith(color: AppColors.brandChampagne, fontSize: 14),
+                  style: AppTypography.title.copyWith(color: Colors.white, fontSize: 14),
                 ),
               ),
             ),
@@ -280,7 +281,7 @@ class _SectionHeader extends StatelessWidget {
       child: Text(
         title,
         style: AppTypography.caption.copyWith(
-          color: AppColors.brandSlate,
+          color: AppColors.textSecondary,
           letterSpacing: 1.2,
           fontWeight: FontWeight.w700,
         ),
@@ -332,10 +333,10 @@ class _InfoRow extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.brandMist,
+                  color: AppColors.surfaceElevated,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, size: 20, color: AppColors.brandMidnight),
+                child: Icon(icon, size: 20, color: AppColors.primary),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -345,7 +346,7 @@ class _InfoRow extends StatelessWidget {
                     Text(
                       title,
                       style: AppTypography.caption.copyWith(
-                        color: AppColors.brandSlate,
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -353,7 +354,7 @@ class _InfoRow extends StatelessWidget {
                     Text(
                       value,
                       style: AppTypography.body.copyWith(
-                        color: AppColors.brandMidnight,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -394,10 +395,10 @@ class _InfoWidgetRow extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.brandMist,
+                  color: AppColors.surfaceElevated,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, size: 20, color: AppColors.brandMidnight),
+                child: Icon(icon, size: 20, color: AppColors.primary),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
@@ -407,7 +408,7 @@ class _InfoWidgetRow extends StatelessWidget {
                     Text(
                       title,
                       style: AppTypography.caption.copyWith(
-                        color: AppColors.brandSlate,
+                        color: AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

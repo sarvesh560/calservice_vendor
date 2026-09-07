@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_motion.dart';
@@ -9,25 +10,29 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/animated_pressable.dart';
 import '../../data/static_promotions.dart';
 import '../../models/promotion_model.dart';
+import '../providers/promotion_providers.dart';
 
 /// Secondary persistent partner promotion pill attached to the right screen edge.
 /// Smoothly expands into a focused campaign card panel on tap.
-class FloatingPartnerPromotion extends StatefulWidget {
+class FloatingPartnerPromotion extends ConsumerStatefulWidget {
   const FloatingPartnerPromotion({
     super.key,
     this.promotions = staticPromotions,
+    this.onClose,
+    this.initialExpanded = true,
   });
 
   final List<PromotionModel> promotions;
+  final VoidCallback? onClose;
+  final bool initialExpanded;
 
   @override
-  State<FloatingPartnerPromotion> createState() => _FloatingPartnerPromotionState();
+  ConsumerState<FloatingPartnerPromotion> createState() => _FloatingPartnerPromotionState();
 }
 
-class _FloatingPartnerPromotionState extends State<FloatingPartnerPromotion> with TickerProviderStateMixin {
+class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromotion> with TickerProviderStateMixin {
   int _currentIndex = 0;
   Timer? _rotationTimer;
-  bool _isExpanded = false;
 
   late final AnimationController _pulseController;
   late final Animation<double> _pulseX;
@@ -39,7 +44,7 @@ class _FloatingPartnerPromotionState extends State<FloatingPartnerPromotion> wit
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
-    )..repeat(reverse: true);
+    );
 
     _pulseX = Tween<double>(begin: 0, end: -4).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
@@ -53,7 +58,9 @@ class _FloatingPartnerPromotionState extends State<FloatingPartnerPromotion> wit
     if (widget.promotions.length <= 1) return;
 
     _rotationTimer = Timer.periodic(const Duration(seconds: 10), (_) {
-      if (!mounted || _isExpanded) return;
+      if (!mounted) return;
+      final isExpanded = ref.read(promotionExpansionProvider);
+      if (isExpanded) return;
       setState(() {
         _currentIndex = (_currentIndex + 1) % widget.promotions.length;
       });
@@ -77,9 +84,7 @@ class _FloatingPartnerPromotionState extends State<FloatingPartnerPromotion> wit
   }
 
   void _toggleExpand() {
-    setState(() {
-      _isExpanded = !_isExpanded;
-    });
+    ref.read(promotionExpansionProvider.notifier).toggle();
   }
 
   @override
@@ -88,12 +93,21 @@ class _FloatingPartnerPromotionState extends State<FloatingPartnerPromotion> wit
       return const SizedBox.shrink();
     }
 
+    final isExpanded = ref.watch(promotionExpansionProvider);
+    if (isExpanded) {
+      _pulseController.stop();
+    } else {
+      if (!_pulseController.isAnimating) {
+        _pulseController.repeat(reverse: true);
+      }
+    }
+
     final currentPromo = widget.promotions[_currentIndex];
 
     return Stack(
       children: [
         // ── 1. Dimmed Backdrop when Expanded ──────────────────────────────
-        if (_isExpanded)
+        if (isExpanded)
           Positioned.fill(
             child: GestureDetector(
               onTap: _toggleExpand,
@@ -127,11 +141,14 @@ class _FloatingPartnerPromotionState extends State<FloatingPartnerPromotion> wit
                 ),
               );
             },
-            child: _isExpanded
+            child: isExpanded
                 ? _ExpandedPromotionCard(
                     key: const ValueKey('expanded_card'),
                     promotion: currentPromo,
-                    onClose: _toggleExpand,
+                    onClose: () {
+                      ref.read(promotionExpansionProvider.notifier).collapse();
+                      widget.onClose?.call();
+                    },
                     onCta: () => _launchUrl(currentPromo.externalUrl),
                   )
                 : AnimatedBuilder(
@@ -172,15 +189,15 @@ class _CollapsedEdgePill extends StatelessWidget {
         width: 68,
         height: 98,
         decoration: BoxDecoration(
-          color: AppColors.brandMidnightDark,
+          color: AppColors.surfaceElevated,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(16),
             bottomLeft: Radius.circular(16),
           ),
           border: Border(
-            top: BorderSide(color: AppColors.brandChampagne.withValues(alpha: 0.5)),
-            left: BorderSide(color: AppColors.brandChampagne.withValues(alpha: 0.5)),
-            bottom: BorderSide(color: AppColors.brandChampagne.withValues(alpha: 0.5)),
+            top: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
+            left: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
+            bottom: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
           ),
           boxShadow: [
             BoxShadow(
@@ -197,13 +214,13 @@ class _CollapsedEdgePill extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
-                color: AppColors.brandChampagne.withValues(alpha: 0.15),
+                color: AppColors.primary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(AppRadius.pill),
               ),
               child: Text(
                 'PROMO',
                 style: AppTypography.label.copyWith(
-                  color: AppColors.brandChampagne,
+                  color: AppColors.primary,
                   fontSize: 7.5,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.5,
@@ -216,15 +233,15 @@ class _CollapsedEdgePill extends StatelessWidget {
               height: 32,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.5)),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
               ),
               child: ClipOval(
                 child: Image.asset(
                   promotion.logoAsset,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: AppColors.brandMidnight,
-                    child: const Icon(Icons.star_rounded, size: 18, color: AppColors.brandChampagne),
+                    color: AppColors.surface,
+                    child: Icon(Icons.star_rounded, size: 18, color: AppColors.primary),
                   ),
                 ),
               ),
@@ -236,7 +253,7 @@ class _CollapsedEdgePill extends StatelessWidget {
                 promotion.partnerName,
                 key: ValueKey<String>(promotion.partnerName),
                 style: AppTypography.label.copyWith(
-                  color: AppColors.brandMist,
+                  color: AppColors.textPrimary,
                   fontSize: 9.5,
                   fontWeight: FontWeight.w700,
                 ),
@@ -271,9 +288,9 @@ class _ExpandedPromotionCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: AppSpacing.md),
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.brandMidnightDark,
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.5)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.45),
@@ -298,15 +315,15 @@ class _ExpandedPromotionCard extends StatelessWidget {
                       height: 26,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.4)),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                       ),
                       child: ClipOval(
                         child: Image.asset(
                           promotion.logoAsset,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => Container(
-                            color: AppColors.brandMidnight,
-                            child: const Icon(Icons.star_rounded, size: 14, color: AppColors.brandChampagne),
+                            color: AppColors.surface,
+                            child: Icon(Icons.star_rounded, size: 14, color: AppColors.primary),
                           ),
                         ),
                       ),
@@ -316,7 +333,7 @@ class _ExpandedPromotionCard extends StatelessWidget {
                       child: Text(
                         promotion.partnerName,
                         style: AppTypography.title.copyWith(
-                          color: AppColors.brandMist,
+                          color: AppColors.textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
@@ -327,11 +344,12 @@ class _ExpandedPromotionCard extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
+              AnimatedPressable(
                 onPressed: onClose,
-                icon: const Icon(Icons.close_rounded, size: 20, color: AppColors.brandSlate),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  child: Icon(Icons.close_rounded, size: 20, color: AppColors.textSecondary),
+                ),
               ),
             ],
           ),
@@ -347,9 +365,9 @@ class _ExpandedPromotionCard extends StatelessWidget {
                 promotion.imageAsset,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  color: AppColors.brandMidnight,
+                  color: AppColors.surface,
                   alignment: Alignment.center,
-                  child: const Icon(Icons.workspace_premium_rounded, size: 36, color: AppColors.brandChampagne),
+                  child: Icon(Icons.workspace_premium_rounded, size: 36, color: AppColors.primary),
                 ),
               ),
             ),
@@ -362,7 +380,7 @@ class _ExpandedPromotionCard extends StatelessWidget {
             style: AppTypography.display.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: AppColors.brandMist,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 4),
@@ -370,7 +388,7 @@ class _ExpandedPromotionCard extends StatelessWidget {
             promotion.subtitle,
             style: AppTypography.bodySmall.copyWith(
               fontSize: 12,
-              color: AppColors.brandSlate,
+              color: AppColors.textSecondary,
               height: 1.35,
             ),
           ),
@@ -383,7 +401,7 @@ class _ExpandedPromotionCard extends StatelessWidget {
               width: double.infinity,
               height: 42,
               decoration: BoxDecoration(
-                color: AppColors.brandChampagne,
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(AppRadius.control),
               ),
               alignment: Alignment.center,
@@ -393,13 +411,13 @@ class _ExpandedPromotionCard extends StatelessWidget {
                   Text(
                     promotion.ctaText,
                     style: AppTypography.label.copyWith(
-                      color: AppColors.brandMidnightDark,
+                      color: AppColors.textOnPrimary,
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(width: 6),
-                  const Icon(Icons.arrow_forward_rounded, size: 16, color: AppColors.brandMidnightDark),
+                  Icon(Icons.arrow_forward_rounded, size: 16, color: AppColors.textOnPrimary),
                 ],
               ),
             ),

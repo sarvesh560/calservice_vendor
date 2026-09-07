@@ -107,7 +107,7 @@ class _ProofSubmissionSheetState extends ConsumerState<ProofSubmissionSheet> {
           children: [
             Row(
               children: [
-                const Icon(Icons.camera_alt_outlined, size: 22, color: AppColors.primary),
+                Icon(Icons.camera_alt_outlined, size: 22, color: AppColors.primary),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(

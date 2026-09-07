@@ -155,21 +155,21 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                           color: AppColors.brandMidnight.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(AppRadius.sm),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.add_card_rounded,
                           size: 20,
-                          color: AppColors.brandMidnight,
+                          color: AppColors.primary,
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       Text(
                         'Link Bank Account',
-                        style: AppTypography.headline.copyWith(color: AppColors.brandMidnight, fontSize: 16),
+                        style: AppTypography.headline.copyWith(color: AppColors.textPrimary, fontSize: 16),
                       ),
                     ],
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded, size: 20, color: AppColors.brandMidnight),
+                    icon: Icon(Icons.close_rounded, size: 20, color: AppColors.textSecondary),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -187,7 +187,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.lock_outline_rounded, size: 18, color: AppColors.brandMidnight),
+                    Icon(Icons.lock_outline_rounded, size: 18, color: AppColors.primary),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(

@@ -36,7 +36,7 @@ class _AnimatedPromotionCarouselState extends State<AnimatedPromotionCarousel> {
     _autoTimer?.cancel();
     if (widget.promotions.length <= 1) return;
 
-    _autoTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+    _autoTimer = Timer.periodic(const Duration(seconds: 6), (_) {
       if (!mounted) return;
       final nextIndex = (_currentIndex + 1) % widget.promotions.length;
       _pageController.animateToPage(
@@ -77,6 +77,12 @@ class _AnimatedPromotionCarouselState extends State<AnimatedPromotionCarousel> {
             },
             itemBuilder: (context, index) {
               final promo = widget.promotions[index];
+              if (promo.mediaType == PromotionMediaType.video && promo.videoAsset != null) {
+                return VideoPromotionSlide(
+                  promotion: promo,
+                  isActive: index == _currentIndex,
+                );
+              }
               return PromotionBanner(
                 promotion: promo,
                 isActive: index == _currentIndex,
@@ -99,8 +105,8 @@ class _AnimatedPromotionCarouselState extends State<AnimatedPromotionCarousel> {
               height: 6,
               decoration: BoxDecoration(
                 color: isCurrent
-                    ? AppColors.brandChampagne
-                    : AppColors.brandSlate.withValues(alpha: 0.3),
+                    ? AppColors.primary
+                    : AppColors.accentSoft,
                 borderRadius: BorderRadius.circular(AppRadius.pill),
               ),
             );

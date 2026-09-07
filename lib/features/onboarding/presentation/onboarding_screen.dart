@@ -11,6 +11,7 @@ import 'components/onboarding_page_content.dart';
 import 'components/onboarding_indicator.dart';
 import 'components/onboarding_controls.dart';
 
+
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -276,12 +277,12 @@ class _LanguageTile extends StatelessWidget {
       title: Text(
         label,
         style: AppTypography.title.copyWith(
-          color: isSelected ? AppColors.brandChampagne : AppColors.brandMidnight,
+          color: isSelected ? AppColors.primary : AppColors.textPrimary,
           fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check_circle_rounded, color: AppColors.brandChampagne)
+          ? Icon(Icons.check_circle_rounded, color: AppColors.primary)
           : null,
     );
   }

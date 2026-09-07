@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -365,6 +366,210 @@ class _PromotionBannerState extends State<PromotionBanner> with TickerProviderSt
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Independent full-card video promotion slide for the carousel (Slide 1).
+class VideoPromotionSlide extends StatelessWidget {
+  const VideoPromotionSlide({
+    super.key,
+    required this.promotion,
+    required this.isActive,
+  });
+
+  final PromotionModel promotion;
+  final bool isActive;
+
+  Future<void> _launchUrl() async {
+    final uri = Uri.parse(promotion.externalUrl);
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {}
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedPressable(
+      onPressed: _launchUrl,
+      child: Container(
+        height: 195,
+        margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+        decoration: BoxDecoration(
+          color: AppColors.brandMidnightDark,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.brandChampagne.withValues(alpha: 0.35),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.brandMidnightDark.withValues(alpha: 0.25),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: promotion.videoAsset != null
+              ? CarouselVideoPlayer(
+                  videoAsset: promotion.videoAsset!,
+                  isActive: isActive,
+                  fallbackImageAsset: promotion.imageAsset,
+                )
+              : Image.asset(
+                  promotion.imageAsset,
+                  fit: BoxFit.cover,
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class CarouselVideoPlayer extends StatefulWidget {
+  const CarouselVideoPlayer({
+    super.key,
+    required this.videoAsset,
+    required this.isActive,
+    required this.fallbackImageAsset,
+  });
+
+  final String videoAsset;
+  final bool isActive;
+  final String fallbackImageAsset;
+
+  @override
+  State<CarouselVideoPlayer> createState() => _CarouselVideoPlayerState();
+}
+
+class _CarouselVideoPlayerState extends State<CarouselVideoPlayer> with WidgetsBindingObserver {
+  VideoPlayerController? _controller;
+  bool _isInitialized = false;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initializePlayer();
+  }
+
+  Future<void> _initializePlayer() async {
+    try {
+      final controller = VideoPlayerController.asset(widget.videoAsset);
+      _controller = controller;
+      await controller.initialize();
+      if (!mounted) return;
+      await controller.setLooping(true);
+      await controller.setVolume(0.0);
+      
+      controller.addListener(_videoListener);
+
+      setState(() {
+        _isInitialized = true;
+      });
+
+      debugPrint('[VIDEO_TELEMETRY] Initialized for ${widget.videoAsset}:');
+      debugPrint('[VIDEO_TELEMETRY] - isInitialized: ${controller.value.isInitialized}');
+      debugPrint('[VIDEO_TELEMETRY] - duration: ${controller.value.duration}');
+      debugPrint('[VIDEO_TELEMETRY] - size: ${controller.value.size}');
+      debugPrint('[VIDEO_TELEMETRY] - isActive: ${widget.isActive}');
+
+      if (widget.isActive && mounted) {
+        await controller.play();
+        debugPrint('[VIDEO_TELEMETRY] play() called. isPlaying: ${controller.value.isPlaying}');
+      }
+    } catch (e, stackTrace) {
+      debugPrint('[VIDEO_TELEMETRY] INITIALIZATION FAILED for ${widget.videoAsset}: $e');
+      debugPrintStack(stackTrace: stackTrace);
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+        });
+      }
+    }
+  }
+
+  void _videoListener() {
+    if (!mounted || _controller == null) return;
+    final val = _controller!.value;
+    debugPrint('[VIDEO_TELEMETRY] tick - isPlaying: ${val.isPlaying}, pos: ${val.position}/${val.duration}, hasError: ${val.hasError}');
+    if (val.hasError) {
+      debugPrint('[VIDEO_TELEMETRY] ERROR DESCRIPTION: ${val.errorDescription}');
+      setState(() {
+        _hasError = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_controller != null && _isInitialized) {
+      if (state == AppLifecycleState.resumed && widget.isActive) {
+        _controller!.play();
+      } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+        _controller!.pause();
+      }
+    }
+  }
+
+  @override
+  void didUpdateWidget(CarouselVideoPlayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_controller != null && _isInitialized) {
+      if (widget.isActive && !oldWidget.isActive) {
+        _controller!.play();
+      } else if (!widget.isActive && oldWidget.isActive) {
+        _controller!.pause();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller?.removeListener(_videoListener);
+    _controller?.pause();
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_hasError || !_isInitialized || _controller == null) {
+      return Image.asset(
+        widget.fallbackImageAsset,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Container(
+          color: AppColors.surfaceElevated,
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.workspace_premium_rounded,
+            size: 42,
+            color: AppColors.primary,
+          ),
+        ),
+      );
+    }
+
+    final videoSize = _controller!.value.size;
+    final width = videoSize.width > 0 ? videoSize.width : 100.0;
+    final height = videoSize.height > 0 ? videoSize.height : 100.0;
+
+    return SizedBox.expand(
+      child: FittedBox(
+        fit: BoxFit.cover,
+        clipBehavior: Clip.hardEdge,
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: VideoPlayer(_controller!),
         ),
       ),
     );

@@ -155,12 +155,12 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
         actions: [
           if (_view == 'list') ...[
             IconButton(
-              icon: const Icon(Icons.add_location_alt_outlined, size: 20, color: AppColors.brandMidnight),
+              icon: Icon(Icons.add_location_alt_outlined, size: 20, color: AppColors.primary),
               tooltip: 'Add Location',
               onPressed: _openAdd,
             ),
             IconButton(
-              icon: const Icon(Icons.refresh_rounded, size: 20, color: AppColors.brandMidnight),
+              icon: Icon(Icons.refresh_rounded, size: 20, color: AppColors.textSecondary),
               tooltip: 'Refresh locations',
               onPressed: () => ref.refresh(savedLocationsProvider.future),
             ),

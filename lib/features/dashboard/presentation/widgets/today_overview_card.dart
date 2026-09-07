@@ -32,7 +32,7 @@ class TodayOverviewCard extends ConsumerWidget {
             children: [
               Text(
                 'TODAY',
-                style: AppTypography.label.copyWith(color: AppColors.brandSlate, letterSpacing: 1.0),
+                style: AppTypography.label.copyWith(color: AppColors.textSecondary, letterSpacing: 1.0),
               ),
               Icon(Icons.trending_up_rounded, color: AppColors.success.base, size: 20),
             ],
@@ -75,7 +75,7 @@ class TodayOverviewCard extends ConsumerWidget {
           child: Text(
             '₹${earnings.toStringAsFixed(0)}',
             key: const ValueKey('earnings'),
-            style: AppTypography.numeric.copyWith(fontSize: 32, letterSpacing: -0.5),
+            style: AppTypography.numeric.copyWith(fontSize: 32, letterSpacing: -0.5, color: AppColors.textPrimary),
           ),
         );
       },
@@ -86,7 +86,7 @@ class TodayOverviewCard extends ConsumerWidget {
           height: 38,
           width: 120,
           decoration: BoxDecoration(
-            color: AppColors.brandMidnightDark.withValues(alpha: 0.05),
+            color: AppColors.border,
             borderRadius: BorderRadius.circular(AppRadius.control),
           ),
         ),
@@ -111,27 +111,27 @@ class _EmptyEarningsState extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.brandMist,
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: AppColors.brandMidnightDark.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.account_balance_wallet_outlined, size: 24, color: AppColors.brandSlate),
+              Icon(Icons.account_balance_wallet_outlined, size: 24, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
               Text(
                 '₹0',
-                style: AppTypography.numeric.copyWith(fontSize: 24, color: AppColors.brandMidnight),
+                style: AppTypography.numeric.copyWith(fontSize: 24, color: AppColors.textPrimary),
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
             'No earnings yet',
-            style: AppTypography.title.copyWith(fontSize: 14),
+            style: AppTypography.title.copyWith(fontSize: 14, color: AppColors.textPrimary),
           ),
           const SizedBox(height: 2),
           Text(
@@ -153,9 +153,9 @@ class _Stat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value, style: AppTypography.titleLarge),
+        Text(value, style: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary)),
         const SizedBox(height: 2),
-        Text(label, style: AppTypography.label),
+        Text(label, style: AppTypography.label.copyWith(color: AppColors.textSecondary)),
       ],
     );
   }

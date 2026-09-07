@@ -10,6 +10,9 @@ import '../../domain/appearance_preferences.dart';
 class AppearanceController extends AsyncNotifier<AppearancePreferences> {
   @override
   Future<AppearancePreferences> build() async {
+    final repo = ref.read(appearanceRepositoryProvider);
+    final localPref = await repo.fetchLocalPreferences();
+
     final authState = ref.watch(authControllerProvider);
     final isApprovedEmployee =
         authState.status == AuthStatus.authenticated &&
@@ -17,15 +20,13 @@ class AppearanceController extends AsyncNotifier<AppearancePreferences> {
         authState.user?.registrationStatus == 'approved';
 
     if (!isApprovedEmployee) {
-      return AppearancePreferences.defaults;
+      return localPref;
     }
 
     try {
-      return await ref.read(appearanceRepositoryProvider).fetchPreferences();
+      return await repo.fetchPreferences();
     } catch (_) {
-      // Theme must never fail to render — fall back quietly, the Appearance
-      // screen's own fetch will surface a retry if this was a real error.
-      return AppearancePreferences.defaults;
+      return localPref;
     }
   }
 

@@ -54,7 +54,7 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
       ),
@@ -88,13 +88,13 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.brandMidnight,
-              AppColors.brandMidnightDark,
+              AppColors.primaryDark,
+              AppColors.primary,
             ],
           ),
         ),
@@ -286,7 +286,7 @@ class WorkforceAppBar extends ConsumerWidget implements PreferredSizeWidget {
   ) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
       ),
@@ -454,10 +454,10 @@ class _StatusSubBar extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFF071A2E).withValues(alpha: 0.65),
+        color: AppColors.surfaceElevated,
         border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
-          bottom: BorderSide(color: const Color(0xFF004E89).withValues(alpha: 0.3)),
+          top: BorderSide(color: AppColors.border),
+          bottom: BorderSide(color: AppColors.border),
         ),
       ),
       child: Row(
@@ -482,7 +482,7 @@ class _StatusSubBar extends StatelessWidget {
             'WORKFORCE STATUS:',
             style: AppTypography.label.copyWith(
               fontSize: 10,
-              color: const Color(0xFFBAE6FD), // Sky-200 for maximum readability on Peacock
+              color: AppColors.textSecondary,
               letterSpacing: 0.5,
             ),
           ),

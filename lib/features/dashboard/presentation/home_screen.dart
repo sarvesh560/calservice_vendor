@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_motion.dart';
@@ -18,6 +17,8 @@ import 'widgets/greeting_header.dart';
 import 'widgets/today_overview_card.dart';
 import '../../promotions/presentation/widgets/animated_promotion_carousel.dart';
 import '../../promotions/presentation/widgets/floating_partner_promotion.dart';
+
+
 
 /// The completely redesigned Home Screen.
 /// Follows the Obsidian + Copper + Porcelain presentation layer rule.
@@ -73,6 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          // 1. Dashboard Content
           RefreshIndicator(
             onRefresh: () async {
               ref.invalidate(activeJobsProvider);
@@ -121,7 +123,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
               ),
             ),
           ),
-          const FloatingPartnerPromotion(),
+
+          // 2. Persistent Floating Partner Promotion Layer
+          const FloatingPartnerPromotion(
+            initialExpanded: true,
+          ),
         ],
       ),
     );
@@ -182,9 +188,10 @@ class _QuickActionTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
           decoration: BoxDecoration(
-            color: AppColors.brandMist,
+            color: AppColors.surface,
             borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(color: AppColors.brandMidnightDark.withValues(alpha: 0.1)),
+            border: Border.all(color: AppColors.border),
+            boxShadow: AppElevation.subtle,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -193,10 +200,10 @@ class _QuickActionTile extends StatelessWidget {
                 width: 32,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: AppColors.brandMidnightDark.withValues(alpha: 0.05),
+                  color: AppColors.surfaceElevated,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, size: 18, color: AppColors.brandMidnightDark),
+                child: Icon(icon, size: 18, color: AppColors.primary),
               ),
               const SizedBox(height: 8),
               Text(
@@ -207,7 +214,7 @@ class _QuickActionTile extends StatelessWidget {
                 style: AppTypography.label.copyWith(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -265,7 +272,7 @@ class _HomeJobsSection extends ConsumerWidget {
               Text(
                 sectionTitle,
                 style: AppTypography.label.copyWith(
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.0,
                 ),
@@ -275,7 +282,7 @@ class _HomeJobsSection extends ConsumerWidget {
                 child: Text(
                   'View all',
                   style: AppTypography.label.copyWith(
-                    color: AppColors.brandChampagne,
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

@@ -985,9 +985,9 @@ class _ExpandablePendingSection extends StatelessWidget {
                         turns: expanded ? 0.5 : 0,
                         duration: const Duration(milliseconds: 220),
                         curve: Curves.easeOutCubic,
-                        child: const Icon(
+                        child: Icon(
                           Icons.keyboard_arrow_down_rounded,
-                          color: AppColors.brandSlate,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -1418,9 +1418,9 @@ class _DiscoverHeader extends StatelessWidget {
                   turns: expanded ? 0.5 : 0,
                   duration: const Duration(milliseconds: 220),
                   curve: Curves.easeOutCubic,
-                  child: const Icon(
+                  child: Icon(
                     Icons.keyboard_arrow_down_rounded,
-                    color: AppColors.brandSlate,
+                    color: AppColors.textSecondary,
                     size: 24,
                   ),
                 ),

@@ -40,7 +40,7 @@ class _AuthorizedServicesCardState extends ConsumerState<AuthorizedServicesCard>
         children: [
           Row(
             children: [
-              const Icon(Icons.build_outlined, size: 16, color: AppColors.primary),
+              Icon(Icons.build_outlined, size: 16, color: AppColors.primary),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(

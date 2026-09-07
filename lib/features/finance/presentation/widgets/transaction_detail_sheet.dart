@@ -93,7 +93,7 @@ class TransactionDetailSheet extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, size: 20, color: AppColors.brandMidnight),
+                  icon: Icon(Icons.close_rounded, size: 20, color: AppColors.textSecondary),
                   onPressed: () => Navigator.of(context).pop(),
                   tooltip: 'Close',
                 ),

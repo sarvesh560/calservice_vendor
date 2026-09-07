@@ -61,7 +61,7 @@ class _AdminApplicationDetailScreenState
             Expanded(child: Text(message)),
           ],
         ),
-        backgroundColor: isError ? const Color(0xFFDC2626) : const Color(0xFF059669),
+        backgroundColor: isError ? AppColors.error.base : AppColors.success.base,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 4),
       ),
@@ -614,6 +614,10 @@ class _AdminApplicationDetailScreenState
 
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          'Dossier #${widget.applicationId}',
+          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         automaticallyImplyLeading: false,
         leading: Navigator.canPop(context)
             ? IconButton(
@@ -629,13 +633,13 @@ class _AdminApplicationDetailScreenState
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF0A2540),
-                Color(0xFF004E89),
+                AppColors.primaryDark,
+                AppColors.primary,
               ],
             ),
           ),

@@ -123,17 +123,17 @@ class AdminTitleSection extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: isRefreshing ? null : onRefresh,
                 icon: isRefreshing
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 13,
                         height: 13,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF004E89)),
+                        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
                       )
-                    : const Icon(Icons.refresh_rounded, size: 15, color: Color(0xFF004E89)),
+                    : Icon(Icons.refresh_rounded, size: 15, color: AppColors.primary),
                 label: const Text('Refresh Data'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF0A2540),
-                  backgroundColor: const Color(0xFFF8FAFC),
-                  side: const BorderSide(color: Color(0xFFE2E8F0)),
+                  foregroundColor: AppColors.primary,
+                  backgroundColor: AppColors.surfaceElevated,
+                  side: BorderSide(color: AppColors.border),
                   visualDensity: VisualDensity.compact,
                   padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
                   textStyle: const TextStyle(

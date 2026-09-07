@@ -51,16 +51,16 @@ class PremiumSecondaryAppBar extends StatelessWidget implements PreferredSizeWid
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.brandMist,
+                      color: AppColors.surfaceElevated,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppColors.brandMidnightDark.withValues(alpha: 0.1),
+                        color: AppColors.border,
                       ),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back_ios_new_rounded,
                       size: 18,
-                      color: AppColors.brandMidnight,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -74,7 +74,7 @@ class PremiumSecondaryAppBar extends StatelessWidget implements PreferredSizeWid
           Text(
             title,
             style: AppTypography.titleLarge.copyWith(
-              color: AppColors.brandMidnight,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -83,7 +83,7 @@ class PremiumSecondaryAppBar extends StatelessWidget implements PreferredSizeWid
             Text(
               subtitle!,
               style: AppTypography.bodySmall.copyWith(
-                color: AppColors.brandSlate,
+                color: AppColors.textSecondary,
               ),
             ),
           ],

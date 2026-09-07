@@ -40,7 +40,7 @@ class OnboardingLanguageSelector extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.arrow_drop_down_rounded, size: 18, color: AppColors.brandMist),
+            Icon(Icons.arrow_drop_down_rounded, size: 18, color: AppColors.textSecondary),
           ],
         ),
       ),
@@ -217,10 +217,10 @@ class _PremiumNextButtonState extends State<_PremiumNextButton> with SingleTicke
                     child: child,
                   );
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_forward_rounded,
                   size: 20,
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],

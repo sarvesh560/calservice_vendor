@@ -1049,8 +1049,8 @@ class _WizardFooter extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: isPrimaryEnabled
-                      ? const LinearGradient(
-                          colors: [AppColors.brandMidnightDark, AppColors.brandMidnight],
+                      ? LinearGradient(
+                          colors: [AppColors.primaryDark, AppColors.primary],
                         )
                       : null,
                   color: isPrimaryEnabled ? null : AppColors.surfaceMuted,
@@ -1063,7 +1063,7 @@ class _WizardFooter extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     disabledBackgroundColor: Colors.transparent,
-                    foregroundColor: AppColors.brandChampagne,
+                    foregroundColor: Colors.white,
                     disabledForegroundColor: AppColors.textMuted,
                     shadowColor: Colors.transparent,
                     elevation: 0,
@@ -1073,12 +1073,12 @@ class _WizardFooter extends StatelessWidget {
                     ),
                   ),
                   child: isSaving
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 18,
                           width: 18,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: AppColors.brandChampagne,
+                            color: Colors.white,
                           ),
                         )
                       : Text(

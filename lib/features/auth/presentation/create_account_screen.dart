@@ -308,18 +308,18 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                         ),
                         alignment: Alignment.center,
                         child: _isSubmitting
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: AppColors.brandChampagne,
+                                  color: AppColors.primary,
                                 ),
                               )
                             : Text(
                                 'Create Account',
                                 style: AppTypography.label.copyWith(
-                                  color: AppColors.brandChampagne,
+                                  color: AppColors.primary,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -334,14 +334,14 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                       children: [
                         Text(
                           'Already have an account? ',
-                          style: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate),
+                          style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                         ),
                         GestureDetector(
                           onTap: () => context.go(AppRoutes.login),
                           child: Text(
                             'Sign In',
                             style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.brandChampagne,
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -362,8 +362,8 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
   InputDecoration _inputDecoration(String label, IconData prefixIcon, {Widget? suffixIcon}) {
     return InputDecoration(
       labelText: label,
-      labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate),
-      prefixIcon: Icon(prefixIcon, color: AppColors.brandSlate, size: 20),
+      labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
+      prefixIcon: Icon(prefixIcon, color: AppColors.textSecondary, size: 20),
       suffixIcon: suffixIcon,
       filled: true,
       fillColor: AppColors.surfaceMuted.withValues(alpha: 0.5),
@@ -378,7 +378,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.control),
-        borderSide: const BorderSide(color: AppColors.brandChampagne, width: 1.5),
+        borderSide: BorderSide(color: AppColors.primary, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.control),

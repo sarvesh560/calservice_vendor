@@ -41,7 +41,7 @@ class JobListTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        job.displayTitle ?? 'Unknown Service',
+                        job.displayTitle,
                         style: AppTypography.title.copyWith(fontSize: 16),
                       ),
                       const SizedBox(height: 4),

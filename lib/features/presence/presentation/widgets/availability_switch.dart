@@ -29,7 +29,7 @@ class AvailabilitySwitch extends ConsumerWidget {
             ),
             duration: const Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: targetOnline ? const Color(0xFF059669) : AppColors.brandMidnight,
+            backgroundColor: targetOnline ? AppColors.success.base : AppColors.brandMidnight,
           ),
         );
       }
@@ -43,7 +43,7 @@ class AvailabilitySwitch extends ConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(displayError),
-            backgroundColor: const Color(0xFFDC2626),
+            backgroundColor: AppColors.error.base,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 4),
           ),
@@ -58,9 +58,9 @@ class AvailabilitySwitch extends ConsumerWidget {
     final isOnline = presenceState.isOnline;
     final isToggling = presenceState.isToggling;
 
-    final statusColor = isOnline ? const Color(0xFF10B981) : const Color(0xFF64748B);
-    final statusBgColor = isOnline ? const Color(0xFFECFDF5) : const Color(0xFFF8FAFC);
-    final statusBorderColor = isOnline ? const Color(0xFFA7F3D0) : const Color(0xFFE2E8F0);
+    final statusColor = isOnline ? AppColors.success.base : AppColors.textMuted;
+    final statusBgColor = isOnline ? AppColors.success.tint : AppColors.surfaceMuted;
+    final statusBorderColor = isOnline ? AppColors.success.tintBorder : AppColors.border;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -112,7 +112,7 @@ class AvailabilitySwitch extends ConsumerWidget {
                       style: AppTypography.title.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: isOnline ? const Color(0xFF065F46) : const Color(0xFF334155),
+                        color: isOnline ? AppColors.success.onTint : AppColors.textPrimary,
                       ),
                       child: Text(isOnline ? 'You are Online' : 'You are Offline'),
                     ),
@@ -121,12 +121,12 @@ class AvailabilitySwitch extends ConsumerWidget {
               ),
               const Spacer(),
               if (isToggling)
-                const SizedBox(
+                SizedBox(
                   width: 24,
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF059669)),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                   ),
                 )
               else
@@ -136,10 +136,10 @@ class AvailabilitySwitch extends ConsumerWidget {
                   child: Switch.adaptive(
                     value: isOnline,
                     onChanged: (val) => _handleToggle(context, ref, val),
-                    activeThumbColor: const Color(0xFF10B981),
-                    activeTrackColor: const Color(0xFFA7F3D0),
-                    inactiveThumbColor: const Color(0xFF64748B),
-                    inactiveTrackColor: const Color(0xFFE2E8F0),
+                    activeThumbColor: AppColors.primary,
+                    activeTrackColor: AppColors.primary.withValues(alpha: 0.3),
+                    inactiveThumbColor: AppColors.textMuted,
+                    inactiveTrackColor: AppColors.border,
                   ),
                 ),
             ],
@@ -148,7 +148,7 @@ class AvailabilitySwitch extends ConsumerWidget {
           AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 300),
             style: AppTypography.bodySmall.copyWith(
-              color: isOnline ? const Color(0xFF047857) : AppColors.textSecondary,
+              color: isOnline ? AppColors.success.base : AppColors.textSecondary,
               fontWeight: FontWeight.w500,
             ),
             child: Text(

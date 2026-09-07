@@ -122,10 +122,10 @@ class WithdrawalCard extends StatelessWidget {
             // Middle Row: Bank Account & Requested Date
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.account_balance_outlined,
                   size: 16,
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.primary,
                 ),
                 const SizedBox(width: 6),
                 Expanded(
@@ -147,10 +147,10 @@ class WithdrawalCard extends StatelessWidget {
 
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.access_time_rounded,
                   size: 16,
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.primary,
                 ),
                 const SizedBox(width: 6),
                 Expanded(

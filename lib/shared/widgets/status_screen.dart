@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_theme.dart';
 
+
 /// Generic full-screen status message (icon + title + explanation), used for
 /// every "you can't go further yet" screen: pending review, corrections
 /// needed, rejected, incomplete registration, employees-only.

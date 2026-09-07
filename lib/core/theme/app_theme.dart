@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_typography.dart';
 import '../../features/settings/domain/appearance_preferences.dart';
 
@@ -29,87 +28,110 @@ class AppColors {
   }
 
   static bool get _isDark => _brightness == Brightness.dark;
+  static bool get highContrast => _highContrast;
 
-  // Brand colors
-  static const Color brandMidnight = Color(0xFF17233C);
-  static const Color brandMidnightDark = Color(0xFF10182B);
-  static const Color brandChampagne = Color(0xFFC8A96B);
-  static const Color brandChampagneDark = Color(0xFFA8894F);
-  static const Color brandSlate = Color(0xFF6E7F9D);
-  static const Color brandMist = Color(0xFFF5F6F8);
-  
-  static const Color primary = Color(0xFF17233C);
-  static const Color primaryDark = Color(0xFF10182B);
-  
-  static const Color secondary = Color(0xFFC8A96B);
-  static const Color secondaryDark = Color(0xFFA8894F);
-  
-  static const Color accent = Color(0xFF6E7F9D);
-  static const Color accentSoft = Color(0xFFEAF0F7);
-  
+  // Static Deep Teal + Warm Ivory + Sage Palette Constants
+  static const Color obsidianBackground = Color(0xFF101918);
+  static const Color obsidianSurface = Color(0xFF182321);
+  static const Color obsidianElevated = Color(0xFF21302D);
+  static const Color obsidianBorder = Color(0xFF30403D);
+
+  static const Color champagneGold = Color(0xFF0F6B68);
+  static const Color champagneGoldDark = Color(0xFF084C4A);
+  static const Color lightGold = Color(0xFF3C918C);
+
+  // Dynamic brand color aliases mapped to Deep Teal & Warm Ivory Palette
+  static Color get burgundy => background;
+  static Color get burgundyDark => surface;
+  static Color get warmTaupe => primary;
+  static Color get lightTaupe => secondary;
+  static Color get softIvory => surfaceElevated;
+  static Color get porcelain => surface;
+  static Color get espresso => textPrimary;
+  static Color get mochaGray => textSecondary;
+  static Color get warmStone => border;
+  static Color get mutedTerracotta => const Color(0xFFB85C55);
+
+  static Color get brandMidnight => background;
+  static Color get brandMidnightDark => surface;
+  static Color get brandChampagne => primary;
+  static Color get brandChampagneDark => primaryDark;
+  static Color get brandSlate => textSecondary;
+  static Color get brandMist => surfaceElevated;
+
+  // Dynamic Primary & Accent Getters based on Brightness
+  static Color get primary => const Color(0xFF0F6B68);
+  static Color get primaryDark => const Color(0xFF084C4A);
+  static Color get secondary => const Color(0xFF3C918C);
+  static Color get secondaryDark => const Color(0xFF0F6B68);
+  static Color get accent => const Color(0xFF3C918C);
+  static Color get accentSoft => _isDark ? const Color(0xFF78BDB8) : const Color(0xFFA8D5D1);
+
+  // Dynamic Semantic Color Getters (Light vs Dark)
   static SemanticColor get success => _isDark ? const SemanticColor(
-    base: Color(0xFF65B88E),
-    tint: Color(0xFF18382B),
-    tintBorder: Color(0xFF294A3D),
-    onTint: Color(0xFFB3DDC7),
+    base: Color(0xFF71866A),
+    tint: Color(0xFF182216),
+    tintBorder: Color(0xFF2E3D2A),
+    onTint: Color(0xFFDCF0D6),
   ) : const SemanticColor(
-    base: Color(0xFF2F7D5A),
-    tint: Color(0xFFE8F4EE),
-    tintBorder: Color(0xFFB5DECA),
-    onTint: Color(0xFF1B4934),
+    base: Color(0xFF71866A),
+    tint: Color(0xFFF1F5EF),
+    tintBorder: Color(0xFFC4D5BF),
+    onTint: Color(0xFF1F2B1A),
   );
 
   static SemanticColor get error => _isDark ? const SemanticColor(
-    base: Color(0xFFE17C7C),
-    tint: Color(0xFF3A2024),
-    tintBorder: Color(0xFF5A3036),
-    onTint: Color(0xFFF2BABA),
+    base: Color(0xFFB85C55),
+    tint: Color(0xFF281716),
+    tintBorder: Color(0xFF492A27),
+    onTint: Color(0xFFF8E9E8),
   ) : const SemanticColor(
-    base: Color(0xFFB84A4A),
-    tint: Color(0xFFF9E9E9),
-    tintBorder: Color(0xFFE5B5B5),
-    onTint: Color(0xFF6B2B2B),
+    base: Color(0xFFB85C55),
+    tint: Color(0xFFFAEEEA),
+    tintBorder: Color(0xFFE5C0BD),
+    onTint: Color(0xFF451C1A),
   );
 
   static SemanticColor get warning => _isDark ? const SemanticColor(
-    base: Color(0xFFD6AA62),
-    tint: Color(0xFF3A2D18),
-    tintBorder: Color(0xFF5A4525),
-    onTint: Color(0xFFEBD4B0),
+    base: Color(0xFFB68A45),
+    tint: Color(0xFF271F13),
+    tintBorder: Color(0xFF493A24),
+    onTint: Color(0xFFF8EFDE),
   ) : const SemanticColor(
-    base: Color(0xFFB9822B),
-    tint: Color(0xFFFBF2DF),
-    tintBorder: Color(0xFFE5CC9E),
-    onTint: Color(0xFF6C4C19),
+    base: Color(0xFFB68A45),
+    tint: Color(0xFFFBF6ED),
+    tintBorder: Color(0xFFE4D5B8),
+    onTint: Color(0xFF3B2A0F),
   );
 
   static SemanticColor get info => _isDark ? const SemanticColor(
-    base: Color(0xFF88A9D1),
-    tint: Color(0xFF1C2C43),
-    tintBorder: Color(0xFF2C4362),
-    onTint: Color(0xFFC4D4E8),
+    base: Color(0xFF0F6B68),
+    tint: Color(0xFF132423),
+    tintBorder: Color(0xFF234442),
+    onTint: Color(0xFFE0F4F2),
   ) : const SemanticColor(
-    base: Color(0xFF52749E),
-    tint: Color(0xFFEAF0F7),
-    tintBorder: Color(0xFFB9CBE0),
-    onTint: Color(0xFF30445C),
+    base: Color(0xFF0F6B68),
+    tint: Color(0xFFEEF7F6),
+    tintBorder: Color(0xFFBBE3E0),
+    onTint: Color(0xFF083D3B),
   );
 
-  static Color get surfaceMuted => _isDark ? const Color(0xFF202B40) : const Color(0xFFECEFF3);
-  
-  static Color get background => _isDark ? const Color(0xFF0C1220) : const Color(0xFFF5F6F8);
-  static Color get surface => _isDark ? const Color(0xFF121A2A) : const Color(0xFFFFFFFF);
-  static Color get surfaceElevated => _isDark ? const Color(0xFF182236) : const Color(0xFFFCFCFD);
+  static Color get surfaceMuted => _isDark ? const Color(0xFF21302D) : const Color(0xFFEEF2EF);
 
-  static Color get border => _isDark ? const Color(0xFF29354A) : const Color(0xFFDCE1E8);
-  static Color get borderStrong => _isDark ? const Color(0xFF3A4860) : const Color(0xFFC5CCD6);
-  static Color get divider => _isDark ? const Color(0xFF253147) : const Color(0xFFE7EAF0);
+  static Color get scaffoldBackground => _isDark ? const Color(0xFF101918) : const Color(0xFFFFFFFF);
+  static Color get background => scaffoldBackground;
+  static Color get surface => _isDark ? const Color(0xFF182321) : const Color(0xFFF7F8F6);
+  static Color get surfaceElevated => _isDark ? const Color(0xFF21302D) : const Color(0xFFEEF2EF);
 
-  static Color get textPrimary => _isDark ? const Color(0xFFF2F5F9) : const Color(0xFF172033);
-  static Color get textSecondary => _isDark ? const Color(0xFFAEB8C7) : const Color(0xFF5E6878);
-  static Color get textMuted => _isDark ? const Color(0xFF7D889A) : const Color(0xFF8992A0);
-  
-  static Color get textOnPrimary => _isDark ? const Color(0xFF10182B) : const Color(0xFFFFFFFF);
+  static Color get border => _isDark ? const Color(0xFF30403D) : const Color(0xFFD9E0DC);
+  static Color get borderStrong => const Color(0xFF0F6B68);
+  static Color get divider => _isDark ? const Color(0xFF30403D) : const Color(0xFFD9E0DC);
+
+  static Color get textPrimary => _isDark ? const Color(0xFFF4F2EC) : const Color(0xFF202522);
+  static Color get textSecondary => _isDark ? const Color(0xFFA9B2AE) : const Color(0xFF68716C);
+  static Color get textMuted => _isDark ? const Color(0xFF71827E) : const Color(0xFF8A847C);
+
+  static Color get textOnPrimary => const Color(0xFFFFFFFF);
 }
 
 class AppSpacing {
@@ -154,7 +176,7 @@ class InstantPageTransitionsBuilder extends PageTransitionsBuilder {
 }
 
 Color colorForAccent(AccentColorOption accent) {
-  return AppColors.brandMidnight;
+  return AppColors.primary;
 }
 
 class AppTheme {
@@ -167,8 +189,19 @@ class AppTheme {
     required bool highContrast,
     required bool reducedMotion,
   }) {
-    final seed = colorForAccent(accent);
-    final colorScheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
+    final isDark = brightness == Brightness.dark;
+    final primaryColor = const Color(0xFF0F6B68);
+    final surfaceColor = isDark ? const Color(0xFF182321) : const Color(0xFFF7F8F6);
+    final backgroundColor = isDark ? const Color(0xFF101918) : const Color(0xFFFFFFFF);
+    final onPrimaryColor = const Color(0xFFFFFFFF);
+
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: primaryColor,
+      brightness: brightness,
+      primary: primaryColor,
+      surface: surfaceColor,
+      onPrimary: onPrimaryColor,
+    );
 
     final pageTransitionsTheme = reducedMotion
         ? const PageTransitionsTheme(builders: {TargetPlatform.android: InstantPageTransitionsBuilder(), TargetPlatform.iOS: InstantPageTransitionsBuilder()})
@@ -179,11 +212,11 @@ class AppTheme {
       brightness: brightness,
       colorScheme: colorScheme,
       visualDensity: density == LayoutDensityOption.compact ? VisualDensity.compact : VisualDensity.standard,
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: backgroundColor,
       pageTransitionsTheme: pageTransitionsTheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: brightness == Brightness.dark ? const Color(0xFF121A2A) : const Color(0xFF17233C),
-        foregroundColor: const Color(0xFFF5F6F8),
+        backgroundColor: surfaceColor,
+        foregroundColor: AppColors.textPrimary,
         centerTitle: false,
         elevation: 0,
       ),
@@ -198,8 +231,8 @@ class AppTheme {
       ),
       dividerTheme: DividerThemeData(color: AppColors.divider, thickness: highContrast ? 1.2 : 1),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: brightness == Brightness.dark ? const Color(0xFF0C1220) : const Color(0xFFFFFFFF),
-        indicatorColor: brightness == Brightness.dark ? const Color(0xFF202B40) : const Color(0xFFF7F0E2),
+        backgroundColor: isDark ? const Color(0xFF182321) : const Color(0xFFFFFDF8),
+        indicatorColor: isDark ? const Color(0xFF21302D) : const Color(0xFFFAF7F0),
         elevation: 0,
         height: 64,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
@@ -207,25 +240,22 @@ class AppTheme {
           return TextStyle(
             fontSize: 12,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected 
-                ? (brightness == Brightness.dark ? const Color(0xFFD4B779) : const Color(0xFF17233C)) 
-                : (brightness == Brightness.dark ? const Color(0xFF7D889A) : const Color(0xFF8992A0)),
+            color: selected ? primaryColor : AppColors.textSecondary,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: selected 
-                ? (brightness == Brightness.dark ? const Color(0xFFD4B779) : const Color(0xFFC8A96B)) 
-                : (brightness == Brightness.dark ? const Color(0xFF7D889A) : const Color(0xFF8992A0))
+            color: selected ? primaryColor : AppColors.textSecondary,
           );
         }),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: brightness == Brightness.dark ? const Color(0xFFD4B779) : const Color(0xFF17233C),
-          foregroundColor: brightness == Brightness.dark ? const Color(0xFF10182B) : const Color(0xFFFFFFFF),
-          disabledBackgroundColor: brightness == Brightness.dark ? const Color(0xFF29354A) : const Color(0xFFDCE1E8),
+          backgroundColor: primaryColor,
+          foregroundColor: onPrimaryColor,
+          disabledBackgroundColor: isDark ? const Color(0xFF21302D) : const Color(0xFFD8D1C7),
+          disabledForegroundColor: AppColors.textMuted,
           minimumSize: const Size(64, 44),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.control)),
@@ -234,13 +264,34 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: brightness == Brightness.dark ? const Color(0xFFD4B779) : const Color(0xFF17233C),
-          side: BorderSide(color: brightness == Brightness.dark ? const Color(0xFF3A4860) : const Color(0xFFC5CCD6)),
+          foregroundColor: primaryColor,
+          side: BorderSide(color: primaryColor),
           minimumSize: const Size(64, 44),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.control)),
           textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
         ),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: AppColors.surface,
+        modalBackgroundColor: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.sheet)),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: isDark ? const Color(0xFF20231F) : const Color(0xFF20211F),
+        contentTextStyle: TextStyle(color: isDark ? const Color(0xFFF5F2EA) : const Color(0xFFFFFFFF)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+        behavior: SnackBarBehavior.floating,
       ),
       textTheme: AppTypography.textTheme.copyWith(
         displaySmall: AppTypography.display.copyWith(color: AppColors.textPrimary),
@@ -254,7 +305,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: brightness == Brightness.dark ? const Color(0xFF182236) : const Color(0xFFFCFCFD),
+        fillColor: AppColors.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.control),
@@ -266,7 +317,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.control),
-          borderSide: BorderSide(color: brightness == Brightness.dark ? const Color(0xFFD4B779) : const Color(0xFF17233C), width: 1.5),
+          borderSide: BorderSide(color: primaryColor, width: 1.5),
         ),
       ),
     );
