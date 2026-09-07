@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../core/theme/app_motion.dart';
 
 /// A premium press wrapper that provides a subtle scale-down effect

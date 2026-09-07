@@ -85,6 +85,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with SingleTickerProvid
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom + 110,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

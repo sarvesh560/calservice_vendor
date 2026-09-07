@@ -44,7 +44,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
           children: [
             Text(
               'Job Status: ${currentJob.status}',
-              style: AppTypography.title.copyWith(color: AppColors.brandMidnightDark),
+              style: AppTypography.title.copyWith(color: AppColors.textPrimary),
             ),
             const SizedBox(height: AppSpacing.md),
             SecondaryButton(
@@ -90,7 +90,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
                   children: [
                     // HEADER
                     Container(
-                      color: AppColors.brandMidnightDark,
+                      color: AppColors.primary,
                       padding: const EdgeInsets.all(AppSpacing.xl),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +100,10 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
                             children: [
                               Text(
                                 '#${currentJob.id}',
-                                style: AppTypography.caption.copyWith(color: AppColors.brandSlate),
+                                style: AppTypography.caption.copyWith(
+                                  color: AppColors.textOnPrimary.withValues(alpha: 0.85),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               StatusBadge(status: currentJob.status),
                             ],
@@ -108,12 +111,18 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
                           const SizedBox(height: AppSpacing.sm),
                           Text(
                             currentJob.displayTitle,
-                            style: AppTypography.headline.copyWith(color: AppColors.brandMist),
+                            style: AppTypography.headline.copyWith(
+                              color: AppColors.textOnPrimary,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
                             currentJob.serviceCategory ?? 'General Service',
-                            style: AppTypography.bodySmall.copyWith(color: AppColors.brandChampagne),
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.textOnPrimary.withValues(alpha: 0.9),
+                            ),
                           ),
                         ],
                       ),
@@ -200,15 +209,28 @@ class _DetailRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 20, color: AppColors.brandChampagne),
+        Icon(icon, size: 22, color: AppColors.primary),
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: AppTypography.caption.copyWith(color: AppColors.brandSlate)),
-              const SizedBox(height: 2),
-              Text(value, style: AppTypography.title.copyWith(color: AppColors.brandMidnight)),
+              Text(
+                label,
+                style: AppTypography.caption.copyWith(
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                value,
+                style: AppTypography.title.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
             ],
           ),
         ),

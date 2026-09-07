@@ -100,8 +100,9 @@ class NotificationsScreen extends ConsumerWidget {
                       child: Text(
                         dateGroup.toUpperCase(),
                         style: AppTypography.label.copyWith(
-                          color: AppColors.brandSlate,
+                          color: AppColors.textSecondary,
                           letterSpacing: 1.0,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -166,8 +167,8 @@ class _NotificationTile extends ConsumerWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('This job is no longer available.'),
-              backgroundColor: AppColors.brandMidnightDark,
+              content: Text('This job is no longer available.', style: TextStyle(color: AppColors.textPrimary)),
+              backgroundColor: AppColors.surfaceElevated,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
@@ -202,7 +203,7 @@ class _NotificationTile extends ConsumerWidget {
     return AnimatedPressable(
       onPressed: () => _handleNotificationTap(context, ref),
       child: Container(
-        color: isUnread ? AppColors.brandChampagne.withValues(alpha: 0.05) : Colors.transparent,
+        color: isUnread ? AppColors.primary.withValues(alpha: 0.08) : Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.lg),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,14 +211,14 @@ class _NotificationTile extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: isUnread ? AppColors.brandMidnightDark : AppColors.brandMist,
+                color: isUnread ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceElevated,
                 shape: BoxShape.circle,
                 border: isUnread ? null : Border.all(color: AppColors.border),
               ),
               child: Icon(
                 _getIconForType(notification.notificationType),
                 size: 20,
-                color: isUnread ? AppColors.brandChampagne : AppColors.brandSlate,
+                color: isUnread ? AppColors.primary : AppColors.textSecondary,
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -230,7 +231,7 @@ class _NotificationTile extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: isUnread ? FontWeight.w800 : FontWeight.w600,
-                      color: isUnread ? AppColors.brandMidnightDark : AppColors.textPrimary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -240,7 +241,7 @@ class _NotificationTile extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 13, 
-                      color: isUnread ? AppColors.brandSlate : AppColors.textSecondary, 
+                      color: AppColors.textSecondary, 
                       height: 1.4,
                     ),
                   ),
@@ -250,7 +251,7 @@ class _NotificationTile extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 12, 
                       fontWeight: FontWeight.w600,
-                      color: isUnread ? AppColors.brandChampagne : AppColors.textMuted,
+                      color: isUnread ? AppColors.primary : AppColors.textMuted,
                     ),
                   ),
                 ],

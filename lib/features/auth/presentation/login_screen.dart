@@ -52,7 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.brandMidnightDark,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(
@@ -69,16 +69,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: AppColors.brandChampagne,
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
-                child: Icon(Icons.work_outline_rounded, color: AppColors.brandMidnightDark, size: 32),
+                child: Icon(Icons.work_outline_rounded, color: AppColors.textOnPrimary, size: 32),
               ),
               const SizedBox(height: AppSpacing.xxl),
               Text(
                 'Welcome Back',
-                style: AppTypography.display.copyWith(color: AppColors.brandMist),
+                style: AppTypography.display.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 8),
               Text(
@@ -93,7 +93,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 cursorColor: AppColors.primary,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: AppColors.surfaceElevated,
+                  fillColor: AppColors.surface,
                   labelText: 'Email Address',
                   labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                   prefixIcon: Icon(Icons.email_outlined, color: AppColors.primary),
@@ -118,7 +118,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: AppColors.surfaceElevated,
+                  fillColor: AppColors.surface,
                   labelText: 'Password',
                   labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                   prefixIcon: Icon(Icons.lock_outline_rounded, color: AppColors.primary),
@@ -160,7 +160,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Text(
                       'Create Account',
                       style: AppTypography.body.copyWith(
-                        color: AppColors.brandChampagne,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

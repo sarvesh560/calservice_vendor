@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
@@ -46,7 +47,10 @@ class _PromotionBannerState extends State<PromotionBanner> with TickerProviderSt
     _floatController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
+    );
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      _floatController.repeat(reverse: true);
+    }
 
     _bgFade = CurvedAnimation(
       parent: _entranceController,

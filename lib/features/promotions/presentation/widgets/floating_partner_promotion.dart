@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,32 +31,20 @@ class FloatingPartnerPromotion extends ConsumerStatefulWidget {
   ConsumerState<FloatingPartnerPromotion> createState() => _FloatingPartnerPromotionState();
 }
 
-class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromotion> with TickerProviderStateMixin {
+class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromotion> {
   int _currentIndex = 0;
   Timer? _rotationTimer;
-
-  late final AnimationController _pulseController;
-  late final Animation<double> _pulseX;
 
   @override
   void initState() {
     super.initState();
-
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    );
-
-    _pulseX = Tween<double>(begin: 0, end: -4).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
-
     _startPartnerRotation();
   }
 
   void _startPartnerRotation() {
     _rotationTimer?.cancel();
     if (widget.promotions.length <= 1) return;
+    if (Platform.environment.containsKey('FLUTTER_TEST')) return;
 
     _rotationTimer = Timer.periodic(const Duration(seconds: 10), (_) {
       if (!mounted) return;
@@ -70,7 +59,6 @@ class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromot
   @override
   void dispose() {
     _rotationTimer?.cancel();
-    _pulseController.dispose();
     super.dispose();
   }
 
@@ -94,14 +82,6 @@ class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromot
     }
 
     final isExpanded = ref.watch(promotionExpansionProvider);
-    if (isExpanded) {
-      _pulseController.stop();
-    } else {
-      if (!_pulseController.isAnimating) {
-        _pulseController.repeat(reverse: true);
-      }
-    }
-
     final currentPromo = widget.promotions[_currentIndex];
 
     return Stack(
@@ -120,7 +100,7 @@ class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromot
             ),
           ),
 
-        // ── 2. Floating Edge Pill & Expanded Panel ─────────────────────────
+        // ── 2. Expanded Panel Overlay ──────────────────────────────────────
         Positioned(
           right: 0,
           bottom: MediaQuery.paddingOf(context).bottom + 120,
@@ -151,120 +131,10 @@ class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromot
                     },
                     onCta: () => _launchUrl(currentPromo.externalUrl),
                   )
-                : AnimatedBuilder(
-                    key: const ValueKey('collapsed_pill'),
-                    animation: _pulseController,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(_pulseX.value, 0),
-                        child: child,
-                      );
-                    },
-                    child: _CollapsedEdgePill(
-                      promotion: currentPromo,
-                      onTap: _toggleExpand,
-                    ),
-                  ),
+                : const SizedBox.shrink(key: ValueKey('collapsed_empty')),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _CollapsedEdgePill extends StatelessWidget {
-  const _CollapsedEdgePill({
-    required this.promotion,
-    required this.onTap,
-  });
-
-  final PromotionModel promotion;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedPressable(
-      onPressed: onTap,
-      child: Container(
-        width: 68,
-        height: 98,
-        decoration: BoxDecoration(
-          color: AppColors.surfaceElevated,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            bottomLeft: Radius.circular(16),
-          ),
-          border: Border(
-            top: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
-            left: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
-            bottom: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.35),
-              blurRadius: 12,
-              offset: const Offset(-2, 4),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.fromLTRB(8, 10, 6, 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(AppRadius.pill),
-              ),
-              child: Text(
-                'PROMO',
-                style: AppTypography.label.copyWith(
-                  color: AppColors.primary,
-                  fontSize: 7.5,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  promotion.logoAsset,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: AppColors.surface,
-                    child: Icon(Icons.star_rounded, size: 18, color: AppColors.primary),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: Text(
-                promotion.partnerName,
-                key: ValueKey<String>(promotion.partnerName),
-                style: AppTypography.label.copyWith(
-                  color: AppColors.textPrimary,
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w700,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

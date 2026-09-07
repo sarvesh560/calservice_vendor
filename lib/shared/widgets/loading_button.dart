@@ -46,9 +46,15 @@ class LoadingButton extends StatelessWidget {
       ),
     );
 
+    final effectiveStyle = ButtonStyle(
+      padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
+      minimumSize: WidgetStateProperty.all(const Size(0, 44)),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    ).merge(style);
+
     if (filled) {
-      return ElevatedButton(onPressed: isLoading ? null : onPressed, style: style, child: child);
+      return ElevatedButton(onPressed: isLoading ? null : onPressed, style: effectiveStyle, child: child);
     }
-    return OutlinedButton(onPressed: isLoading ? null : onPressed, style: style, child: child);
+    return OutlinedButton(onPressed: isLoading ? null : onPressed, style: effectiveStyle, child: child);
   }
 }

@@ -154,7 +154,7 @@ class _PaymentActionsState extends ConsumerState<PaymentActions> {
           
         Text(
           'Payment Status',
-          style: AppTypography.title.copyWith(color: AppColors.brandMidnightDark),
+          style: AppTypography.title.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         
@@ -174,8 +174,8 @@ class _PaymentActionsState extends ConsumerState<PaymentActions> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Payment Completed', style: AppTypography.label),
-                      Text('This job has been fully paid.', style: AppTypography.bodySmall),
+                      Text('Payment Completed', style: AppTypography.label.copyWith(color: AppColors.textPrimary)),
+                      Text('This job has been fully paid.', style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary)),
                     ],
                   ),
                 ),
@@ -192,14 +192,14 @@ class _PaymentActionsState extends ConsumerState<PaymentActions> {
             ),
             child: Row(
               children: [
-                Icon(Icons.credit_card, color: AppColors.brandMidnight, size: 24),
+                Icon(Icons.credit_card, color: AppColors.primary, size: 24),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Online Payment Pending', style: AppTypography.label),
-                      Text('The customer will pay online.', style: AppTypography.bodySmall),
+                      Text('Online Payment Pending', style: AppTypography.label.copyWith(color: AppColors.textPrimary)),
+                      Text('The customer will pay online.', style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary)),
                     ],
                   ),
                 ),
@@ -212,7 +212,7 @@ class _PaymentActionsState extends ConsumerState<PaymentActions> {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(AppRadius.card),
-              border: Border.all(color: AppColors.brandChampagneDark),
+              border: Border.all(color: AppColors.primary),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,10 +220,10 @@ class _PaymentActionsState extends ConsumerState<PaymentActions> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Cash Collection', style: AppTypography.label),
+                    Text('Cash Collection', style: AppTypography.label.copyWith(color: AppColors.textPrimary)),
                     Text(
                       '$currency${amountDue.toStringAsFixed(2)}',
-                      style: AppTypography.titleLarge.copyWith(color: AppColors.brandChampagneDark),
+                      style: AppTypography.titleLarge.copyWith(color: AppColors.primary),
                     ),
                   ],
                 ),

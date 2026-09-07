@@ -30,24 +30,42 @@ class WalletScreen extends ConsumerWidget {
             child: ListView(
               children: [
                 Container(
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.primary,
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.xxl * 1.5),
                   child: Column(
                     children: [
-                      Text('AVAILABLE BALANCE', style: AppTypography.label.copyWith(color: AppColors.brandChampagneDark)),
+                      Text(
+                        'AVAILABLE BALANCE',
+                        style: AppTypography.label.copyWith(
+                          color: AppColors.textOnPrimary.withValues(alpha: 0.85),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         currency.format(wallet.availableBalance),
-                        style: AppTypography.display.copyWith(color: AppColors.brandMist, fontSize: 40),
+                        style: AppTypography.display.copyWith(
+                          color: AppColors.textOnPrimary,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Pending: ', style: AppTypography.bodySmall.copyWith(color: AppColors.brandSlate)),
+                          Text(
+                            'Pending: ',
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.textOnPrimary.withValues(alpha: 0.8),
+                            ),
+                          ),
                           Text(
                             currency.format(wallet.pendingBalance),
-                            style: AppTypography.numeric.copyWith(color: AppColors.brandMist),
+                            style: AppTypography.numeric.copyWith(
+                              color: AppColors.textOnPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),

@@ -171,7 +171,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
 
               // ── ACCOUNT SECTION ──────────────────────────────────────────
-              const SectionHeader(title: 'ACCOUNT'),
+              SectionHeader(title: context.tr('account').toUpperCase()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Container(
@@ -186,17 +186,17 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       SettingsRow(
                         icon: Icons.person_outline_rounded,
-                        title: 'Personal & Business Info',
+                        title: context.tr('personal_business_info'),
                         onTap: () => context.push('/more/profile'),
                       ),
                       SettingsRow(
                         icon: Icons.assignment_outlined,
-                        title: 'Registration Application',
+                        title: context.tr('registration_application'),
                         onTap: () => context.push('/onboarding/wizard'),
                       ),
                       SettingsRow(
                         icon: Icons.description_outlined,
-                        title: 'Compliance Documents',
+                        title: context.tr('compliance_documents'),
                         isLast: true,
                         onTap: () => context.push('/more/documents'),
                       ),
@@ -206,7 +206,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
 
               // ── WORK & TERRITORY ──────────────────────────────────────────
-              const SectionHeader(title: 'WORK & TERRITORY'),
+              SectionHeader(title: context.tr('work_territory').toUpperCase()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Container(
@@ -221,17 +221,17 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       SettingsRow(
                         icon: Icons.handyman_outlined,
-                        title: 'Authorized Services',
+                        title: context.tr('authorized_services'),
                         onTap: () => context.push('/more/services'),
                       ),
                       SettingsRow(
                         icon: Icons.map_outlined,
-                        title: 'Working Locations & Territory',
+                        title: context.tr('working_locations'),
                         onTap: () => context.push('/more/locations'),
                       ),
                       SettingsRow(
                         icon: Icons.insights_rounded,
-                        title: 'Performance & Ratings',
+                        title: context.tr('performance_ratings'),
                         isLast: true,
                         onTap: () => context.push('/more/performance'),
                       ),
@@ -241,7 +241,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
 
               // ── FINANCE & EARNINGS ─────────────────────────────────────────
-              const SectionHeader(title: 'FINANCE & EARNINGS'),
+              SectionHeader(title: context.tr('finance_earnings').toUpperCase()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Container(
@@ -256,22 +256,22 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       SettingsRow(
                         icon: Icons.account_balance_wallet_outlined,
-                        title: 'Wallet & Balance Overview',
+                        title: context.tr('wallet_overview'),
                         onTap: () => context.push('/earnings/wallet'),
                       ),
                       SettingsRow(
                         icon: Icons.receipt_long_outlined,
-                        title: 'Transactions Ledger',
+                        title: context.tr('transactions_ledger'),
                         onTap: () => context.push('/earnings/transactions'),
                       ),
                       SettingsRow(
                         icon: Icons.account_balance_outlined,
-                        title: 'Payout Bank Accounts',
+                        title: context.tr('payout_bank_accounts'),
                         onTap: () => context.push('/earnings/bank-account'),
                       ),
                       SettingsRow(
                         icon: Icons.payments_outlined,
-                        title: 'Withdrawal Requests',
+                        title: context.tr('withdrawal_requests'),
                         isLast: true,
                         onTap: () => context.push('/earnings/withdrawals'),
                       ),
@@ -281,7 +281,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
 
               // ── PREFERENCES SECTION ───────────────────────────────────────
-              const SectionHeader(title: 'PREFERENCES'),
+              SectionHeader(title: context.tr('preferences').toUpperCase()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Container(
@@ -296,17 +296,17 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       SettingsRow(
                         icon: Icons.language_rounded,
-                        title: 'App Language ($langLabel)',
+                        title: '${context.tr('select_language')} ($langLabel)',
                         onTap: () => _showLanguageSelector(context, ref, currentLang),
                       ),
                       SettingsRow(
                         icon: Icons.notifications_none_rounded,
-                        title: 'Notification Preferences',
+                        title: context.tr('notification_settings'),
                         onTap: () => context.push('/more/settings/notifications'),
                       ),
                       SettingsRow(
                         icon: Icons.palette_outlined,
-                        title: 'Appearance',
+                        title: context.tr('appearance'),
                         isLast: true,
                         onTap: () => context.push('/more/settings/appearance'),
                       ),
@@ -316,7 +316,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
 
               // ── SECURITY & PRIVACY ────────────────────────────────────────
-              const SectionHeader(title: 'SECURITY & PRIVACY'),
+              SectionHeader(title: context.tr('security_privacy').toUpperCase()),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: Container(
@@ -331,12 +331,12 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       SettingsRow(
                         icon: Icons.security_rounded,
-                        title: 'Account Security',
+                        title: context.tr('account_security'),
                         onTap: () => context.push('/more/settings/security'),
                       ),
                       SettingsRow(
                         icon: Icons.privacy_tip_outlined,
-                        title: 'Privacy & Data',
+                        title: context.tr('privacy_data'),
                         isLast: true,
                         onTap: () => context.push('/more/settings/privacy'),
                       ),
@@ -360,7 +360,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      'Sign Out',
+                      context.tr('sign_out'),
                       style: AppTypography.label.copyWith(
                         color: AppColors.error.base,
                         fontWeight: FontWeight.w800,

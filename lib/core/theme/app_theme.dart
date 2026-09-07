@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_typography.dart';
 import '../../features/settings/domain/appearance_preferences.dart';
 
@@ -52,12 +53,12 @@ class AppColors {
   static Color get warmStone => border;
   static Color get mutedTerracotta => const Color(0xFFB85C55);
 
-  static Color get brandMidnight => background;
-  static Color get brandMidnightDark => surface;
+  static Color get brandMidnight => _isDark ? const Color(0xFF182321) : const Color(0xFF202522);
+  static Color get brandMidnightDark => textPrimary;
   static Color get brandChampagne => primary;
   static Color get brandChampagneDark => primaryDark;
   static Color get brandSlate => textSecondary;
-  static Color get brandMist => surfaceElevated;
+  static Color get brandMist => _isDark ? surfaceElevated : const Color(0xFFEAF0ED);
 
   // Dynamic Primary & Accent Getters based on Brightness
   static Color get primary => const Color(0xFF0F6B68);
@@ -209,6 +210,7 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
+      fontFamily: GoogleFonts.manrope().fontFamily,
       brightness: brightness,
       colorScheme: colorScheme,
       visualDensity: density == LayoutDensityOption.compact ? VisualDensity.compact : VisualDensity.standard,

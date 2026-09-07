@@ -74,7 +74,7 @@ class ActiveAssignmentBanner extends StatelessWidget {
                             job.status.toUpperCase(),
                             style: AppTypography.label.copyWith(
                               fontSize: 9.5,
-                              color: AppColors.brandMist,
+                              color: AppColors.textSecondary,
                               letterSpacing: 0.3,
                             ),
                           ),

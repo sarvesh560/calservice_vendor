@@ -64,7 +64,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
-                          'Complete your registration',
+                          'Registration Incomplete',
                           style: AppTypography.display.copyWith(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,

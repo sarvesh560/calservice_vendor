@@ -172,7 +172,7 @@ class _PreServiceActionsState extends ConsumerState<PreServiceActions> {
       children: [
         Text(
           'Pre-Service Checklist',
-          style: AppTypography.title.copyWith(color: AppColors.brandMidnightDark),
+          style: AppTypography.title.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         
@@ -231,14 +231,14 @@ class _PreServiceActionsState extends ConsumerState<PreServiceActions> {
                 children: [
                   Icon(
                     _status.otpVerified ? Icons.check_circle_rounded : Icons.dialpad_rounded,
-                    color: _status.otpVerified ? AppColors.success.base : AppColors.brandMidnight,
+                    color: _status.otpVerified ? AppColors.success.base : AppColors.primary,
                     size: 20,
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
                     '1. Customer OTP Verification',
                     style: AppTypography.label.copyWith(
-                      color: _status.otpVerified ? AppColors.success.base : AppColors.brandMidnight,
+                      color: _status.otpVerified ? AppColors.success.base : AppColors.textPrimary,
                     ),
                   ),
                 ],
@@ -291,14 +291,14 @@ class _PreServiceActionsState extends ConsumerState<PreServiceActions> {
                 children: [
                   Icon(
                     _status.presencePhoto ? Icons.check_circle_rounded : Icons.camera_front_rounded,
-                    color: _status.presencePhoto ? AppColors.success.base : AppColors.brandMidnight,
+                    color: _status.presencePhoto ? AppColors.success.base : AppColors.primary,
                     size: 20,
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
                     '2. Pre-Service Selfie',
                     style: AppTypography.label.copyWith(
-                      color: _status.presencePhoto ? AppColors.success.base : AppColors.brandMidnight,
+                      color: _status.presencePhoto ? AppColors.success.base : AppColors.textPrimary,
                     ),
                   ),
                 ],

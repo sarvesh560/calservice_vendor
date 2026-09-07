@@ -119,7 +119,7 @@ class _InProgressActionsState extends ConsumerState<InProgressActions> {
           
         Text(
           'Active Work Dashboard',
-          style: AppTypography.title.copyWith(color: AppColors.brandMidnightDark),
+          style: AppTypography.title.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: AppSpacing.md),
         

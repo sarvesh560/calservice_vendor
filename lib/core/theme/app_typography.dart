@@ -2,7 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTypography {
-  static TextTheme get textTheme => GoogleFonts.manropeTextTheme();
+  static bool _configured = false;
+
+  static void _ensureConfigured() {
+    if (!_configured) {
+      GoogleFonts.config.allowRuntimeFetching = false;
+      _configured = true;
+    }
+  }
+
+  static TextTheme get textTheme {
+    _ensureConfigured();
+    return GoogleFonts.manropeTextTheme();
+  }
 
   static TextStyle get display => GoogleFonts.manrope(
         fontSize: 32,
