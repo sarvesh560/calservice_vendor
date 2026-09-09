@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../presence_controller.dart';
 
-
 /// Professional single executive availability switch widget for technicians.
-///
-/// Features:
-/// - Displays clear status: `You are Online` or `You are Offline`
-/// - Displays clear helper: `Available for new service requests` or `New job offers are currently paused`
-/// - Single `Switch.adaptive` control connected to Riverpod presenceControllerProvider
-/// - Disables interaction and shows loading indicator while request is in flight
-/// - Catches API/network errors and displays informative SnackBar while preserving state
 class AvailabilitySwitch extends ConsumerWidget {
   const AvailabilitySwitch({super.key});
 
@@ -24,12 +17,12 @@ class AvailabilitySwitch extends ConsumerWidget {
           SnackBar(
             content: Text(
               targetOnline
-                  ? 'You are now ONLINE and available for new dispatch requests.'
-                  : 'You are now OFFLINE. New dispatch offers paused.',
+                  ? context.tr('online_status')
+                  : context.tr('offline_status'),
             ),
             duration: const Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: targetOnline ? AppColors.success.base : AppColors.brandMidnight,
+            backgroundColor: targetOnline ? AppColors.success.base : const Color(0xFF334155),
           ),
         );
       }
@@ -114,7 +107,7 @@ class AvailabilitySwitch extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         color: isOnline ? AppColors.success.onTint : AppColors.textPrimary,
                       ),
-                      child: Text(isOnline ? 'You are Online' : 'You are Offline'),
+                      child: Text(isOnline ? context.tr('online_status') : context.tr('offline_status')),
                     ),
                   ],
                 ),
@@ -132,7 +125,7 @@ class AvailabilitySwitch extends ConsumerWidget {
               else
                 Semantics(
                   label: 'Technician Availability Switch',
-                  hint: isOnline ? 'Double tap to go offline' : 'Double tap to go online',
+                  hint: isOnline ? context.tr('offline') : context.tr('online'),
                   child: Switch.adaptive(
                     value: isOnline,
                     onChanged: (val) => _handleToggle(context, ref, val),
@@ -153,8 +146,8 @@ class AvailabilitySwitch extends ConsumerWidget {
             ),
             child: Text(
               isOnline
-                  ? 'Available for new service requests'
-                  : 'New job offers are currently paused',
+                  ? context.tr('available_for_new_requests')
+                  : context.tr('job_offers_paused'),
             ),
           ),
           if (isToggling) ...[
@@ -168,7 +161,7 @@ class AvailabilitySwitch extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Updating availability with server...',
+                  context.tr('updating_availability'),
                   style: TextStyle(fontSize: 12, color: AppColors.textMuted),
                 ),
               ],
@@ -179,3 +172,4 @@ class AvailabilitySwitch extends ConsumerWidget {
     );
   }
 }
+

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/loading_button.dart';
+import '../../../../shared/widgets/success_animation.dart';
 import '../../data/job_actions_repository.dart';
 import '../../domain/job.dart';
 import '../jobs_providers.dart';
@@ -70,7 +71,7 @@ class _CashCollectionSheetState extends ConsumerState<CashCollectionSheet> {
     });
 
     try {
-      final message = await ref
+      await ref
           .read(jobActionsRepositoryProvider)
           .collectCash(widget.job.id, _amountReceived);
 
@@ -79,11 +80,11 @@ class _CashCollectionSheetState extends ConsumerState<CashCollectionSheet> {
 
       if (mounted) {
         Navigator.of(context).pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: const Color(0xFFD97706),
-          ),
+        await SuccessAnimation.showSuccessDialog(
+          context,
+          title: 'Job Completed',
+          message: 'Payment recorded and job marked complete.',
+          actionLabel: 'Done',
         );
       }
     } on DioException catch (e) {

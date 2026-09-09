@@ -81,111 +81,116 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
       backgroundColor: AppColors.background,
       appBar: const PremiumSecondaryAppBar(title: 'Job Details'),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // HEADER
-                    Container(
-                      color: AppColors.primary,
-                      padding: const EdgeInsets.all(AppSpacing.xl),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // HEADER
+                  Container(
+                    color: AppColors.primary,
+                    padding: const EdgeInsets.all(AppSpacing.xl),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '#${currentJob.id}',
+                              style: AppTypography.caption.copyWith(
+                                color: AppColors.textOnPrimary.withValues(alpha: 0.85),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            StatusBadge(status: currentJob.status),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(
+                          currentJob.displayTitle,
+                          style: AppTypography.headline.copyWith(
+                            color: AppColors.textOnPrimary,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          currentJob.serviceCategory ?? 'General Service',
+                          style: AppTypography.bodySmall.copyWith(
+                            color: AppColors.textOnPrimary.withValues(alpha: 0.9),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // DETAILS CARD
+                  Padding(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(AppRadius.card),
+                        border: Border.all(color: AppColors.border),
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '#${currentJob.id}',
-                                style: AppTypography.caption.copyWith(
-                                  color: AppColors.textOnPrimary.withValues(alpha: 0.85),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              StatusBadge(status: currentJob.status),
-                            ],
+                          _DetailRow(
+                            icon: Icons.person_outline_rounded,
+                            label: 'Customer Name',
+                            value: currentJob.customerName ?? 'Verified Customer',
                           ),
-                          const SizedBox(height: AppSpacing.sm),
-                          Text(
-                            currentJob.displayTitle,
-                            style: AppTypography.headline.copyWith(
-                              color: AppColors.textOnPrimary,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                            ),
+                          const Divider(height: AppSpacing.xl),
+                          _DetailRow(
+                            icon: Icons.location_on_outlined,
+                            label: 'Service Location',
+                            value: currentJob.address ?? 'Location coordinates provided upon dispatch',
                           ),
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            currentJob.serviceCategory ?? 'General Service',
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.textOnPrimary.withValues(alpha: 0.9),
-                            ),
+                          const Divider(height: AppSpacing.xl),
+                          _DetailRow(
+                            icon: Icons.payments_outlined,
+                            label: 'Payout Amount',
+                            value: amountText,
                           ),
                         ],
                       ),
                     ),
-
-                    // DETAILS CARD
-                    Padding(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      child: Container(
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(AppRadius.card),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _DetailRow(
-                              icon: Icons.person_outline_rounded,
-                              label: 'Customer Name',
-                              value: currentJob.customerName ?? 'Verified Customer',
-                            ),
-                            const Divider(height: AppSpacing.xl),
-                            _DetailRow(
-                              icon: Icons.location_on_outlined,
-                              label: 'Service Location',
-                              value: currentJob.address ?? 'Location coordinates provided upon dispatch',
-                            ),
-                            const Divider(height: AppSpacing.xl),
-                            _DetailRow(
-                              icon: Icons.payments_outlined,
-                              label: 'Payout Amount',
-                              value: amountText,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-
-            // BOTTOM ACTION BAR
-            if (canAccept)
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border(top: BorderSide(color: AppColors.border)),
-                ),
-                child: OfferActionsSection(job: currentJob),
-              )
-            else if (isActive)
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border(top: BorderSide(color: AppColors.border)),
-                ),
-                child: _buildActiveJobActions(currentJob),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (canAccept)
+                    Container(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        border: Border(top: BorderSide(color: AppColors.border)),
+                      ),
+                      child: OfferActionsSection(job: currentJob),
+                    )
+                  else if (isActive)
+                    Container(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        border: Border(top: BorderSide(color: AppColors.border)),
+                      ),
+                      child: _buildActiveJobActions(currentJob),
+                    ),
+                ],
               ),
+            ),
           ],
         ),
       ),

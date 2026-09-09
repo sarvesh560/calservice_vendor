@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../routing/app_routes.dart';
@@ -20,11 +21,11 @@ class PersonalInformationScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(title: 'Personal Information'),
+      appBar: PremiumSecondaryAppBar(title: context.tr('personal_business_info')),
       body: profileAsync.when(
         data: (profile) => _buildProfileDetails(context, profile),
         loading: () => _buildLoadingSkeleton(),
-        error: (error, stack) => _buildErrorState(ref, error),
+        error: (error, stack) => _buildErrorState(context, ref, error),
       ),
     );
   }
@@ -44,35 +45,35 @@ class PersonalInformationScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── 1. PERSONAL DETAILS ─────────────────────────────────────────
-          const _SectionHeader(title: 'PERSONAL DETAILS'),
+          _SectionHeader(title: context.tr('personal_business_info').toUpperCase()),
           _CardContainer(
             children: [
               _InfoRow(
                 icon: Icons.person_outline_rounded,
-                title: 'Full Name',
-                value: profile.fullName.isNotEmpty ? profile.fullName : 'Not provided',
+                title: context.tr('full_name'),
+                value: profile.fullName.isNotEmpty ? profile.fullName : '—',
               ),
               _InfoRow(
                 icon: Icons.phone_android_outlined,
-                title: 'Phone Number',
-                value: profile.displayPhone.isNotEmpty ? profile.displayPhone : 'Not provided',
+                title: context.tr('mobile_number'),
+                value: profile.displayPhone.isNotEmpty ? profile.displayPhone : '—',
               ),
               _InfoRow(
                 icon: Icons.email_outlined,
-                title: 'Email Address',
-                value: profile.email?.isNotEmpty == true ? profile.email! : 'Not provided',
+                title: context.tr('email_address'),
+                value: profile.email?.isNotEmpty == true ? profile.email! : '—',
               ),
               _InfoRow(
                 icon: Icons.cake_outlined,
-                title: 'Date of Birth',
-                value: profile.dateOfBirth?.isNotEmpty == true ? profile.dateOfBirth! : 'Not provided',
+                title: context.tr('date_of_birth'),
+                value: profile.dateOfBirth?.isNotEmpty == true ? profile.dateOfBirth! : '—',
               ),
               _InfoRow(
                 icon: Icons.badge_outlined,
-                title: 'Professional Title',
+                title: context.tr('account'),
                 value: profile.title?.isNotEmpty == true
                     ? profile.title!
-                    : (profile.bio?.isNotEmpty == true ? profile.bio! : 'Not provided'),
+                    : (profile.bio?.isNotEmpty == true ? profile.bio! : '—'),
                 isLast: true,
               ),
             ],
@@ -80,22 +81,17 @@ class PersonalInformationScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── 2. BUSINESS INFORMATION ─────────────────────────────────────
-          const _SectionHeader(title: 'BUSINESS INFORMATION'),
+          _SectionHeader(title: context.tr('account').toUpperCase()),
           _CardContainer(
             children: [
               _InfoRow(
                 icon: Icons.business_outlined,
-                title: 'Business / Company Name',
-                value: profile.companyName?.isNotEmpty == true ? profile.companyName! : 'Independent Vendor',
-              ),
-              _InfoRow(
-                icon: Icons.work_outline_rounded,
-                title: 'Department / Role',
-                value: profile.department?.isNotEmpty == true ? profile.department! : 'Not provided',
+                title: context.tr('company_name'),
+                value: profile.companyName?.isNotEmpty == true ? profile.companyName! : '—',
               ),
               _InfoWidgetRow(
                 icon: Icons.verified_outlined,
-                title: 'Registration Status',
+                title: context.tr('registration_application'),
                 widget: StatusBadge(status: profile.registrationStatus),
                 isLast: true,
               ),
@@ -104,33 +100,33 @@ class PersonalInformationScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── 3. ADDRESS & TERRITORY ──────────────────────────────────────
-          const _SectionHeader(title: 'ADDRESS & TERRITORY'),
+          _SectionHeader(title: context.tr('work_territory').toUpperCase()),
           _CardContainer(
             children: [
               _InfoRow(
                 icon: Icons.location_on_outlined,
-                title: 'Address',
-                value: address.isNotEmpty ? address : 'Not provided',
+                title: context.tr('street_address'),
+                value: address.isNotEmpty ? address : '—',
               ),
               _InfoRow(
                 icon: Icons.location_city_outlined,
-                title: 'City',
-                value: city.isNotEmpty ? city : 'Not provided',
+                title: context.tr('city'),
+                value: city.isNotEmpty ? city : '—',
               ),
               _InfoRow(
                 icon: Icons.map_outlined,
-                title: 'State',
-                value: stateStr.isNotEmpty ? stateStr : 'Not provided',
+                title: context.tr('state'),
+                value: stateStr.isNotEmpty ? stateStr : '—',
               ),
               _InfoRow(
                 icon: Icons.pin_drop_outlined,
-                title: 'Pincode / Postal Code',
-                value: pincode.isNotEmpty ? pincode : 'Not provided',
+                title: context.tr('pincode'),
+                value: pincode.isNotEmpty ? pincode : '—',
               ),
               _InfoRow(
                 icon: Icons.public_outlined,
-                title: 'Country',
-                value: countryStr.isNotEmpty ? countryStr : 'Not provided',
+                title: context.tr('country'),
+                value: countryStr.isNotEmpty ? countryStr : '—',
                 isLast: true,
               ),
             ],
@@ -155,7 +151,7 @@ class PersonalInformationScreen extends ConsumerWidget {
                   Icon(Icons.edit_note_rounded, color: AppColors.primary, size: 22),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    'Edit Information',
+                    context.tr('registration_application'),
                     style: AppTypography.title.copyWith(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w700,
@@ -222,7 +218,7 @@ class PersonalInformationScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(WidgetRef ref, Object error) {
+  Widget _buildErrorState(BuildContext context, WidgetRef ref, Object error) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xxl),
@@ -236,17 +232,9 @@ class PersonalInformationScreen extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Unable to load personal information',
+              context.tr('error_occurred'),
               style: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary),
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              error.toString(),
-              style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: AppSpacing.xl),
             AnimatedPressable(
@@ -258,7 +246,7 @@ class PersonalInformationScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(AppRadius.control),
                 ),
                 child: Text(
-                  'Retry',
+                  context.tr('retry'),
                   style: AppTypography.title.copyWith(color: Colors.white, fontSize: 14),
                 ),
               ),
@@ -269,6 +257,7 @@ class PersonalInformationScreen extends ConsumerWidget {
     );
   }
 }
+
 
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({required this.title});

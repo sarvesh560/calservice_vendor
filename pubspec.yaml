@@ -84,6 +84,7 @@ flutter:
     - assets/images/onboarding/
     - assets/images/promotions/
     - assets/images/onboarding/animations/
+    - assets/images/animations/
     - assets/onboarding/
     - assets/promotions/
     - assets/promotions/offers.mp4
@@ -113,3 +114,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Manrope-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Manrope-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Manrope-ExtraBold.ttf
+          weight: 800

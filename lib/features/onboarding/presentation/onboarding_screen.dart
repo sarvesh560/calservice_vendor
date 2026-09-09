@@ -97,7 +97,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               children: [
                 Text(
                   'Select Language',
-                  style: AppTypography.titleLarge.copyWith(color: AppColors.brandMidnight),
+                  style: AppTypography.titleLarge.copyWith(color: AppColors.textPrimary),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 _LanguageTile(

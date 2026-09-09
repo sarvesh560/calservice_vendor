@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mobile/core/localization/app_localizations.dart';
 import 'package:mobile/features/auth/domain/auth_user.dart';
 import 'package:mobile/features/auth/presentation/auth_controller.dart';
 import 'package:mobile/features/dashboard/presentation/widgets/brand_bar_title.dart';
@@ -28,6 +28,7 @@ import 'package:mobile/features/performance/presentation/performance_screen.dart
 import 'package:mobile/features/profile/domain/employee_profile.dart';
 import 'package:mobile/features/profile/domain/shift_status.dart';
 import 'package:mobile/features/profile/presentation/profile_providers.dart';
+
 
 class FakeAuthController extends StateNotifier<AuthState> implements AuthController {
   FakeAuthController(AuthUser user) : super(AuthState.authenticated(user));
@@ -344,6 +345,8 @@ void main() {
             ],
             child: MaterialApp(
               theme: ThemeData.light(useMaterial3: true),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: const DocumentsScreen(),
             ),
           ),
@@ -351,7 +354,7 @@ void main() {
 
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
-        expect(find.text('Documents'), findsOneWidget);
+        expect(find.text('Compliance Documents'), findsOneWidget);
       });
 
       testWidgets('PerformanceScreen adapts without overflow on $label', (tester) async {

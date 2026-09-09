@@ -121,7 +121,7 @@ void main() {
       expect(find.text('Zayn Kishan'), findsOneWidget);
       expect(find.textContaining('ID: ORG--7688'), findsOneWidget);
       expect(find.textContaining('zaynkishan@gmail.com'), findsNWidgets(2)); // Header + Overview card
-      expect(find.text('SUBMITTED'), findsOneWidget);
+      expect(find.text('Submitted'), findsOneWidget);
 
       // Verify Tabs exist
       expect(find.text('Overview'), findsOneWidget);

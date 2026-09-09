@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../profile/presentation/profile_providers.dart';
@@ -44,7 +45,7 @@ class _AuthorizedServicesCardState extends ConsumerState<AuthorizedServicesCard>
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
-                  'Your Authorized Dispatch Services (${approvedServices.length})',
+                  '${context.tr("authorized_services")} (${approvedServices.length})',
                   style: AppTypography.title.copyWith(
                     fontSize: 12,
                   ),
@@ -60,7 +61,7 @@ class _AuthorizedServicesCardState extends ConsumerState<AuthorizedServicesCard>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          _isExpanded ? 'Show less' : 'View all',
+                          _isExpanded ? 'Show less' : context.tr('view_all'),
                           style: AppTypography.label.copyWith(
                             fontSize: 11,
                             color: AppColors.primary,
@@ -87,7 +88,7 @@ class _AuthorizedServicesCardState extends ConsumerState<AuthorizedServicesCard>
                 border: Border.all(color: const Color(0xFFE2E8F0)),
               ),
               child: Text(
-                'Awaiting Admin service authorizations.',
+                context.tr('no_services'),
                 style: AppTypography.bodySmall.copyWith(fontSize: 11.5),
               ),
             ),
@@ -135,7 +136,7 @@ class _AuthorizedServicesCardState extends ConsumerState<AuthorizedServicesCard>
                         border: Border.all(color: const Color(0xFFBFDBFE)),
                       ),
                       child: Text(
-                        '+${approvedServices.length - 6} more',
+                        '+${approvedServices.length - 6}',
                         style: AppTypography.label.copyWith(
                           fontSize: 11,
                           color: const Color(0xFF1D4ED8),
@@ -151,3 +152,4 @@ class _AuthorizedServicesCardState extends ConsumerState<AuthorizedServicesCard>
     );
   }
 }
+

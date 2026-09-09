@@ -12,6 +12,7 @@ import 'providers/security_providers.dart';
 import 'widgets/settings_section_card.dart';
 
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
+import '../../../shared/widgets/success_animation.dart';
 
 class AccountSecurityScreen extends StatelessWidget {
   const AccountSecurityScreen({super.key});
@@ -95,6 +96,14 @@ class _ChangePasswordCardState extends ConsumerState<_ChangePasswordCard> {
       _newController.clear();
       _confirmController.clear();
       setState(() => _success = 'Password updated successfully.');
+      if (mounted) {
+        await SuccessAnimation.showSuccessDialog(
+          context,
+          title: 'Password Updated',
+          message: 'Your security password has been updated successfully.',
+          actionLabel: 'Done',
+        );
+      }
     } on DioException catch (e) {
       setState(() => _error = describeDioError(e, fallback: 'Failed to update password.'));
     } catch (_) {

@@ -64,7 +64,8 @@ class WithdrawalCard extends StatelessWidget {
                           style: AppTypography.title.copyWith(
                             fontSize: 17,
                             fontFamily: 'monospace',
-                            color: AppColors.brandMidnight,
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),

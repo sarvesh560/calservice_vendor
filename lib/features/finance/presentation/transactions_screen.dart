@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/ledger_row.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
@@ -18,7 +19,8 @@ class TransactionsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(title: 'Transactions'),
+      appBar: PremiumSecondaryAppBar(title: context.tr('transactions_ledger')),
+
       body: txAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => Center(child: Text('Error: ')),

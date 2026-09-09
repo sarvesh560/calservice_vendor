@@ -17,12 +17,12 @@ class ActiveAssignmentBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.brandMidnight,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.6), width: 1.5),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: AppColors.brandMidnight.withValues(alpha: 0.1),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -39,9 +39,9 @@ class ActiveAssignmentBanner extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.brandChampagne.withValues(alpha: 0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.3)),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                 ),
                 child: Icon(Icons.local_shipping_outlined, color: AppColors.primary, size: 18),
               ),
@@ -58,7 +58,7 @@ class ActiveAssignmentBanner extends StatelessWidget {
                         Text(
                           'ACTIVE ASSIGNMENT',
                           style: AppTypography.label.copyWith(
-                            color: AppColors.brandChampagne,
+                            color: AppColors.primary,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.5,
                           ),
@@ -66,15 +66,15 @@ class ActiveAssignmentBanner extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.brandMidnightDark,
+                            color: AppColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(AppRadius.sm),
-                            border: Border.all(color: AppColors.brandChampagne.withValues(alpha: 0.3)),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             job.status.toUpperCase(),
                             style: AppTypography.label.copyWith(
                               fontSize: 9.5,
-                              color: AppColors.textSecondary,
+                              color: AppColors.primary,
                               letterSpacing: 0.3,
                             ),
                           ),

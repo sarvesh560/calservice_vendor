@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/localization/app_localizations.dart';
 import '../../core/network/api_error.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -29,8 +30,8 @@ class AsyncValueView<T> extends StatelessWidget {
       loading: () => _LoadingBlock(compact: compact),
       error: (error, _) => _ErrorBlock(
         message: error is DioException
-            ? describeDioError(error, fallback: 'Something went wrong. Please try again.')
-            : 'Something went wrong. Please try again.',
+            ? describeDioError(error, fallback: context.tr('error_occurred'))
+            : context.tr('error_occurred'),
         onRetry: onRetry,
         compact: compact,
       ),
@@ -84,7 +85,7 @@ class _ErrorBlock extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded, size: 18),
-              label: const Text('Retry'),
+              label: Text(context.tr('retry')),
               style: OutlinedButton.styleFrom(minimumSize: const Size(120, 40)),
             ),
           ],
@@ -93,3 +94,4 @@ class _ErrorBlock extends StatelessWidget {
     );
   }
 }
+

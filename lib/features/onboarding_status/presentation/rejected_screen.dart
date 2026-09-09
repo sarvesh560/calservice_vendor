@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
@@ -20,8 +21,8 @@ class RejectedScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Application Status',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('status'),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -70,7 +71,7 @@ class RejectedScreen extends ConsumerWidget {
                         border: Border.all(color: AppColors.error.tintBorder),
                       ),
                       child: Text(
-                        'DECISION FINAL',
+                        context.tr('doc_rejected').toUpperCase(),
                         style: TextStyle(
                           fontSize: 10.5,
                           fontWeight: FontWeight.w800,
@@ -81,13 +82,13 @@ class RejectedScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'Application Declined',
+                      context.tr('application_rejected'),
                       style: AppTypography.display.copyWith(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Your technician application was not approved. Please contact CalServices support if you have questions regarding this decision.',
+                      context.tr('application_rejected_desc'),
                       style: AppTypography.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -105,7 +106,7 @@ class RejectedScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'REASON PROVIDED:',
+                              context.tr('doc_rejected').toUpperCase(),
                               style: TextStyle(
                                 fontSize: 10.5,
                                 fontWeight: FontWeight.w800,
@@ -144,7 +145,7 @@ class RejectedScreen extends ConsumerWidget {
                           const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
-                              'Operations Support: support@calservices.com',
+                              context.tr('contact_support'),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: AppColors.textSecondary,
@@ -160,7 +161,7 @@ class RejectedScreen extends ConsumerWidget {
                       child: OutlinedButton(
                         onPressed: () =>
                             ref.read(authControllerProvider.notifier).logout(),
-                        child: const Text('Log Out'),
+                        child: Text(context.tr('logout')),
                       ),
                     ),
                   ],
@@ -173,3 +174,4 @@ class RejectedScreen extends ConsumerWidget {
     );
   }
 }
+

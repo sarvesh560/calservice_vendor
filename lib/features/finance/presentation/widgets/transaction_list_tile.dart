@@ -87,7 +87,8 @@ class TransactionListTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.title.copyWith(
                         fontSize: 13,
-                        color: AppColors.brandMidnight,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -177,7 +178,7 @@ class TransactionListTile extends StatelessWidget {
                         style: AppTypography.label.copyWith(
                           fontSize: 10.5,
                           fontFamily: 'monospace',
-                          color: AppColors.brandMidnightDark,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),

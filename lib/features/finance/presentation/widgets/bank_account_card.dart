@@ -66,7 +66,8 @@ class BankAccountCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: AppTypography.title.copyWith(
                                 fontSize: 14.5,
-                                color: AppColors.brandMidnight,
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -135,7 +136,7 @@ class BankAccountCard extends StatelessWidget {
                         'Account Number',
                         style: AppTypography.label.copyWith(
                           fontSize: 10.5,
-                          color: AppColors.brandMidnightDark,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -147,7 +148,7 @@ class BankAccountCard extends StatelessWidget {
                           style: AppTypography.title.copyWith(
                             fontSize: 14,
                             fontFamily: 'monospace',
-                            color: AppColors.brandMidnight,
+                            color: AppColors.textPrimary,
                             letterSpacing: 1.0,
                           ),
                         ),
@@ -163,7 +164,7 @@ class BankAccountCard extends StatelessWidget {
                       'IFSC Code',
                       style: AppTypography.label.copyWith(
                         fontSize: 10.5,
-                        color: AppColors.brandMidnightDark,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -172,7 +173,7 @@ class BankAccountCard extends StatelessWidget {
                       style: AppTypography.title.copyWith(
                         fontSize: 13,
                         fontFamily: 'monospace',
-                        color: AppColors.brandMidnight,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -194,7 +195,7 @@ class BankAccountCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.brandMist,
+                          color: AppColors.surfaceElevated,
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(color: AppColors.border),
                         ),
@@ -210,15 +211,15 @@ class BankAccountCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.brandMidnight.withValues(alpha: 0.05),
+                            color: AppColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: AppColors.brandMidnight.withValues(alpha: 0.15), width: 0.6),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.25), width: 0.6),
                           ),
                           child: Text(
                             'PRIMARY',
                             style: AppTypography.label.copyWith(
                               fontSize: 9.5,
-                              color: AppColors.brandMidnight,
+                              color: AppColors.primary,
                               letterSpacing: 0.5,
                             ),
                           ),

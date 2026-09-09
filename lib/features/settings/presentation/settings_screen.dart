@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
 
@@ -11,8 +12,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Settings',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('preferences'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -20,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
           _SettingsMenuCard(
             icon: Icons.lock_outline_rounded,
             iconColor: const Color(0xFF2563EB),
-            title: 'Account & Security',
+            title: context.tr('account_security'),
             subtitle: 'Password, email, 2FA, sessions & activity',
             onTap: () => context.push('/more/settings/security'),
           ),
@@ -28,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
           _SettingsMenuCard(
             icon: Icons.palette_outlined,
             iconColor: const Color(0xFF7C3AED),
-            title: 'Appearance & UI',
+            title: context.tr('appearance'),
             subtitle: 'Theme, accent color, density & accessibility',
             onTap: () => context.push('/more/settings/appearance'),
           ),
@@ -36,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
           _SettingsMenuCard(
             icon: Icons.notifications_outlined,
             iconColor: const Color(0xFFD97706),
-            title: 'Notifications',
+            title: context.tr('notification_settings'),
             subtitle: 'Alert channels & subscription preferences',
             onTap: () => context.push('/more/settings/notifications'),
           ),
@@ -44,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
           _SettingsMenuCard(
             icon: Icons.shield_outlined,
             iconColor: const Color(0xFF059669),
-            title: 'Privacy & Data',
+            title: context.tr('privacy_data'),
             subtitle: 'Export your data or deactivate your account',
             onTap: () => context.push('/more/settings/privacy'),
           ),
@@ -53,6 +54,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
+
 
 class _SettingsMenuCard extends StatelessWidget {
   const _SettingsMenuCard({

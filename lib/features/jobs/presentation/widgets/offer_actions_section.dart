@@ -2,20 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/loading_button.dart';
+import '../../../../shared/widgets/success_animation.dart';
 import '../../data/job_actions_repository.dart';
 import '../../domain/job.dart';
 import '../jobs_providers.dart';
 
-/// Accept/Decline for a pending offer — the exact same two backend calls
-/// the web app's "ACCEPT JOB"/"DECLINE" buttons make. Reproduces the
-/// backend's own error codes (JOB_ALREADY_ACCEPTED, OFFER_EXPIRED,
-/// EMPLOYEE_ALREADY_BUSY) with their correct individual messages — the web
-/// app's own error-handling has a left-to-right `if` ordering bug that
-/// collapses all three 409s onto the first message; this fixes that
-/// display bug while keeping every underlying validation identical.
 class OfferActionsSection extends ConsumerStatefulWidget {
   const OfferActionsSection({super.key, required this.job});
 
@@ -41,6 +36,7 @@ class _OfferActionsSectionState extends ConsumerState<OfferActionsSection> {
   }
 
   Future<void> _accept() async {
+    final fallbackMsg = context.tr('error_occurred');
     setState(() {
       _isAccepting = true;
       _error = null;
@@ -49,36 +45,23 @@ class _OfferActionsSectionState extends ConsumerState<OfferActionsSection> {
       await ref.read(jobActionsRepositoryProvider).acceptOffer(widget.job.id);
       await _refreshJobs();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Job offer accepted! Heading to customer site.')),
+        await SuccessAnimation.showSuccessDialog(
+          context,
+          title: 'Job Accepted',
+          message: 'Offer accepted. Head to active jobs to start work.',
+          actionLabel: 'Continue',
         );
       }
     } on DioException catch (e) {
       final code = _codeOf(e);
-      String message;
-      switch (code) {
-        case 'JOB_ALREADY_ACCEPTED':
-          message = 'This job was already accepted by another technician.';
-          break;
-        case 'OFFER_EXPIRED':
-          message = 'This job offer has expired.';
-          break;
-        case 'EMPLOYEE_ALREADY_BUSY':
-          message = 'You already have an active job in progress.';
-          break;
-        case 'CROSS_TENANT_FORBIDDEN':
-          message = 'Unauthorized: cross-company access forbidden.';
-          break;
-        default:
-          message = describeDioError(e, fallback: 'Failed to accept job offer.');
-      }
+      String message = describeDioError(e, fallback: fallbackMsg);
       setState(() => _error = message);
       if (code == 'JOB_ALREADY_ACCEPTED' || code == 'OFFER_EXPIRED') {
         await _refreshJobs();
         if (mounted) Navigator.of(context).maybePop();
       }
     } catch (_) {
-      setState(() => _error = 'Failed to accept job offer.');
+      setState(() => _error = fallbackMsg);
     } finally {
       if (mounted) setState(() => _isAccepting = false);
     }
@@ -97,9 +80,9 @@ class _OfferActionsSectionState extends ConsumerState<OfferActionsSection> {
       await _refreshJobs();
       if (mounted) Navigator.of(context).maybePop();
     } on DioException catch (e) {
-      setState(() => _error = describeDioError(e, fallback: 'Failed to decline job offer.'));
+      setState(() => _error = describeDioError(e, fallback: context.tr('error_occurred')));
     } catch (_) {
-      setState(() => _error = 'Failed to decline job offer.');
+      setState(() => _error = context.tr('error_occurred'));
     } finally {
       if (mounted) setState(() => _isDeclining = false);
     }
@@ -129,7 +112,7 @@ class _OfferActionsSectionState extends ConsumerState<OfferActionsSection> {
           children: [
             Expanded(
               child: LoadingButton(
-                label: 'ACCEPT JOB',
+                label: context.tr('confirm'),
                 icon: Icons.check_circle_outline_rounded,
                 isLoading: _isAccepting,
                 onPressed: _isDeclining ? null : _accept,
@@ -139,7 +122,7 @@ class _OfferActionsSectionState extends ConsumerState<OfferActionsSection> {
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: LoadingButton(
-                label: 'DECLINE',
+                label: context.tr('cancel'),
                 filled: false,
                 isLoading: _isDeclining,
                 onPressed: _isAccepting ? null : _declineFlow,
@@ -207,12 +190,7 @@ class _DeclineReasonSheetState extends State<_DeclineReasonSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Decline Job Offer', style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                'Let us know why — this helps us dispatch better.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Text(context.tr('cancel'), style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: AppSpacing.md),
               RadioGroup<String>(
                 groupValue: _selected,
@@ -236,13 +214,13 @@ class _DeclineReasonSheetState extends State<_DeclineReasonSheet> {
                 TextField(
                   controller: _customController,
                   onChanged: (_) => setState(() {}),
-                  decoration: const InputDecoration(hintText: 'Please explain...'),
+                  decoration: const InputDecoration(hintText: 'Explanation'),
                   maxLines: 2,
                 ),
               ],
               const SizedBox(height: AppSpacing.md),
               LoadingButton(
-                label: 'Confirm Decline',
+                label: context.tr('confirm'),
                 onPressed: canConfirm
                     ? () => Navigator.of(context).pop(
                         isOther ? _customController.text.trim() : _selected,
@@ -257,3 +235,4 @@ class _DeclineReasonSheetState extends State<_DeclineReasonSheet> {
     );
   }
 }
+

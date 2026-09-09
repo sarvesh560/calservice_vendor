@@ -233,7 +233,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                           style: AppTypography.title.copyWith(
                             fontSize: 18,
                             fontFamily: 'monospace',
-                            color: AppColors.brandMidnight,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ],
@@ -252,7 +252,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                             'Min Threshold',
                             style: AppTypography.label.copyWith(
                               fontSize: 9.5,
-                              color: AppColors.brandMidnightDark,
+                              color: AppColors.textSecondary,
                             ),
                           ),
                           Text(
@@ -260,7 +260,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                             style: AppTypography.label.copyWith(
                               fontSize: 11,
                               fontFamily: 'monospace',
-                              color: AppColors.brandMidnight,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ],
@@ -305,7 +305,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                 'Payout Amount (₹)',
                 style: AppTypography.title.copyWith(
                   fontSize: 12.5,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -316,7 +316,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                   fontSize: 16,
                   fontFamily: 'monospace',
                   fontWeight: FontWeight.w800,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   prefixText: '₹ ',
@@ -384,7 +384,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                 'Destination Bank Account',
                 style: AppTypography.title.copyWith(
                   fontSize: 12.5,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -415,7 +415,7 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                         icon: const Icon(Icons.add_rounded, size: 16),
                         label: const Text('Add Bank Account'),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.brandMidnight,
+                          foregroundColor: AppColors.textPrimary,
                           side: BorderSide(color: AppColors.border),
                           minimumSize: const Size(120, 40),
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -488,8 +488,8 @@ class _RequestWithdrawalSheetState extends ConsumerState<RequestWithdrawalSheet>
                     ? () => _submit(availableBalance, accounts)
                     : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.brandChampagne,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.textOnPrimary,
                   minimumSize: const Size.fromHeight(48),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.control)),
                 ),
@@ -524,7 +524,7 @@ class _PresetChip extends StatelessWidget {
           label,
           style: AppTypography.label.copyWith(
             fontSize: 11,
-            color: AppColors.brandMidnight,
+            color: AppColors.textPrimary,
           ),
         ),
       ),

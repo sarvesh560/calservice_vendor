@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../routing/app_routes.dart';
@@ -16,8 +17,8 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Complete Registration',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('registration_incomplete'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -64,7 +65,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
-                          'Registration Incomplete',
+                          context.tr('registration_incomplete'),
                           style: AppTypography.display.copyWith(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
@@ -74,7 +75,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
-                          'Your vendor profile is not complete yet. Complete the remaining steps to submit your application and start receiving dispatches.',
+                          context.tr('registration_incomplete_desc'),
                           style: AppTypography.bodySmall.copyWith(
                             color: AppColors.textSecondary,
                             fontSize: 14,
@@ -97,7 +98,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Continue Registration',
+                                  context.tr('continue_registration'),
                                   style: AppTypography.label.copyWith(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -119,7 +120,7 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
                   TextButton(
                     onPressed: () => ref.read(authControllerProvider.notifier).logout(),
                     child: Text(
-                      'Log Out',
+                      context.tr('logout'),
                       style: AppTypography.label.copyWith(color: AppColors.brandSlate),
                     ),
                   ),
@@ -132,3 +133,4 @@ class RegistrationIncompleteScreen extends ConsumerWidget {
     );
   }
 }
+

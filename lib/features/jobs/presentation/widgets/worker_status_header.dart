@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../shared/widgets/status_chip.dart';
@@ -89,12 +90,12 @@ class WorkerStatusHeader extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 6),
+                            const SizedBox(width: 4),
                             StatusChip(
                               status: hasActiveJob ? 'busy' : (isOnline ? 'online' : 'offline'),
                               label: hasActiveJob
-                                  ? 'ON JOB'
-                                  : (isOnline ? 'AVAILABLE' : 'OFFLINE'),
+                                  ? context.tr('on_the_way')
+                                  : (isOnline ? context.tr('online') : context.tr('offline')),
                               dense: true,
                             ),
                           ],
@@ -155,13 +156,14 @@ class WorkerStatusHeader extends ConsumerWidget {
                           : (isOnline ? const Color(0xFF059669) : const Color(0xFF64748B)),
                     ),
                     const SizedBox(width: 6),
-                    Flexible(
+                    Expanded(
                       child: Text(
                         hasActiveJob
-                            ? 'BUSY • ON ACTIVE JOB'
-                            : (isOnline ? 'ONLINE • READY FOR DISPATCH' : 'OFFLINE • DISPATCH PAUSED'),
+                            ? context.tr('on_the_way')
+                            : (isOnline ? context.tr('available_for_new_requests') : context.tr('job_offers_paused')),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                         style: AppTypography.label.copyWith(
                           fontSize: 10.5,
                           fontWeight: FontWeight.w800,

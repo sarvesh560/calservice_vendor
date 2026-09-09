@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../routing/app_routes.dart';
@@ -77,12 +78,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               const SizedBox(height: AppSpacing.xxl),
               Text(
-                'Welcome Back',
+                context.tr('welcome_back_title'),
                 style: AppTypography.display.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 8),
               Text(
-                'Sign in to your vendor account to manage jobs and earnings.',
+                context.tr('welcome_back_subtitle'),
                 style: AppTypography.body.copyWith(color: AppColors.textSecondary),
               ),
               const SizedBox(height: 48),
@@ -93,8 +94,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 cursorColor: AppColors.primary,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: AppColors.surface,
-                  labelText: 'Email Address',
+                  fillColor: AppColors.surfaceElevated,
+                  labelText: context.tr('email_address'),
                   labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                   prefixIcon: Icon(Icons.email_outlined, color: AppColors.primary),
                   enabledBorder: OutlineInputBorder(
@@ -118,8 +119,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: AppColors.surface,
-                  labelText: 'Password',
+                  fillColor: AppColors.surfaceElevated,
+                  labelText: context.tr('password'),
                   labelStyle: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                   prefixIcon: Icon(Icons.lock_outline_rounded, color: AppColors.primary),
                   suffixIcon: IconButton(
@@ -143,7 +144,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               
               const SizedBox(height: 48),
               PremiumButton(
-                label: 'Sign In',
+                label: context.tr('sign_in'),
                 isLoading: _isLoading,
                 onPressed: _handleLogin,
               ),
@@ -152,13 +153,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'New technician? ',
+                    context.tr('new_technician'),
                     style: AppTypography.body.copyWith(color: AppColors.textSecondary),
                   ),
                   GestureDetector(
                     onTap: () => context.go(AppRoutes.createAccount),
                     child: Text(
-                      'Create Account',
+                      context.tr('create_account'),
                       style: AppTypography.body.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,

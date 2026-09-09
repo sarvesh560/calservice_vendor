@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/theme/app_motion.dart';
@@ -138,7 +139,7 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                       const SizedBox(height: AppSpacing.xl),
 
                       Text(
-                        'JOBS QUEUE',
+                        context.tr('job_requests').toUpperCase(),
                         style: AppTypography.label.copyWith(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
@@ -157,12 +158,12 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                         child: Row(
                           children: [
                             _TabButton(
-                              title: 'Active (${activeJobs.length})',
+                              title: '${context.tr("active")} (${activeJobs.length})',
                               isSelected: _currentTab == _JobQueueTab.active,
                               onTap: () => setState(() => _currentTab = _JobQueueTab.active),
                             ),
                             _TabButton(
-                              title: 'Completed (${completedJobs.length})',
+                              title: '${context.tr("completed")} (${completedJobs.length})',
                               isSelected: _currentTab == _JobQueueTab.completed,
                               onTap: () {
                                 setState(() => _currentTab = _JobQueueTab.completed);
@@ -170,7 +171,7 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                               },
                             ),
                             _TabButton(
-                              title: 'All (${allJobs.length})',
+                              title: '${context.tr("all")} (${allJobs.length})',
                               isSelected: _currentTab == _JobQueueTab.all,
                               onTap: () {
                                 setState(() => _currentTab = _JobQueueTab.all);
@@ -208,16 +209,8 @@ class _JobsScreenState extends ConsumerState<JobsScreen> with SingleTickerProvid
                                   : (_currentTab == _JobQueueTab.completed
                                       ? Icons.task_alt_outlined
                                       : Icons.work_off_outlined),
-                              title: _currentTab == _JobQueueTab.active
-                                  ? 'No active jobs'
-                                  : (_currentTab == _JobQueueTab.completed
-                                      ? 'No completed jobs yet'
-                                      : 'No jobs found'),
-                              message: _currentTab == _JobQueueTab.active
-                                  ? 'New exclusive job offers and dispatches will appear here automatically.'
-                                  : (_currentTab == _JobQueueTab.completed
-                                      ? 'Jobs you finish and confirm payment for will appear here.'
-                                      : 'No assigned service requests found.'),
+                              title: context.tr('no_jobs'),
+                              message: context.tr('no_jobs'),
                             ),
                           );
                         }
@@ -283,7 +276,7 @@ class _JobsHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Jobs Workspace',
+          context.tr('jobs'),
           style: AppTypography.headline.copyWith(
             fontSize: 20,
             color: AppColors.textPrimary,
@@ -304,6 +297,7 @@ class _JobsHeader extends StatelessWidget {
     );
   }
 }
+
 
 class _TabButton extends StatelessWidget {
   const _TabButton({

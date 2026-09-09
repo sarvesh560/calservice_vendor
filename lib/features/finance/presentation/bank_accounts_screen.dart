@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../../shared/widgets/settings_row.dart';
@@ -17,7 +18,8 @@ class BankAccountsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: PremiumSecondaryAppBar(
-        title: 'Bank Accounts',
+        title: context.tr('payout_bank_accounts'),
+
         actions: [
           IconButton(
             icon: Icon(Icons.add_circle_outline_rounded, color: AppColors.textSecondary),

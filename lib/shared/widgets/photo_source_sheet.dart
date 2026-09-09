@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_theme.dart';
 
 /// Bottom sheet offering Camera or Gallery, then returns the picked file
@@ -29,12 +30,12 @@ Future<String?> pickJobPhoto(BuildContext context) async {
           const SizedBox(height: AppSpacing.md),
           ListTile(
             leading: const Icon(Icons.photo_camera_outlined),
-            title: const Text('Take Photo'),
+            title: Text(context.tr('camera')),
             onTap: () => Navigator.of(context).pop(ImageSource.camera),
           ),
           ListTile(
             leading: const Icon(Icons.photo_library_outlined),
-            title: const Text('Choose from Gallery'),
+            title: Text(context.tr('gallery')),
             onTap: () => Navigator.of(context).pop(ImageSource.gallery),
           ),
           const SizedBox(height: AppSpacing.sm),

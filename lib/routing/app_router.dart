@@ -46,6 +46,7 @@ import '../features/settings/presentation/appearance_screen.dart';
 import '../features/settings/presentation/notification_settings_screen.dart';
 import '../features/settings/presentation/privacy_data_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import '../core/navigation/app_page_transitions.dart';
 import '../shared/widgets/app_shell_scaffold.dart';
 import '../shared/widgets/lottie_loading_indicator.dart';
 import 'app_routes.dart';
@@ -167,48 +168,78 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.onboarding,
-        builder: (context, state) => const OnboardingScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeIn(
+          state,
+          child: const OnboardingScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeScale(
+          state,
+          child: const LoginScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.createAccount,
-        builder: (context, state) => const CreateAccountScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeScale(
+          state,
+          child: const CreateAccountScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.onboardingWizard,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final stepParam = state.uri.queryParameters['step'];
           final initialStep = stepParam != null ? int.tryParse(stepParam) : null;
-          return OnboardingWizardScreen(initialStep: initialStep);
+          return AppPageTransitions.modalSlideUp(
+            state,
+            child: OnboardingWizardScreen(initialStep: initialStep),
+          );
         },
       ),
       GoRoute(
         path: AppRoutes.pendingReview,
-        builder: (context, state) => const PendingReviewScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const PendingReviewScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.correctionRequired,
-        builder: (context, state) => const CorrectionRequiredScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const CorrectionRequiredScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.rejected,
-        builder: (context, state) => const RejectedScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const RejectedScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.registrationIncomplete,
-        builder: (context, state) => const RegistrationIncompleteScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const RegistrationIncompleteScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.employeeOnly,
-        builder: (context, state) => const EmployeeOnlyScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeIn(
+          state,
+          child: const EmployeeOnlyScreen(),
+        ),
       ),
       // ── Admin Routes ───────────────────────────────────────────────────────
       GoRoute(
         path: AppRoutes.adminHome,
-        builder: (context, state) => const AdminHomeScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeIn(
+          state,
+          child: const AdminHomeScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin',
@@ -216,7 +247,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminEmployees,
-        builder: (context, state) => const AdminEmployeesScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminEmployeesScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/employees',
@@ -224,9 +258,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminApplications,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final status = state.uri.queryParameters['status'];
-          return AdminApplicationsScreen(statusFilter: status);
+          return AppPageTransitions.fadeSlideUp(
+            state,
+            child: AdminApplicationsScreen(statusFilter: status),
+          );
         },
       ),
       GoRoute(
@@ -236,9 +273,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminApplicationDetail,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
-          return AdminApplicationDetailScreen(applicationId: id);
+          return AppPageTransitions.slideRight(
+            state,
+            child: AdminApplicationDetailScreen(applicationId: id),
+          );
         },
       ),
       GoRoute(
@@ -247,10 +287,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminServices,
-        builder: (context, state) => const AdminPlaceholderScreen(
-          title: 'Workforce Services Catalog',
-          module: 'Services',
-          description: 'Master service categories, pricing matrices, and dispatch prerequisites',
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminPlaceholderScreen(
+            title: 'Workforce Services Catalog',
+            module: 'Services',
+            description: 'Master service categories, pricing matrices, and dispatch prerequisites',
+          ),
         ),
       ),
       GoRoute(
@@ -259,7 +302,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminSkills,
-        builder: (context, state) => const AdminSkillsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminSkillsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/skills',
@@ -267,7 +313,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminJobs,
-        builder: (context, state) => const AdminJobsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminJobsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/jobs',
@@ -275,11 +324,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminDispatch,
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final jobId = state.uri.queryParameters['job_id'] ??
               state.uri.queryParameters['jobId'];
           final tab = int.tryParse(state.uri.queryParameters['tab'] ?? '') ?? 0;
-          return AdminDispatchScreen(jobId: jobId, initialTabIndex: tab);
+          return AppPageTransitions.fadeSlideUp(
+            state,
+            child: AdminDispatchScreen(jobId: jobId, initialTabIndex: tab),
+          );
         },
       ),
       GoRoute(
@@ -289,8 +341,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminLiveWorkforce,
-        builder: (context, state) => const AdminDispatchScreen(
-          initialTabIndex: 1,
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminDispatchScreen(initialTabIndex: 1),
         ),
       ),
       GoRoute(
@@ -299,7 +352,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminReports,
-        builder: (context, state) => const AdminReportsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminReportsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/reports',
@@ -307,10 +363,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminSettings,
-        builder: (context, state) => const AdminPlaceholderScreen(
-          title: 'System Settings & Controls',
-          module: 'Settings',
-          description: 'Tenant parameters, radius rules, and dispatch expiration ring timings',
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminPlaceholderScreen(
+            title: 'System Settings & Controls',
+            module: 'Settings',
+            description: 'Tenant parameters, radius rules, and dispatch expiration ring timings',
+          ),
         ),
       ),
       GoRoute(
@@ -320,7 +379,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Admin Finance Routes
       GoRoute(
         path: AppRoutes.adminFinanceWallets,
-        builder: (context, state) => const AdminWalletsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.fadeSlideUp(
+          state,
+          child: const AdminWalletsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/finance/wallets',
@@ -328,7 +390,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminFinanceTransactions,
-        builder: (context, state) => const AdminTransactionsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const AdminTransactionsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/finance/transactions',
@@ -336,7 +401,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminFinanceWithdrawals,
-        builder: (context, state) => const AdminWithdrawalsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const AdminWithdrawalsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/finance/withdrawals',
@@ -344,7 +412,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.adminFinanceBankAccounts,
-        builder: (context, state) => const AdminBankAccountsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const AdminBankAccountsScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/finance/bank-accounts',
@@ -353,7 +424,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Admin Monitoring Routes
       GoRoute(
         path: AppRoutes.adminMonitoringDatabaseEgress,
-        builder: (context, state) => const AdminDatabaseEgressScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const AdminDatabaseEgressScreen(),
+        ),
       ),
       GoRoute(
         path: '/workforce/admin/monitoring/database-egress',
@@ -366,19 +440,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.earningsWallet,
-        builder: (context, state) => const WalletScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const WalletScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.earningsTransactions,
-        builder: (context, state) => const TransactionsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const TransactionsScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.earningsWithdrawals,
-        builder: (context, state) => const WithdrawalsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const WithdrawalsScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.earningsBankAccount,
-        builder: (context, state) => const BankAccountsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const BankAccountsScreen(),
+        ),
       ),
       // Aliases
       GoRoute(
@@ -399,7 +485,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.notifications,
-        builder: (context, state) => const NotificationsScreen(),
+        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+          state,
+          child: const NotificationsScreen(),
+        ),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -421,9 +510,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) {
-                      return JobDetailScreen(job: state.extra as Job);
-                    },
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: JobDetailScreen(job: state.extra as Job),
+                    ),
                   ),
                 ],
               ),
@@ -437,47 +527,80 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: 'performance',
-                    builder: (context, state) => const PerformanceScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const PerformanceScreen(),
+                    ),
                   ),
                   GoRoute(
                     path: 'profile',
-                    builder: (context, state) => const PersonalInformationScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const PersonalInformationScreen(),
+                    ),
                   ),
                   GoRoute(
                     path: 'personal-info',
-                    builder: (context, state) => const PersonalInformationScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const PersonalInformationScreen(),
+                    ),
                   ),
                   GoRoute(
                     path: 'documents',
-                    builder: (context, state) => const DocumentsScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const DocumentsScreen(),
+                    ),
                   ),
                   GoRoute(
                     path: 'services',
-                    builder: (context, state) => const ServicesScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const ServicesScreen(),
+                    ),
                   ),
                   GoRoute(
                     path: 'locations',
-                    builder: (context, state) => const LocationsScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const LocationsScreen(),
+                    ),
                   ),
                   GoRoute(
                     path: 'settings',
-                    builder: (context, state) => const SettingsScreen(),
+                    pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                      state,
+                      child: const SettingsScreen(),
+                    ),
                     routes: [
                       GoRoute(
                         path: 'security',
-                        builder: (context, state) => const AccountSecurityScreen(),
+                        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                          state,
+                          child: const AccountSecurityScreen(),
+                        ),
                       ),
                       GoRoute(
                         path: 'appearance',
-                        builder: (context, state) => const AppearanceScreen(),
+                        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                          state,
+                          child: const AppearanceScreen(),
+                        ),
                       ),
                       GoRoute(
                         path: 'notifications',
-                        builder: (context, state) => const NotificationSettingsScreen(),
+                        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                          state,
+                          child: const NotificationSettingsScreen(),
+                        ),
                       ),
                       GoRoute(
                         path: 'privacy',
-                        builder: (context, state) => const PrivacyDataScreen(),
+                        pageBuilder: (context, state) => AppPageTransitions.slideRight(
+                          state,
+                          child: const PrivacyDataScreen(),
+                        ),
                       ),
                     ],
                   ),

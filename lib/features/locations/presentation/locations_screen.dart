@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
+import '../../../shared/widgets/success_animation.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../domain/saved_location.dart';
 import 'locations_providers.dart';
@@ -17,6 +19,7 @@ const Map<String, IconData> _labelIcons = {
 };
 
 class LocationsScreen extends ConsumerStatefulWidget {
+
   const LocationsScreen({super.key});
 
   @override
@@ -149,8 +152,8 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
     return Scaffold(
       appBar: PremiumSecondaryAppBar(
         title: _view == 'list'
-            ? 'My Saved Locations'
-            : (_view == 'add' ? 'Add New Location' : 'Edit Location'),
+            ? context.tr('working_locations')
+            : (_view == 'add' ? context.tr('street_address') : context.tr('working_locations')),
         onBack: _view != 'list' ? _closeForm : null,
         actions: [
           if (_view == 'list') ...[
@@ -695,12 +698,13 @@ class _LocationsScreenState extends ConsumerState<LocationsScreen> {
     if (!mounted) return;
 
     if (success) {
+      final msg = _view == 'edit' ? 'Location updated successfully.' : 'Location saved successfully.';
       _closeForm();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_view == 'edit' ? 'Location updated successfully.' : 'Location saved successfully.'),
-          backgroundColor: const Color(0xFF10B981),
-        ),
+      await SuccessAnimation.showSuccessDialog(
+        context,
+        title: 'Location Saved',
+        message: msg,
+        actionLabel: 'Done',
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

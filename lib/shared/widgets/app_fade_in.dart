@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../core/theme/app_motion.dart';
+
 
 /// A restrained entrance: a short fade paired with a small upward settle.
 ///

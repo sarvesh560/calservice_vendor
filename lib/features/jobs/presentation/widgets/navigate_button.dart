@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/location/navigation_launcher.dart';
 import '../../domain/job.dart';
 
@@ -27,12 +28,13 @@ class NavigateButton extends StatelessWidget {
         );
         if (!launched && context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not open a maps app for navigation.')),
+            SnackBar(content: Text(context.tr('error_occurred'))),
           );
         }
       },
       icon: const Icon(Icons.directions_rounded, size: 18),
-      label: const Text('Navigate'),
+      label: Text(context.tr('navigate')),
     );
   }
 }
+

@@ -4,13 +4,16 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
 import '../../../shared/widgets/status_badge.dart';
+import '../../../shared/widgets/success_animation.dart';
 import '../../profile/domain/employee_profile.dart';
 import '../../profile/presentation/profile_providers.dart';
 import '../domain/service_catalog.dart';
 import 'services_providers.dart';
 
+import '../../../core/localization/app_localizations.dart';
 
 class ServicesScreen extends ConsumerStatefulWidget {
+
   const ServicesScreen({super.key});
 
   @override
@@ -87,48 +90,11 @@ class _ServicesScreenState extends ConsumerState<ServicesScreen> {
     });
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.fromLTRB(
-            AppSpacing.md,
-            0,
-            AppSpacing.md,
-            AppSpacing.lg,
-          ),
-          backgroundColor: AppColors.primary,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(_smallRadius),
-          ),
-          content: Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.14),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.check_rounded,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  "Request for '$name' submitted to Admin.",
-                  style: AppTypography.bodySmall.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      await SuccessAnimation.showSuccessDialog(
+        context,
+        title: 'Service Requested',
+        message: "Request for '$name' submitted for administrative review.",
+        actionLabel: 'Done',
       );
     } else {
       final error = ref.read(servicesControllerProvider).error;
@@ -191,8 +157,8 @@ class _ServicesScreenState extends ConsumerState<ServicesScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'My Services',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('authorized_services'),
       ),
       body: RefreshIndicator(
         color: AppColors.primary,
@@ -654,7 +620,7 @@ class _ServicesScreenState extends ConsumerState<ServicesScreen> {
                   style: AppTypography.display.copyWith(
                     fontSize: 25,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.brandMidnightDark,
+                    color: AppColors.textPrimary,
                     height: 1.12,
                   ),
                 ),
@@ -664,7 +630,7 @@ class _ServicesScreenState extends ConsumerState<ServicesScreen> {
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 12,
                     height: 1.5,
-                    color: AppColors.brandSlate,
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -844,7 +810,7 @@ class _MiniInfo extends StatelessWidget {
         vertical: 6,
       ),
       decoration: BoxDecoration(
-        color: AppColors.brandMist,
+        color: AppColors.surfaceElevated,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -861,7 +827,7 @@ class _MiniInfo extends StatelessWidget {
             style: AppTypography.label.copyWith(
               fontSize: 10,
               fontWeight: FontWeight.w800,
-              color: AppColors.brandMidnightDark,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(width: 3),
@@ -870,7 +836,7 @@ class _MiniInfo extends StatelessWidget {
             style: AppTypography.label.copyWith(
               fontSize: 9,
               fontWeight: FontWeight.w600,
-              color: AppColors.brandSlate,
+              color: AppColors.textSecondary,
             ),
           ),
         ],
@@ -950,7 +916,7 @@ class _ExpandablePendingSection extends StatelessWidget {
                               style: AppTypography.headline.copyWith(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.brandMidnightDark,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 3),
@@ -958,7 +924,7 @@ class _ExpandablePendingSection extends StatelessWidget {
                               '${services.length} service${services.length == 1 ? '' : 's'} waiting for Admin review',
                               style: AppTypography.bodySmall.copyWith(
                                 fontSize: 11,
-                                color: AppColors.brandSlate,
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -1105,7 +1071,7 @@ class _ExpandableApprovedSection extends StatelessWidget {
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color:
-                                AppColors.brandMidnightDark,
+                                AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 3),
@@ -1114,7 +1080,7 @@ class _ExpandableApprovedSection extends StatelessWidget {
                               style:
                               AppTypography.bodySmall.copyWith(
                                 fontSize: 11,
-                                color: AppColors.brandSlate,
+                                color: AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -1244,7 +1210,7 @@ class _ApprovedServiceTile extends StatelessWidget {
                   style: AppTypography.headline.copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.brandMidnightDark,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -1254,7 +1220,7 @@ class _ApprovedServiceTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 11,
-                    color: AppColors.brandSlate,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -1314,7 +1280,7 @@ class _NoApprovedServicesCard extends StatelessWidget {
                   style: AppTypography.headline.copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.brandMidnightDark,
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -1323,7 +1289,7 @@ class _NoApprovedServicesCard extends StatelessWidget {
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 11.5,
                     height: 1.4,
-                    color: AppColors.brandSlate,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -1372,7 +1338,7 @@ class _DiscoverHeader extends StatelessWidget {
                       style: AppTypography.headline.copyWith(
                         fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.brandMidnightDark,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -1381,7 +1347,7 @@ class _DiscoverHeader extends StatelessWidget {
                       style: AppTypography.bodySmall.copyWith(
                         fontSize: 11.5,
                         height: 1.4,
-                        color: AppColors.brandSlate,
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],
@@ -1463,7 +1429,7 @@ class _SectionHeader extends StatelessWidget {
                 style: AppTypography.headline.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 5),
@@ -2211,7 +2177,7 @@ class _ServiceSearchField extends StatelessWidget {
         textInputAction: TextInputAction.search,
         textCapitalization: TextCapitalization.words,
         style: AppTypography.bodySmall.copyWith(
-          color: AppColors.brandMidnightDark,
+          color: AppColors.textPrimary,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
@@ -2306,7 +2272,7 @@ class _EmptyServiceCard extends StatelessWidget {
             style: AppTypography.headline.copyWith(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              color: AppColors.brandMidnightDark,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 6),
@@ -2777,7 +2743,7 @@ class _ServiceDetailsSheet extends StatelessWidget {
               fontSize: 11,
               fontWeight: FontWeight.w800,
               letterSpacing: 0.5,
-              color: AppColors.brandMidnightDark,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 7),

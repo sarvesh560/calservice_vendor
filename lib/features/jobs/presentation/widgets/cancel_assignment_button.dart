@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/network/api_error.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/loading_button.dart';
@@ -9,9 +10,6 @@ import '../../data/job_actions_repository.dart';
 import '../../domain/job.dart';
 import '../jobs_providers.dart';
 
-/// The exact 8 reason codes accepted by the backend
-/// (WorkforceJobTechnicianCancelView.VALID_CANCELLATION_REASONS), and the
-/// endpoint the web UI's cancel modal actually calls (`/cancel/`).
 const _cancelReasons = [
   ('VEHICLE_ISSUE', 'Vehicle issue / Breakdown'),
   ('TRAFFIC_ROUTE_ISSUE', 'Heavy traffic / Road blockage'),
@@ -23,11 +21,6 @@ const _cancelReasons = [
   ('OTHER', 'Other reason (explanation required)'),
 ];
 
-/// Shown for status accepted/on_the_way/en_route — matches the web JSX
-/// condition exactly. Disabled once the (informational) cancellation
-/// countdown has hit zero, mirroring the web button's disabled state, even
-/// though the backend itself doesn't actually enforce a time deadline on
-/// this endpoint (only status + OTP-not-verified gates it).
 class CancelAssignmentButton extends StatelessWidget {
   const CancelAssignmentButton({super.key, required this.job});
 
@@ -43,7 +36,7 @@ class CancelAssignmentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LoadingButton(
-      label: 'Cancel Assignment',
+      label: context.tr('cancel'),
       filled: false,
       onPressed: _canCancelNow
           ? () => showDialog<void>(
@@ -81,6 +74,7 @@ class _CancelAssignmentDialogState extends ConsumerState<_CancelAssignmentDialog
   }
 
   Future<void> _confirm() async {
+    final fallbackMsg = context.tr('error_occurred');
     setState(() {
       _isSubmitting = true;
       _error = null;
@@ -102,17 +96,17 @@ class _CancelAssignmentDialogState extends ConsumerState<_CancelAssignmentDialog
       String message;
       switch (code) {
         case 'CANCELLATION_NOT_ALLOWED_IN_CURRENT_STATE':
-          message = 'Cancellation is not allowed in the current state.';
+          message = fallbackMsg;
           break;
         case 'CANCELLATION_LOCKED_AFTER_OTP':
-          message = 'Cancellation is not allowed after customer OTP verification.';
+          message = fallbackMsg;
           break;
         default:
-          message = describeDioError(e, fallback: 'Failed to cancel job assignment.');
+          message = describeDioError(e, fallback: fallbackMsg);
       }
       setState(() => _error = message);
     } catch (_) {
-      setState(() => _error = 'Failed to cancel job assignment.');
+      setState(() => _error = fallbackMsg);
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
@@ -124,24 +118,12 @@ class _CancelAssignmentDialogState extends ConsumerState<_CancelAssignmentDialog
     final canConfirm = !isOther || _detailController.text.trim().isNotEmpty;
 
     return AlertDialog(
-      title: const Text('Cancel Job Assignment'),
+      title: Text(context.tr('cancel')),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF1F2),
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-                border: Border.all(color: const Color(0xFFFECDD3)),
-              ),
-              child: const Text(
-                'This will unassign you from the job and redispatch it to another technician.',
-                style: TextStyle(fontSize: 11.5, color: Color(0xFF9F1239)),
-              ),
-            ),
             if (_error != null) ...[
               const SizedBox(height: AppSpacing.sm),
               Text(_error!, style: const TextStyle(fontSize: 12, color: Color(0xFFDC2626))),
@@ -170,7 +152,7 @@ class _CancelAssignmentDialogState extends ConsumerState<_CancelAssignmentDialog
               TextField(
                 controller: _detailController,
                 onChanged: (_) => setState(() {}),
-                decoration: const InputDecoration(labelText: 'Explanation (required)'),
+                decoration: const InputDecoration(labelText: 'Explanation'),
                 maxLines: 2,
               ),
             ],
@@ -180,14 +162,15 @@ class _CancelAssignmentDialogState extends ConsumerState<_CancelAssignmentDialog
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text('Keep Job'),
+          child: Text(context.tr('cancel')),
         ),
         FilledButton(
           onPressed: (canConfirm && !_isSubmitting) ? _confirm : null,
           style: FilledButton.styleFrom(backgroundColor: const Color(0xFFDC2626)),
-          child: Text(_isSubmitting ? 'Cancelling...' : 'Confirm Cancel'),
+          child: Text(_isSubmitting ? context.tr('loading') : context.tr('confirm')),
         ),
       ],
     );
   }
 }
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
@@ -36,8 +37,8 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Application Status',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('status'),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -91,7 +92,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                             border: Border.all(color: AppColors.warning.tintBorder),
                           ),
                           child: Text(
-                            'VERIFICATION IN PROGRESS',
+                            context.tr('registration_under_review').toUpperCase(),
                             style: TextStyle(
                               fontSize: 10.5,
                               fontWeight: FontWeight.w800,
@@ -104,13 +105,13 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
 
                         // ── Title & Description ────────────────────────────
                         Text(
-                          'Application Under Review',
+                          context.tr('registration_under_review'),
                           style: AppTypography.display.copyWith(fontSize: 20),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Your technician application has been submitted and is being reviewed by CalServices operations desk.',
+                          context.tr('registration_under_review_desc'),
                           style: AppTypography.bodySmall,
                           textAlign: TextAlign.center,
                         ),
@@ -132,7 +133,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Requested Services',
+                                      context.tr('authorized_services'),
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: AppColors.textMuted,
@@ -140,7 +141,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      '$servicesCount Services',
+                                      '$servicesCount',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -165,7 +166,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Documents Lodged',
+                                      context.tr('compliance_documents'),
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: AppColors.textMuted,
@@ -173,7 +174,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      '$docsCount Files',
+                                      '$docsCount',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -207,7 +208,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  'You will be notified once verification is completed. You cannot receive job dispatches until approved.',
+                                  context.tr('registration_under_review_desc'),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: AppColors.info.onTint,
@@ -237,8 +238,8 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                                 : const Icon(Icons.refresh_rounded, size: 18),
                             label: Text(
                               _isRefreshing
-                                  ? 'Checking Status...'
-                                  : 'Refresh Status',
+                                  ? context.tr('loading')
+                                  : context.tr('retry'),
                             ),
                           ),
                         ),
@@ -246,7 +247,7 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
                         TextButton(
                           onPressed: () =>
                               ref.read(authControllerProvider.notifier).logout(),
-                          child: const Text('Log Out'),
+                          child: Text(context.tr('logout')),
                         ),
                       ],
                     ),
@@ -260,3 +261,4 @@ class _PendingReviewScreenState extends ConsumerState<PendingReviewScreen> {
     );
   }
 }
+

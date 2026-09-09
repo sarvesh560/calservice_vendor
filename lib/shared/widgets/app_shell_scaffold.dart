@@ -57,7 +57,7 @@ class _AppShellScaffoldState extends ConsumerState<AppShellScaffold> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'New Service Request',
+                  context.tr('new_service_request'),
                   style: AppTypography.title.copyWith(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class _AppShellScaffoldState extends ConsumerState<AppShellScaffold> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'You have a new service request available.',
+                  context.tr('new_service_request_desc'),
                   style: AppTypography.caption.copyWith(
                     color: AppColors.textPrimary,
                     fontSize: 13,
@@ -75,7 +75,7 @@ class _AppShellScaffoldState extends ConsumerState<AppShellScaffold> {
               ],
             ),
             action: SnackBarAction(
-              label: 'VIEW',
+              label: context.tr('view'),
               textColor: AppColors.primary,
               onPressed: () {
                 if (jobId != null && jobId > 0) {

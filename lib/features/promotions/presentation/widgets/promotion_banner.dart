@@ -140,18 +140,18 @@ class _PromotionBannerState extends State<PromotionBanner> with TickerProviderSt
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.brandMidnightDark,
+              const Color(0xFF0F172A),
               const Color(0xFF0F365C),
-              AppColors.brandMidnight,
+              const Color(0xFF020617),
             ],
           ),
           border: Border.all(
-            color: AppColors.brandChampagne.withValues(alpha: 0.35),
+            color: AppColors.primary.withValues(alpha: 0.35),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.brandMidnightDark.withValues(alpha: 0.25),
+              color: Colors.black.withValues(alpha: 0.25),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),
@@ -294,7 +294,7 @@ class _PromotionBannerState extends State<PromotionBanner> with TickerProviderSt
                                     Text(
                                       promo.ctaText,
                                       style: AppTypography.label.copyWith(
-                                        color: AppColors.brandMidnightDark,
+                                        color: AppColors.textOnPrimary,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w800,
                                       ),
@@ -303,7 +303,7 @@ class _PromotionBannerState extends State<PromotionBanner> with TickerProviderSt
                                     Icon(
                                       Icons.arrow_forward_rounded,
                                       size: 14,
-                                      color: AppColors.brandMidnightDark,
+                                      color: AppColors.textOnPrimary,
                                     ),
                                   ],
                                 ),
@@ -404,15 +404,15 @@ class VideoPromotionSlide extends StatelessWidget {
         height: 195,
         margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
         decoration: BoxDecoration(
-          color: AppColors.brandMidnightDark,
+          color: const Color(0xFF0F172A),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppColors.brandChampagne.withValues(alpha: 0.35),
+            color: AppColors.primary.withValues(alpha: 0.35),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.brandMidnightDark.withValues(alpha: 0.25),
+              color: Colors.black.withValues(alpha: 0.25),
               blurRadius: 18,
               offset: const Offset(0, 8),
             ),

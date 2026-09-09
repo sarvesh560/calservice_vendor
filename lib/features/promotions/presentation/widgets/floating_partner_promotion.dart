@@ -62,13 +62,22 @@ class _FloatingPartnerPromotionState extends ConsumerState<FloatingPartnerPromot
     super.dispose();
   }
 
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
+  Future<void> _launchUrl([String? url]) async {
+    final uri = Uri.parse('https://customer.caldimservices.online/');
     try {
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Unable to open offers')),
+        );
       }
-    } catch (_) {}
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Unable to open offers')),
+        );
+      }
+    }
   }
 
   void _toggleExpand() {

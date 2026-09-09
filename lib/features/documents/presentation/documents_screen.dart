@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/empty_state.dart';
@@ -24,7 +25,8 @@ class DocumentsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(title: 'Documents'),
+      appBar: PremiumSecondaryAppBar(title: context.tr('compliance_documents')),
+
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(employeeProfileProvider.future),
         child: AsyncValueView<EmployeeProfile>(

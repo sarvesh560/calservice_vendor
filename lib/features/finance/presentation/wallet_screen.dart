@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/premium_buttons.dart';
@@ -22,7 +22,7 @@ class WalletScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(title: 'Wallet'),
+      appBar: PremiumSecondaryAppBar(title: context.tr('wallet_overview')),
       body: wallet == null 
         ? const Center(child: CircularProgressIndicator())
         : RefreshIndicator(
@@ -35,10 +35,11 @@ class WalletScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       Text(
-                        'AVAILABLE BALANCE',
+                        context.tr('earnings').toUpperCase(),
                         style: AppTypography.label.copyWith(
                           color: AppColors.textOnPrimary.withValues(alpha: 0.85),
                           fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
                         ),
                       ),
                       const SizedBox(height: AppSpacing.sm),
@@ -57,14 +58,14 @@ class WalletScreen extends ConsumerWidget {
                           Text(
                             'Pending: ',
                             style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.textOnPrimary.withValues(alpha: 0.8),
+                              color: AppColors.textOnPrimary.withValues(alpha: 0.85),
                             ),
                           ),
                           Text(
                             currency.format(wallet.pendingBalance),
                             style: AppTypography.numeric.copyWith(
                               color: AppColors.textOnPrimary,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
@@ -77,33 +78,33 @@ class WalletScreen extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                   child: PremiumButton(
-                    label: 'Withdraw Funds',
+                    label: context.tr('withdraw_funds'),
                     icon: Icons.account_balance_wallet_outlined,
                     onPressed: () => context.push('/finance/withdraw'),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
 
-                const SectionHeader(title: 'FINANCE ACTIVITY'),
+                SectionHeader(title: context.tr('finance_earnings').toUpperCase()),
                 Container(
                   color: AppColors.surface,
                   child: Column(
                     children: [
                       SettingsRow(
                         icon: Icons.list_alt_rounded,
-                        title: 'All Transactions',
+                        title: context.tr('transactions_ledger'),
                         subtitle: 'View earnings and deductions',
                         onTap: () => context.push('/finance/transactions'),
                       ),
                       SettingsRow(
                         icon: Icons.history_rounded,
-                        title: 'Withdrawal History',
+                        title: context.tr('withdrawal_requests'),
                         subtitle: 'Track your payouts',
                         onTap: () => context.push('/finance/withdrawals'),
                       ),
                       SettingsRow(
                         icon: Icons.account_balance_rounded,
-                        title: 'Bank Accounts',
+                        title: context.tr('payout_bank_accounts'),
                         subtitle: 'Manage your payout methods',
                         isLast: true,
                         onTap: () => context.push('/finance/bank-accounts'),
@@ -118,3 +119,4 @@ class WalletScreen extends ConsumerWidget {
     );
   }
 }
+

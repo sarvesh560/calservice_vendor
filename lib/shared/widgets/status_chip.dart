@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-
+import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_typography.dart';
+
 
 /// Status colors ported 1:1 from the web app's StatusBadge.jsx color table,
 /// so a given status always means the same color on web and mobile.
 class _StatusStyle {
-  const _StatusStyle(this.label, this.background, this.foreground, this.dot);
+  const _StatusStyle(this.labelKey, this.defaultLabel, this.background, this.foreground, this.dot);
 
-  final String label;
+  final String labelKey;
+  final String defaultLabel;
   final Color background;
   final Color foreground;
   final Color dot;
 }
 
 const _neutral = _StatusStyle(
+  '',
   '',
   Color(0xFFF1F5F9),
   Color(0xFF334155),
@@ -22,166 +25,144 @@ const _neutral = _StatusStyle(
 
 const Map<String, _StatusStyle> _statusStyles = {
   'approved': _StatusStyle(
+    'doc_valid',
     'Approved',
     Color(0xFFECFDF5),
     Color(0xFF065F46),
     Color(0xFF10B981),
   ),
   'active': _StatusStyle(
+    'online',
     'Active',
     Color(0xFFECFDF5),
     Color(0xFF065F46),
     Color(0xFF10B981),
   ),
   'online': _StatusStyle(
+    'online',
     'Online',
     Color(0xFFECFDF5),
     Color(0xFF065F46),
     Color(0xFF10B981),
   ),
   'available': _StatusStyle(
+    'available_for_dispatch',
     'Available',
     Color(0xFFECFDF5),
     Color(0xFF065F46),
     Color(0xFF10B981),
   ),
   'busy': _StatusStyle(
-    'Busy (On Job)',
+    'busy',
+    'Busy',
     Color(0xFFEFF6FF),
     Color(0xFF1E40AF),
     Color(0xFF3B82F6),
   ),
   'submitted': _StatusStyle(
+    'status_pending',
     'Submitted',
     Color(0xFFFFFBEB),
     Color(0xFF92400E),
     Color(0xFFF59E0B),
   ),
   'under_review': _StatusStyle(
+    'registration_under_review',
     'Under Review',
     Color(0xFFFFFBEB),
     Color(0xFF92400E),
     Color(0xFFF59E0B),
   ),
   'pending': _StatusStyle(
+    'status_pending',
     'Pending',
     Color(0xFFFFFBEB),
     Color(0xFF92400E),
     Color(0xFFF59E0B),
   ),
   'offered': _StatusStyle(
+    'status_pending',
     'Offered',
     Color(0xFFFFFBEB),
     Color(0xFF92400E),
     Color(0xFFF59E0B),
   ),
   'correction_required': _StatusStyle(
+    'action_required',
     'Correction Required',
     Color(0xFFFFF7ED),
     Color(0xFF9A3412),
     Color(0xFFF97316),
   ),
   'rejected': _StatusStyle(
+    'doc_rejected',
     'Rejected',
     Color(0xFFFFF1F2),
     Color(0xFF9F1239),
     Color(0xFFF43F5E),
   ),
   'offline': _StatusStyle(
+    'offline',
     'Offline',
     Color(0xFFF1F5F9),
     Color(0xFF334155),
     Color(0xFF94A3B8),
   ),
   'not_started': _StatusStyle(
+    'status_pending',
     'Not Started',
     Color(0xFFF1F5F9),
     Color(0xFF334155),
     Color(0xFF94A3B8),
   ),
   'assigned': _StatusStyle(
+    'status_accepted',
     'Assigned',
     Color(0xFFEFF6FF),
     Color(0xFF1E40AF),
     Color(0xFF3B82F6),
   ),
   'accepted': _StatusStyle(
+    'status_accepted',
     'Accepted',
     Color(0xFFEEF2FF),
     Color(0xFF3730A3),
     Color(0xFF6366F1),
   ),
   'on_the_way': _StatusStyle(
+    'status_on_the_way',
     'On The Way',
     Color(0xFFF0F9FF),
     Color(0xFF075985),
     Color(0xFF0EA5E9),
   ),
   'arrived': _StatusStyle(
+    'status_arrived',
     'Arrived',
     Color(0xFFECFEFF),
     Color(0xFF155E75),
     Color(0xFF06B6D4),
   ),
   'in_progress': _StatusStyle(
+    'status_in_progress',
     'In Progress',
     Color(0xFFFFFBEB),
     Color(0xFF92400E),
     Color(0xFFF59E0B),
   ),
   'completed': _StatusStyle(
+    'status_completed',
     'Completed',
     Color(0xFFECFDF5),
     Color(0xFF065F46),
     Color(0xFF10B981),
   ),
   'cancelled': _StatusStyle(
+    'status_cancelled',
     'Cancelled',
     Color(0xFFF1F5F9),
     Color(0xFF334155),
     Color(0xFF94A3B8),
-  ),
-  'waiting_for_payment': _StatusStyle(
-    'Waiting for Payment',
-    Color(0xFFFFFBEB),
-    Color(0xFF92400E),
-    Color(0xFFF59E0B),
-  ),
-  'new_request': _StatusStyle(
-    'New Request',
-    Color(0xFFF0F9FF),
-    Color(0xFF0369A1),
-    Color(0xFF0EA5E9),
-  ),
-  'unassigned': _StatusStyle(
-    'Unassigned',
-    Color(0xFFFFF7ED),
-    Color(0xFFC2410C),
-    Color(0xFFF97316),
-  ),
-  'en_route': _StatusStyle(
-    'En Route',
-    Color(0xFFF0F9FF),
-    Color(0xFF075985),
-    Color(0xFF0EA5E9),
-  ),
-  'collected': _StatusStyle(
-    'Cash Collected',
-    Color(0xFFECFDF5),
-    Color(0xFF065F46),
-    Color(0xFF10B981),
-  ),
-  'confirmed': _StatusStyle(
-    'Confirmed',
-    Color(0xFFEFF6FF),
-    Color(0xFF1E40AF),
-    Color(0xFF3B82F6),
-  ),
-  'pending_collection': _StatusStyle(
-    'COD Pending',
-    Color(0xFFFFFBEB),
-    Color(0xFF92400E),
-    Color(0xFFF59E0B),
   ),
 };
 
@@ -196,7 +177,17 @@ class StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final key = status.toLowerCase().trim().replaceAll(RegExp(r'[\s-]+'), '_');
     final style = _statusStyles[key] ?? _neutral;
-    final text = label ?? (style.label.isNotEmpty ? style.label : status.replaceAll('_', ' '));
+    
+    String displayText;
+    if (label != null) {
+      displayText = label!;
+    } else if (style.labelKey.isNotEmpty) {
+      displayText = context.tr(style.labelKey);
+    } else if (style.defaultLabel.isNotEmpty) {
+      displayText = style.defaultLabel;
+    } else {
+      displayText = status.replaceAll('_', ' ');
+    }
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -218,7 +209,7 @@ class StatusChip extends StatelessWidget {
           const SizedBox(width: 5),
           Flexible(
             child: Text(
-              text.toUpperCase(),
+              displayText.toUpperCase(),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: AppTypography.caption.copyWith(
@@ -232,3 +223,4 @@ class StatusChip extends StatelessWidget {
     );
   }
 }
+

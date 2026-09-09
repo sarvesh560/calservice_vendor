@@ -237,7 +237,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 'Account Holder Name *',
                 style: AppTypography.title.copyWith(
                   fontSize: 12,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -260,7 +260,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                style: AppTypography.body,
+                style: AppTypography.body.copyWith(color: AppColors.textPrimary),
                 validator: (val) {
                   if (val == null || val.trim().isEmpty) {
                     return 'Account holder name is required.';
@@ -275,7 +275,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 'Bank Name',
                 style: AppTypography.title.copyWith(
                   fontSize: 12,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -298,7 +298,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                style: AppTypography.body,
+                style: AppTypography.body.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: AppSpacing.md),
 
@@ -307,7 +307,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 'Account Number *',
                 style: AppTypography.title.copyWith(
                   fontSize: 12,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -315,7 +315,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 controller: _accountNumberController,
                 keyboardType: TextInputType.number,
                 obscureText: _obscureAccountNumber,
-                style: AppTypography.body.copyWith(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+                style: AppTypography.body.copyWith(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: 'Enter full account number',
                   border: OutlineInputBorder(
@@ -358,7 +358,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 'Securely masked; only last 4 digits are retained for display.',
                 style: AppTypography.label.copyWith(
                   fontSize: 11,
-                  color: AppColors.brandMidnightDark,
+                  color: AppColors.textSecondary,
                   height: 1.3,
                 ),
               ),
@@ -369,14 +369,14 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 'IFSC Code',
                 style: AppTypography.title.copyWith(
                   fontSize: 12,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _ifscController,
                 textCapitalization: TextCapitalization.characters,
-                style: AppTypography.body.copyWith(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+                style: AppTypography.body.copyWith(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: 'e.g. SBIN0001234',
                   border: OutlineInputBorder(
@@ -410,7 +410,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                 'Account Type',
                 style: AppTypography.title.copyWith(
                   fontSize: 12,
-                  color: AppColors.brandMidnight,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -432,8 +432,8 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                   setState(() => _accountType = set.first);
                 },
                 style: SegmentedButton.styleFrom(
-                  selectedBackgroundColor: AppColors.brandMidnight.withValues(alpha: 0.1),
-                  selectedForegroundColor: AppColors.brandMidnight,
+                  selectedBackgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                  selectedForegroundColor: AppColors.primary,
                   backgroundColor: AppColors.surface,
                   foregroundColor: AppColors.textSecondary,
                   side: BorderSide(color: AppColors.border),
@@ -449,7 +449,7 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                     child: OutlinedButton(
                       onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.brandMidnight,
+                        foregroundColor: AppColors.textPrimary,
                         side: BorderSide(color: AppColors.border),
                         minimumSize: const Size.fromHeight(48),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.control)),
@@ -466,8 +466,8 @@ class _AddBankAccountSheetState extends ConsumerState<AddBankAccountSheet> {
                       isLoading: _isSubmitting,
                       onPressed: _submit,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.brandMidnight,
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.textOnPrimary,
                         minimumSize: const Size.fromHeight(48),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.control)),
                       ),

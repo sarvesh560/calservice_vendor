@@ -113,7 +113,10 @@ class ProfileScreen extends ConsumerWidget {
               : (user?.displayName ?? 'Technician Vendor');
 
           return ListView(
-            padding: const EdgeInsets.only(bottom: AppSpacing.xxl * 3, top: AppSpacing.lg),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.paddingOf(context).bottom + 120,
+              top: AppSpacing.lg,
+            ),
             children: [
               // ── PROFILE HEADER CARD ───────────────────────────────────────
               Padding(

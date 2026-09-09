@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/empty_state.dart';
@@ -11,14 +12,12 @@ import '../../../core/theme/app_typography.dart';
 import '../domain/app_notification.dart';
 import 'notifications_providers.dart';
 
-/// Helper to extract associated job ID from notification metadata or title/message text.
 int? extractJobIdFromNotification(AppNotification notification) {
   if (notification.relatedObjectId != null) {
     final raw = notification.relatedObjectId.toString().trim();
     final parsed = int.tryParse(raw);
     if (parsed != null && parsed > 0) return parsed;
   }
-  // Fallback regex parsing on title and message for "#123" or "Job #123" or "Job 123"
   final text = '${notification.title} ${notification.message}';
   final match = RegExp(r'#(\d+)|[Jj]ob\s*#?\s*(\d+)').firstMatch(text);
   if (match != null) {
@@ -31,21 +30,17 @@ int? extractJobIdFromNotification(AppNotification notification) {
   return null;
 }
 
-/// Helper to determine if a notification is related to a specific job.
 bool isJobRelatedNotification(AppNotification notification, int? jobId) {
   final type = notification.notificationType?.toUpperCase() ?? '';
-  // Explicit non-job types
   if (['SYSTEM', 'PAYROLL_AVAILABILITY', 'PROFILE', 'DOCUMENT', 'SERVICE_APPROVAL'].contains(type)) {
     return false;
   }
-  // Explicit job types
   if (['JOB_OFFER', 'JOB_OFFERED', 'JOB_ASSIGNMENT', 'JOB_ASSIGNED', 'SPECIALIST_JOB_ASSIGNED',
        'WORK_EXTENSION_REQUEST', 'WORK_EXTENSION_DECISION', 'SCHEDULE_DELAY', 'WORK_START_OTP',
        'AUTOMATIC_ARRIVAL', 'DISPATCH_UNASSIGNED', 'JOB_UPDATE', 'JOB_CANCELLED', 'JOB_STATUS_CHANGED',
        'SERVICE_REQUEST'].contains(type)) {
     return true;
   }
-  // Fallback check: if a jobId was parsed from metadata or text, treat as job-related
   if (jobId != null) return true;
   return false;
 }
@@ -59,7 +54,7 @@ class NotificationsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(title: 'Notifications'),
+      appBar: PremiumSecondaryAppBar(title: context.tr('notification_settings')),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(notificationsProvider.future),
         child: AsyncValueView(
@@ -70,16 +65,17 @@ class NotificationsScreen extends ConsumerWidget {
               return ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.only(bottom: AppSpacing.xxl * 4),
-                children: const [
-                  SizedBox(height: AppSpacing.xxl * 2),
+                children: [
+                  const SizedBox(height: AppSpacing.xxl * 2),
                   EmptyState(
                     icon: Icons.all_inbox_rounded,
-                    title: "You're all caught up",
-                    message: "No new notifications right now.\nWe'll let you know when something needs your attention.",
+                    title: context.tr('no_notifications'),
+                    message: context.tr('no_notifications'),
                   ),
                 ],
               );
             }
+
 
             final grouped = _groupNotificationsByDate(result.items);
             final keys = grouped.keys.toList();
@@ -100,9 +96,8 @@ class NotificationsScreen extends ConsumerWidget {
                       child: Text(
                         dateGroup.toUpperCase(),
                         style: AppTypography.label.copyWith(
-                          color: AppColors.textSecondary,
+                          color: AppColors.brandSlate,
                           letterSpacing: 1.0,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -167,8 +162,8 @@ class _NotificationTile extends ConsumerWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('This job is no longer available.', style: TextStyle(color: AppColors.textPrimary)),
-              backgroundColor: AppColors.surfaceElevated,
+              content: const Text('This job is no longer available.'),
+              backgroundColor: AppColors.brandMidnightDark,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
@@ -203,7 +198,7 @@ class _NotificationTile extends ConsumerWidget {
     return AnimatedPressable(
       onPressed: () => _handleNotificationTap(context, ref),
       child: Container(
-        color: isUnread ? AppColors.primary.withValues(alpha: 0.08) : Colors.transparent,
+        color: isUnread ? AppColors.brandChampagne.withValues(alpha: 0.05) : Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.lg),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,14 +206,14 @@ class _NotificationTile extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: isUnread ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceElevated,
+                color: isUnread ? AppColors.primary.withValues(alpha: 0.1) : AppColors.brandMist,
                 shape: BoxShape.circle,
-                border: isUnread ? null : Border.all(color: AppColors.border),
+                border: isUnread ? Border.all(color: AppColors.primary.withValues(alpha: 0.3)) : Border.all(color: AppColors.border),
               ),
               child: Icon(
                 _getIconForType(notification.notificationType),
                 size: 20,
-                color: isUnread ? AppColors.primary : AppColors.textSecondary,
+                color: isUnread ? AppColors.primary : AppColors.brandSlate,
               ),
             ),
             const SizedBox(width: AppSpacing.md),
@@ -251,7 +246,7 @@ class _NotificationTile extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 12, 
                       fontWeight: FontWeight.w600,
-                      color: isUnread ? AppColors.primary : AppColors.textMuted,
+                      color: isUnread ? AppColors.brandChampagne : AppColors.textMuted,
                     ),
                   ),
                 ],

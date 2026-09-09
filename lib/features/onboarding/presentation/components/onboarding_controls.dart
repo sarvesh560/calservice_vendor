@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/localization/app_localizations.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../shared/widgets/animated_pressable.dart';
@@ -89,7 +90,7 @@ class _OnboardingBottomControlsState extends State<OnboardingBottomControls> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     child: Text(
-                      'Skip',
+                      context.tr('back'),
                       style: AppTypography.label.copyWith(
                         color: AppColors.brandMist.withValues(alpha: 0.7),
                         fontSize: 15,
@@ -194,10 +195,12 @@ class _PremiumNextButtonState extends State<_PremiumNextButton> with SingleTicke
                   );
                 },
                 child: Text(
-                  widget.isLastPage ? 'GET STARTED' : 'NEXT',
+                  widget.isLastPage
+                      ? context.tr('get_started').toUpperCase()
+                      : context.tr('next').toUpperCase(),
                   key: ValueKey(widget.isLastPage),
                   style: AppTypography.label.copyWith(
-                    color: AppColors.brandMidnightDark,
+                    color: AppColors.textOnPrimary,
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.2,

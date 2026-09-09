@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/network/api_error.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
@@ -59,7 +60,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final confirmPassword = _confirmPasswordController.text;
 
     if (password != confirmPassword) {
-      setState(() => _errorMessage = 'Passwords do not match.');
+      setState(() => _errorMessage = context.tr('passwords_do_not_match'));
       return;
     }
 
@@ -79,7 +80,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
         setState(
           () => _errorMessage = describeDioError(
             e,
-            fallback: 'Unable to create workforce account. Please check details and retry.',
+            fallback: context.tr('signup_failed'),
           ),
         );
       }
@@ -87,8 +88,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
       debugPrint('[WORKFORCE SIGNUP UNEXPECTED ERROR] $e');
       if (mounted) {
         setState(
-          () => _errorMessage =
-              'Unable to create workforce account. Please check details and retry.',
+          () => _errorMessage = context.tr('signup_failed'),
         );
       }
     } finally {
@@ -102,8 +102,8 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Create Account',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('create_account'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -118,7 +118,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // ── 1. Page Introduction (Matching ServicesScreen _buildPageIntro) ─
+                    // ── 1. Page Introduction ─
                     Container(
                       padding: const EdgeInsets.all(AppSpacing.lg),
                       decoration: BoxDecoration(
@@ -139,7 +139,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Create Technician',
+                            context.tr('create_technician'),
                             style: AppTypography.display.copyWith(
                               fontSize: 23,
                               fontWeight: FontWeight.w700,
@@ -149,28 +149,21 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                           ),
                           const SizedBox(height: 7),
                           Text(
-                            'Create your account and start your workforce journey.',
+                            context.tr('create_account_subtitle'),
                             style: AppTypography.bodySmall.copyWith(
                               color: AppColors.textSecondary,
                               fontSize: 13.5,
                               height: 1.45,
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(AppRadius.sm),
-                            ),
-                            child: Text(
-                              'CALDIM ENGINEERING WORKFORCE',
-                              style: AppTypography.caption.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 10,
-                                letterSpacing: 0.5,
-                              ),
+                          const SizedBox(height: 4),
+                          Text(
+                            context.tr('vendor_network_tag'),
+                            style: AppTypography.caption.copyWith(
+                              color: AppColors.primary,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.0,
                             ),
                           ),
                         ],
@@ -212,21 +205,21 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
                     // ── Form Section 1: Account Details ───────────────────────
                     _FormCardSection(
-                      title: 'Personal Details',
+                      title: context.tr('personal_details'),
                       icon: Icons.person_outline_rounded,
                       children: [
                         TextFormField(
                           controller: _firstNameController,
                           style: AppTypography.body.copyWith(color: AppColors.textPrimary),
-                          decoration: _inputDecoration('First Name', Icons.badge_outlined),
-                          validator: (v) => v == null || v.trim().isEmpty ? 'First name required' : null,
+                          decoration: _inputDecoration(context.tr('first_name'), Icons.badge_outlined),
+                          validator: (v) => v == null || v.trim().isEmpty ? context.tr('first_name_required') : null,
                           textInputAction: TextInputAction.next,
                         ),
                         const SizedBox(height: AppSpacing.md),
                         TextFormField(
                           controller: _lastNameController,
                           style: AppTypography.body.copyWith(color: AppColors.textPrimary),
-                          decoration: _inputDecoration('Last Name (Optional)', Icons.badge_outlined),
+                          decoration: _inputDecoration(context.tr('last_name'), Icons.badge_outlined),
                           textInputAction: TextInputAction.next,
                         ),
                       ],
@@ -235,15 +228,15 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
                     // ── Form Section 2: Contact Details ───────────────────────
                     _FormCardSection(
-                      title: 'Contact Details',
+                      title: context.tr('contact_details'),
                       icon: Icons.contact_mail_outlined,
                       children: [
                         TextFormField(
                           controller: _mobileController,
                           style: AppTypography.body.copyWith(color: AppColors.textPrimary),
                           keyboardType: TextInputType.phone,
-                          decoration: _inputDecoration('Mobile Number', Icons.phone_outlined),
-                          validator: (v) => v == null || v.trim().isEmpty ? 'Mobile number required' : null,
+                          decoration: _inputDecoration(context.tr('mobile_number'), Icons.phone_outlined),
+                          validator: (v) => v == null || v.trim().isEmpty ? context.tr('mobile_number_required') : null,
                           textInputAction: TextInputAction.next,
                         ),
                         const SizedBox(height: AppSpacing.md),
@@ -251,10 +244,10 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                           controller: _emailController,
                           style: AppTypography.body.copyWith(color: AppColors.textPrimary),
                           keyboardType: TextInputType.emailAddress,
-                          decoration: _inputDecoration('Email Address', Icons.email_outlined),
+                          decoration: _inputDecoration(context.tr('email_address'), Icons.email_outlined),
                           validator: (v) {
-                            if (v == null || v.trim().isEmpty) return 'Email address required';
-                            if (!v.contains('@')) return 'Enter a valid email address';
+                            if (v == null || v.trim().isEmpty) return context.tr('email_address_required');
+                            if (!v.contains('@')) return context.tr('valid_email_required');
                             return null;
                           },
                           textInputAction: TextInputAction.next,
@@ -265,7 +258,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
                     // ── Form Section 3: Security Credentials ──────────────────
                     _FormCardSection(
-                      title: 'Account Security',
+                      title: context.tr('account_security'),
                       icon: Icons.lock_outline_rounded,
                       children: [
                         TextFormField(
@@ -273,7 +266,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                           obscureText: _obscurePassword,
                           style: AppTypography.body.copyWith(color: AppColors.textPrimary),
                           decoration: _inputDecoration(
-                            'Password',
+                            context.tr('password'),
                             Icons.key_outlined,
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -284,8 +277,8 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                             ),
                           ),
                           validator: (v) {
-                            if (v == null || v.isEmpty) return 'Password required';
-                            if (v.length < 6) return 'Password must be at least 6 characters';
+                            if (v == null || v.isEmpty) return context.tr('password_required');
+                            if (v.length < 6) return context.tr('password_min_length');
                             return null;
                           },
                           textInputAction: TextInputAction.next,
@@ -296,7 +289,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                           obscureText: _obscureConfirmPassword,
                           style: AppTypography.body.copyWith(color: AppColors.textPrimary),
                           decoration: _inputDecoration(
-                            'Confirm Password',
+                            context.tr('confirm_password'),
                             Icons.key_outlined,
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -306,11 +299,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                               onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
                             ),
                           ),
-                          validator: (v) {
-                            if (v == null || v.isEmpty) return 'Confirm password required';
-                            if (v != _passwordController.text) return 'Passwords do not match';
-                            return null;
-                          },
+                          validator: (v) => v == null || v.isEmpty ? context.tr('confirm_password_required') : null,
                           textInputAction: TextInputAction.done,
                         ),
                       ],
@@ -325,21 +314,22 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(AppRadius.control),
+                          border: Border.all(color: AppColors.primary),
                         ),
                         alignment: Alignment.center,
                         child: _isSubmitting
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.white,
+                                  color: AppColors.textOnPrimary,
                                 ),
                               )
                             : Text(
-                                'Create Account & Continue',
+                                context.tr('create_account_continue'),
                                 style: AppTypography.label.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.textOnPrimary,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -353,13 +343,13 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an account? ',
+                          context.tr('already_have_account'),
                           style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary),
                         ),
                         GestureDetector(
                           onTap: () => context.go(AppRoutes.login),
                           child: Text(
-                            'Sign In',
+                            context.tr('sign_in'),
                             style: AppTypography.bodySmall.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,

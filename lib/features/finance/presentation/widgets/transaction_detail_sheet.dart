@@ -78,7 +78,7 @@ class TransactionDetailSheet extends StatelessWidget {
                     children: [
                       Text(
                         'Transaction Details',
-                        style: AppTypography.headline.copyWith(color: AppColors.brandMidnight, fontSize: 16),
+                        style: AppTypography.headline.copyWith(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -262,7 +262,7 @@ class TransactionDetailSheet extends StatelessWidget {
             OutlinedButton(
               onPressed: () => Navigator.of(context).pop(),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.brandMidnight,
+                foregroundColor: AppColors.textPrimary,
                 side: BorderSide(color: AppColors.border),
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
@@ -335,7 +335,7 @@ class _DataSection extends StatelessWidget {
               style: AppTypography.label.copyWith(
                 fontSize: 10,
                 letterSpacing: 0.8,
-                color: AppColors.brandMidnightDark,
+                color: AppColors.textSecondary,
               ),
             ),
           ),
@@ -385,9 +385,7 @@ class _DataRow extends StatelessWidget {
                 fontSize: 12.5,
                 fontWeight: highlight ? FontWeight.w800 : FontWeight.w600,
                 fontFamily: isMonospace ? 'monospace' : null,
-                color: highlight
-                    ? AppColors.brandMidnight
-                    : AppColors.brandMidnight.withValues(alpha: 0.85),
+                color: AppColors.textPrimary,
               ),
             ),
           ),

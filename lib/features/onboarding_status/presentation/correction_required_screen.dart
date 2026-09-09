@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../routing/app_routes.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
+import '../../../shared/widgets/success_animation.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../documents/presentation/documents_providers.dart';
 import '../../onboarding_wizard/presentation/onboarding_wizard_providers.dart';
@@ -42,12 +44,12 @@ class _CorrectionRequiredScreenState
             const SizedBox(height: AppSpacing.sm),
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
-              title: Text('Take Photo of $title'),
+              title: Text(context.tr('camera')),
               onTap: () => Navigator.of(context).pop(ImageSource.camera),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Choose from Gallery'),
+              title: Text(context.tr('gallery')),
               onTap: () => Navigator.of(context).pop(ImageSource.gallery),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -76,9 +78,15 @@ class _CorrectionRequiredScreenState
     if (!mounted) return;
     if (success) {
       ref.invalidate(employeeProfileProvider);
-      setState(() => _successMessage = 'Replacement for $title uploaded!');
+      setState(() => _successMessage = 'Replacement uploaded!');
+      await SuccessAnimation.showSuccessDialog(
+        context,
+        title: 'Document Submitted',
+        message: 'Replacement document uploaded for administrative review.',
+        actionLabel: 'Done',
+      );
     } else {
-      setState(() => _errorMessage = 'Failed to upload document replacement.');
+      setState(() => _errorMessage = context.tr('error_occurred'));
     }
   }
 
@@ -94,8 +102,7 @@ class _CorrectionRequiredScreenState
     if (!mounted) return;
     setState(() => _isSubmitting = false);
     if (!ok) {
-      setState(() => _errorMessage =
-          'Resubmission failed. Please verify documents and retry.');
+      setState(() => _errorMessage = context.tr('error_occurred'));
     }
   }
 
@@ -105,13 +112,13 @@ class _CorrectionRequiredScreenState
     final profile = profileAsync.valueOrNull;
     final notes = profile?.onboardingData.correctionNotes?.isNotEmpty == true
         ? profile!.onboardingData.correctionNotes!
-        : 'Please update the highlighted documents/details below.';
+        : context.tr('correction_required_desc');
     final docs = profile?.documents ?? <EmployeeDocument>[];
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Correction Required',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('action_required'),
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -175,7 +182,7 @@ class _CorrectionRequiredScreenState
                                           color: AppColors.warning.tintBorder),
                                     ),
                                     child: Text(
-                                      'ACTION REQUIRED',
+                                      context.tr('action_required').toUpperCase(),
                                       style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w800,
@@ -186,7 +193,7 @@ class _CorrectionRequiredScreenState
                                   ),
                                   const SizedBox(height: 3),
                                   Text(
-                                    'Corrections Needed',
+                                    context.tr('action_required'),
                                     style: AppTypography.headline,
                                   ),
                                 ],
@@ -210,7 +217,7 @@ class _CorrectionRequiredScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'ADMIN REVIEW NOTES:',
+                                context.tr('action_required').toUpperCase(),
                                 style: TextStyle(
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w800,
@@ -277,7 +284,7 @@ class _CorrectionRequiredScreenState
 
                         // ── Documents to Review ──────────────────────────
                         Text(
-                          'DOCUMENTS TO REVIEW',
+                          context.tr('compliance_documents').toUpperCase(),
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
@@ -296,9 +303,9 @@ class _CorrectionRequiredScreenState
                                   BorderRadius.circular(AppRadius.control),
                               border: Border.all(color: AppColors.border),
                             ),
-                            child: const Text(
-                              'Please use the Registration Wizard below to review all form details and files.',
-                              style: TextStyle(fontSize: 12),
+                            child: Text(
+                              context.tr('correction_required_desc'),
+                              style: const TextStyle(fontSize: 12),
                             ),
                           )
                         else
@@ -348,7 +355,7 @@ class _CorrectionRequiredScreenState
                                         if (doc.rejectionReason != null &&
                                             doc.rejectionReason!.isNotEmpty)
                                           Text(
-                                            'Flag: ${doc.rejectionReason}',
+                                            '${doc.rejectionReason}',
                                             style: TextStyle(
                                               fontSize: 11.5,
                                               fontWeight: FontWeight.w600,
@@ -365,8 +372,8 @@ class _CorrectionRequiredScreenState
                                     ),
                                     icon: const Icon(Icons.upload_file_rounded,
                                         size: 15),
-                                    label: const Text('Replace',
-                                        style: TextStyle(fontSize: 12)),
+                                    label: Text(context.tr('retry'),
+                                        style: const TextStyle(fontSize: 12)),
                                   ),
                                 ],
                               ),
@@ -380,7 +387,7 @@ class _CorrectionRequiredScreenState
                           onPressed: () =>
                               context.push(AppRoutes.onboardingWizard),
                           icon: const Icon(Icons.tune_rounded, size: 18),
-                          label: const Text('Open Registration Wizard'),
+                          label: Text(context.tr('continue_registration')),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
@@ -399,8 +406,8 @@ class _CorrectionRequiredScreenState
                                 )
                               : const Icon(Icons.send_rounded, size: 18),
                           label: Text(_isSubmitting
-                              ? 'Resubmitting...'
-                              : 'Resubmit Application'),
+                              ? context.tr('loading')
+                              : context.tr('submit_application')),
                           style: OutlinedButton.styleFrom(
                             minimumSize: const Size.fromHeight(46),
                           ),
@@ -410,7 +417,7 @@ class _CorrectionRequiredScreenState
                           onPressed: () => ref
                               .read(authControllerProvider.notifier)
                               .logout(),
-                          child: const Text('Log Out'),
+                          child: Text(context.tr('logout')),
                         ),
                       ],
                     ),
@@ -424,3 +431,4 @@ class _CorrectionRequiredScreenState
     );
   }
 }
+

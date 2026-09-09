@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../auth/presentation/auth_controller.dart';
 
@@ -15,11 +16,11 @@ class EmployeeHomePlaceholderScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CalServices Vendor'),
+        title: Text(context.tr('app_title')),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Log out',
+            tooltip: context.tr('logout'),
             onPressed: () => ref.read(authControllerProvider.notifier).logout(),
           ),
         ],
@@ -33,7 +34,7 @@ class EmployeeHomePlaceholderScreen extends ConsumerWidget {
               const Icon(Icons.check_circle, size: 56, color: Colors.green),
               const SizedBox(height: 16),
               Text(
-                'Employee authentication successful.',
+                context.tr('account'),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -44,16 +45,10 @@ class EmployeeHomePlaceholderScreen extends ConsumerWidget {
               if (user != null) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Welcome, ${user.displayName}.',
+                  '${context.tr("welcome")}, ${user.displayName}',
                   textAlign: TextAlign.center,
                 ),
               ],
-              const SizedBox(height: 12),
-              Text(
-                'The employee dashboard will be built in the next phase.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey.shade600),
-              ),
             ],
           ),
         ),
@@ -61,3 +56,4 @@ class EmployeeHomePlaceholderScreen extends ConsumerWidget {
     );
   }
 }
+

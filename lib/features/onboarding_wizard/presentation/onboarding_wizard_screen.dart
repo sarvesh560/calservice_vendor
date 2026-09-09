@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/app_motion.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/widgets/animated_pressable.dart';
-import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/premium_secondary_app_bar.dart';
+import '../../../shared/widgets/success_animation.dart';
 import '../../documents/presentation/documents_providers.dart';
 import '../../profile/domain/employee_profile.dart';
 import '../../profile/presentation/profile_providers.dart';
@@ -16,14 +17,14 @@ import '../../services/domain/service_catalog.dart';
 import '../../services/presentation/services_providers.dart';
 import 'onboarding_wizard_providers.dart';
 
-const _stepLabels = [
-  'Personal',
-  'Address & Territory',
-  'Services',
-  'Skills & Tools',
-  'Documents',
-  'Bank Details',
-  'Review & Submit',
+List<String> _getStepLabels(BuildContext context) => [
+  context.tr('wizard_step_1'),
+  context.tr('wizard_step_2'),
+  context.tr('wizard_step_3'),
+  context.tr('wizard_step_4'),
+  context.tr('wizard_step_5'),
+  context.tr('wizard_step_6'),
+  context.tr('wizard_step_7'),
 ];
 
 const _requiredDocuments = [
@@ -162,11 +163,6 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     _bankRaw = data.section('bank');
     _accountHolderController.text = (_bankRaw['accountHolder'] as String?) ?? '';
     _ifscController.text = (_bankRaw['ifsc'] as String?) ?? '';
-    // Deliberately not pre-filling accountNumber/confirmAccountNumber from a
-    // resumed draft — the backend stores them as plaintext JSON with no
-    // masking, so echoing them back into an editable field on resume would
-    // needlessly re-expose a sensitive value already at rest. Re-entry is
-    // one extra step, not a contract change (same fields, same endpoint).
   }
 
   Future<bool> _saveSection(int step, String key, dynamic value) async {
@@ -180,7 +176,7 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     if (!mounted) return ok;
     setState(() {
       _isSaving = false;
-      if (!ok) _errorMessage = 'Could not save. Please check your connection and try again.';
+      if (!ok) _errorMessage = context.tr('error_occurred');
     });
     return ok;
   }
@@ -250,7 +246,7 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
           return;
         }
         if (accountNumber != confirm) {
-          setState(() => _errorMessage = 'Account numbers do not match.');
+          setState(() => _errorMessage = context.tr('passwords_do_not_match'));
           return;
         }
         final bank = {
@@ -275,8 +271,6 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     if (_currentStep <= 1) return;
     setState(() => _errorMessage = null);
     final prev = _currentStep - 1;
-    // Persist whatever's on the current step so nothing typed is lost, but
-    // don't block backward navigation on validation.
     await _saveSection(_currentStep, _currentSectionKey(), _currentSectionValue());
     if (!mounted) return;
     setState(() => _currentStep = prev);
@@ -348,11 +342,17 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     setState(() {
       _isSaving = false;
       if (!ok) {
-        _errorMessage = 'Submission failed. Please check your connection and try again.';
+        _errorMessage = context.tr('error_occurred');
       }
     });
-    // On success the router's redirect gate picks up the fresh
-    // registrationStatus ('submitted') automatically — no manual navigation.
+    if (ok && mounted) {
+      await SuccessAnimation.showSuccessDialog(
+        context,
+        title: 'Registration Submitted',
+        message: 'Your vendor application has been submitted for administrative review.',
+        actionLabel: 'Continue',
+      );
+    }
   }
 
   @override
@@ -361,8 +361,8 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: const PremiumSecondaryAppBar(
-        title: 'Complete Registration',
+      appBar: PremiumSecondaryAppBar(
+        title: context.tr('registration_application'),
       ),
       body: SafeArea(
         child: AsyncValueView<EmployeeProfile>(
@@ -462,11 +462,10 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     }
   }
 
-  // ── Step 1 — Personal Information ─────────────────────────────────────────
   Widget _buildPersonalStep() {
     return _StepCard(
       icon: Icons.badge_outlined,
-      title: '1. Personal Information',
+      title: '1. ${context.tr("wizard_step_1")}',
       children: [
         _FieldLabel('Date of Birth', required: true),
         const SizedBox(height: 6),
@@ -526,11 +525,10 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     );
   }
 
-  // ── Step 2 — Address & Territory ────────────────────────────────────────
   Widget _buildAddressStep() {
     return _StepCard(
       icon: Icons.map_outlined,
-      title: '2. Residential Address & Travel Territory',
+      title: '2. ${context.tr("wizard_step_4")}',
       children: [
         _FieldLabel('Street Address', required: true),
         const SizedBox(height: 6),
@@ -576,21 +574,20 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     );
   }
 
-  // ── Step 3 — Services ────────────────────────────────────────────────────
   Widget _buildServicesStep() {
     final catalogAsync = ref.watch(serviceCatalogProvider);
     return _StepCard(
       icon: Icons.build_outlined,
-      title: '3. Select Services You Provide',
+      title: '3. ${context.tr("wizard_step_3")}',
       children: [
         AsyncValueView<List<CatalogCategory>>(
           value: catalogAsync,
           onRetry: () => ref.invalidate(serviceCatalogProvider),
           builder: (context, categories) {
             if (categories.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
-                child: Text('No services are currently available in the catalog.'),
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+                child: Text(context.tr('no_services')),
               );
             }
             return Column(
@@ -637,11 +634,10 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     );
   }
 
-  // ── Step 4 — Skills & Tools ──────────────────────────────────────────────
   Widget _buildSkillsStep() {
     return _StepCard(
       icon: Icons.military_tech_outlined,
-      title: '4. Professional Experience & Equipment',
+      title: '4. ${context.tr("performance_ratings")}',
       children: [
         _FieldLabel('Years of Experience', required: false),
         const SizedBox(height: 6),
@@ -675,13 +671,12 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     );
   }
 
-  // ── Step 5 — Documents ───────────────────────────────────────────────────
   Widget _buildDocumentsStep(EmployeeProfile profile) {
     final byCategory = {for (final d in profile.documents) d.category: d};
 
     return _StepCard(
       icon: Icons.file_present_outlined,
-      title: '5. Required Verification Documents',
+      title: '5. ${context.tr("wizard_step_5")}',
       children: _requiredDocuments.map((entry) {
         final (category, title, required) = entry;
         final doc = byCategory[category];
@@ -721,7 +716,7 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
               ),
               OutlinedButton(
                 onPressed: () => _handleDocumentUpload(category, title),
-                child: Text(uploaded ? 'Replace' : 'Upload'),
+                child: Text(uploaded ? context.tr('retry') : context.tr('upload_document')),
               ),
             ],
           ),
@@ -744,12 +739,12 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
             const SizedBox(height: AppSpacing.sm),
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
-              title: Text('Take Photo of $title'),
+              title: Text(context.tr('camera')),
               onTap: () => Navigator.of(context).pop(ImageSource.camera),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Choose from Gallery'),
+              title: Text(context.tr('gallery')),
               onTap: () => Navigator.of(context).pop(ImageSource.gallery),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -776,23 +771,22 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
     );
   }
 
-  // ── Step 6 — Bank Details ────────────────────────────────────────────────
   Widget _buildBankStep() {
     return _StepCard(
       icon: Icons.account_balance_outlined,
-      title: '6. Direct Deposit & Bank Information',
+      title: '6. ${context.tr("payout_bank_accounts")}',
       children: [
-        _FieldLabel('Account Holder Name', required: true),
+        _FieldLabel(context.tr('account_holder_name'), required: true),
         const SizedBox(height: 6),
         TextField(
           controller: _accountHolderController,
           decoration: _inputDecoration(
-            hintText: 'As printed on bank passbook',
+            hintText: context.tr('account_holder_name'),
             icon: Icons.person_outline,
           ),
         ),
         const SizedBox(height: AppSpacing.md),
-        _FieldLabel('IFSC Code', required: true),
+        _FieldLabel(context.tr('ifsc_code'), required: true),
         const SizedBox(height: 6),
         TextField(
           controller: _ifscController,
@@ -809,7 +803,7 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
           decoration: _inputDecoration(hintText: 'e.g. HDFC0001234', icon: Icons.numbers_outlined),
         ),
         const SizedBox(height: AppSpacing.md),
-        _FieldLabel('Account Number', required: true),
+        _FieldLabel(context.tr('account_number'), required: true),
         const SizedBox(height: 6),
         TextField(
           controller: _accountNumberController,
@@ -825,47 +819,46 @@ class _OnboardingWizardScreenState extends ConsumerState<OnboardingWizardScreen>
           ),
         ),
         const SizedBox(height: AppSpacing.md),
-        _FieldLabel('Confirm Account Number', required: true),
+        _FieldLabel(context.tr('confirm_password'), required: true),
         const SizedBox(height: 6),
         TextField(
           controller: _confirmAccountNumberController,
           keyboardType: TextInputType.number,
-          decoration: _inputDecoration(hintText: 'Re-enter account number', icon: Icons.credit_card_outlined),
+          decoration: _inputDecoration(hintText: context.tr('confirm_password'), icon: Icons.credit_card_outlined),
         ),
       ],
     );
   }
 
-  // ── Step 7 — Review & Submit ─────────────────────────────────────────────
   Widget _buildReviewStep(EmployeeProfile profile) {
     return _StepCard(
       icon: Icons.checklist_rounded,
-      title: '7. Review & Submit Application',
+      title: '7. ${context.tr("wizard_step_7")}',
       children: [
-        _ReviewRow('City', _cityController.text.isEmpty ? '—' : _cityController.text),
+        _ReviewRow(context.tr('working_locations'), _cityController.text.isEmpty ? '—' : _cityController.text),
         _ReviewRow('Service Radius', '${_serviceRadius.round()} km'),
         _ReviewRow(
-          'Services Selected',
+          context.tr('authorized_services'),
           _selectedServices.isEmpty
               ? '—'
               : _selectedServices.values.map((s) => s['name']).join(', '),
         ),
         _ReviewRow(
-          'Experience',
+          context.tr('performance_ratings'),
           _experienceYearsController.text.isEmpty
               ? '—'
               : '${_experienceYearsController.text} years',
         ),
-        _ReviewRow('Documents Uploaded', '${profile.documents.where((d) => d.hasFile).length}'),
+        _ReviewRow(context.tr('compliance_documents'), '${profile.documents.where((d) => d.hasFile).length}'),
         const SizedBox(height: AppSpacing.lg),
         CheckboxListTile(
           contentPadding: EdgeInsets.zero,
           controlAffinity: ListTileControlAffinity.leading,
           value: _declarationAccepted,
           onChanged: (value) => setState(() => _declarationAccepted = value ?? false),
-          title: const Text(
-            'I declare that the information provided is accurate and complete to the best of my knowledge.',
-            style: TextStyle(fontSize: 13),
+          title: Text(
+            context.tr('confirm'),
+            style: const TextStyle(fontSize: 13),
           ),
         ),
       ],
@@ -909,6 +902,7 @@ class _WizardProgressHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final targetValue = (currentStep / 7).clamp(0.0, 1.0);
     final percent = (targetValue * 100).round();
+    final labels = _getStepLabels(context);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.md),
@@ -923,11 +917,11 @@ class _WizardProgressHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Step $currentStep of 7: ${_stepLabels[currentStep - 1]}',
-                style: AppTypography.title.copyWith(color: AppColors.brandMidnight),
+                context.tr('step_count', {'current': '$currentStep', 'total': '7'}) + ': ${labels[currentStep - 1]}',
+                style: AppTypography.title.copyWith(color: AppColors.textPrimary),
               ),
               Text(
-                '$percent% Complete',
+                '$percent%',
                 style: AppTypography.caption.copyWith(
                   color: AppColors.brandChampagne,
                   fontWeight: FontWeight.w700,
@@ -957,7 +951,7 @@ class _WizardProgressHeader extends StatelessWidget {
             height: 28,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: _stepLabels.length,
+              itemCount: labels.length,
               separatorBuilder: (context, index) => const SizedBox(width: 6),
               itemBuilder: (context, index) {
                 final stepNumber = index + 1;
@@ -1035,7 +1029,7 @@ class _WizardFooter extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: isSaving ? null : onBack,
                   style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-                  child: const Text('Back'),
+                  child: Text(context.tr('back')),
                 ),
               ),
             ),
@@ -1082,7 +1076,7 @@ class _WizardFooter extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          isLastStep ? 'Submit Application' : 'Save & Continue',
+                          isLastStep ? context.tr('submit_application') : context.tr('next'),
                           style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
                         ),
                 ),
@@ -1096,7 +1090,11 @@ class _WizardFooter extends StatelessWidget {
 }
 
 class _StepCard extends StatelessWidget {
-  const _StepCard({required this.icon, required this.title, required this.children});
+  const _StepCard({
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
 
   final IconData icon;
   final String title;
@@ -1104,41 +1102,58 @@ class _StepCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8),
-              Expanded(child: Text(title, style: AppTypography.titleLarge)),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          ...children,
-        ],
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        side: BorderSide(color: AppColors.border),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: AppColors.primary, size: 22),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: AppTypography.headline.copyWith(fontSize: 16, color: AppColors.textPrimary),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            ...children,
+          ],
+        ),
       ),
     );
   }
 }
 
 class _FieldLabel extends StatelessWidget {
-  const _FieldLabel(this.label, {required this.required});
+  const _FieldLabel(this.label, {this.required = false});
 
   final String label;
   final bool required;
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        text: label,
-        style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700),
-        children: [
-          if (required) const TextSpan(text: ' *', style: TextStyle(color: Color(0xFFE11D48))),
-        ],
-      ),
+    return Row(
+      children: [
+        Text(
+          label,
+          style: AppTypography.label.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
+        ),
+        if (required)
+          Text(
+            ' *',
+            style: AppTypography.label.copyWith(color: AppColors.error.base),
+          ),
+      ],
     );
   }
 }
@@ -1152,14 +1167,21 @@ class _ReviewRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(width: 130, child: Text(label, style: AppTypography.bodySmall)),
-          Expanded(child: Text(value, style: AppTypography.body)),
+          Text(label, style: AppTypography.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: AppTypography.bodySmall.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
